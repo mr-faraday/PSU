@@ -1,3 +1,15 @@
+# QT #
+qt_projs
+
+# Visual Studio #
+vs_projs
+Debug
+.vs
+*.sln
+*.user
+*.filters
+*.vcxproj
+
 # Vendor libs #
 **/io_systems/lib/
 
