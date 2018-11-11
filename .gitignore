@@ -1,16 +1,12 @@
-src_*
-
 # QT #
-qt_projs
+build*
 
 # Visual Studio #
-vs_projs
+Release
 Debug
 .vs
-*.sln
 *.user
 *.filters
-*.vcxproj
 
 # Vendor libs #
 **/io_systems/lib/
