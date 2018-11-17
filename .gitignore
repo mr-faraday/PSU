@@ -4,6 +4,7 @@ build*
 # Visual Studio #
 Release
 Debug
+x64
 .vs
 *.user
 *.filters
