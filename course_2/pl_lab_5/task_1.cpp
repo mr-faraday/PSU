@@ -225,6 +225,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         AddListViewItems(hWnd_LV, colNum, textMaxLen, db.size() - 1);
       }
 
+      EnableMenuItem(GetSubMenu(GetMenu(hWnd), 0), IDM_SAVE, MF_ENABLED);
+      EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT1, MF_ENABLED);
+      EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT2, MF_ENABLED);
+      EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT3, MF_ENABLED);
+      EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT4, MF_ENABLED);
+
       is_saved = TRUE;
       CloseHandle(hFile);
       break;
@@ -279,9 +285,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT2, MF_ENABLED);
         EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT3, MF_ENABLED);
         EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT4, MF_ENABLED);
-        is_saved = FALSE;
       }
 
+      is_saved = FALSE;
       break;
     }
     case IDM_EDIT: {
@@ -339,6 +345,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         }
 
         is_saved = FALSE;
+        if (db.size() == 0) {
+          EnableMenuItem(GetSubMenu(GetMenu(hWnd), 0), IDM_SAVE, MF_DISABLED | MF_GRAYED);
+          EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT1, MF_DISABLED | MF_GRAYED);
+          EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT2, MF_DISABLED | MF_GRAYED);
+          EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT3, MF_DISABLED | MF_GRAYED);
+          EnableMenuItem(GetSubMenu(GetMenu(hWnd), 1), IDM_SORT4, MF_DISABLED | MF_GRAYED);
+
+          is_saved = TRUE;
+        }
       }
 
       break;
