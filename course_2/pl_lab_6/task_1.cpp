@@ -8,9 +8,9 @@
  * В рамках данной лабораторной работы необходимо, используя C++ и OpenGL, разработать программу построения 2D объектов в соответствии со своим вариантом задания.
  */
 
-#pragma comment(lib, "C:/SDKs/OpenGL/LIBs/Win32/glut32.lib")
+#pragma comment(lib, "C:/libs/GL/glut32.lib")
 
-#include <C:/SDKs/OpenGL/include/GL/glut.h>
+#include <C:/libs/GL/glut.h>
 #include <cmath>
 
 #define M_PI 3.14159265358979323846
