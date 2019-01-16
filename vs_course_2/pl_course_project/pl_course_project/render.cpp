@@ -1,8 +1,8 @@
-#pragma comment(lib, "C:/SDKs/OpenGL/LIBs/Win32/glut32.lib")
-#pragma comment(lib, "C:/SDKs/OpenGL/LIBs/Win32/glaux.lib")
+#pragma comment(lib, "C:/libs/GL/glut32.lib")
+#pragma comment(lib, "C:/libs/GL/glaux.lib")
 
-#include <C:/SDKs/OpenGL/include/GL/glut.h>
-#include <C:/SDKs/OpenGL/include/GL/glaux.h>
+#include <C:/libs/GL/glut.h>
+#include <C:/libs/GL/glaux.h>
 
 #include <iostream>
 #include "render.h"

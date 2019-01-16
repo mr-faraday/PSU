@@ -8,12 +8,12 @@
  * В рамках данной лабораторной работы необходимо, анимировать объекты, реализованные в лабораторной работе No7. Нанести текстуры на объект и реализовать возможность вращения камеры вокруг него при помощи мыши.
  */
 
-#pragma comment(lib, "C:/SDKs/OpenGL/LIBs/Win32/glut32.lib")
-#pragma comment(lib, "C:/SDKs/OpenGL/LIBs/Win32/glaux.lib")
+#pragma comment(lib, "C:/libs/GL/glut32.lib")
+#pragma comment(lib, "C:/libs/GL/glaux.lib")
 #pragma comment(lib, "legacy_stdio_definitions.lib")
 
-#include <C:/SDKs/OpenGL/include/GL/glut.h>
-#include <C:/SDKs/OpenGL/include/GL/glaux.h>
+#include <C:/libs/GL/glut.h>
+#include <C:/libs/GL/glaux.h>
 #include <cmath>
 
 #define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT);

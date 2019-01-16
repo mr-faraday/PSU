@@ -5,6 +5,7 @@ build*
 Release
 Debug
 x64
+*.aps
 .vs
 *.user
 *.filters
