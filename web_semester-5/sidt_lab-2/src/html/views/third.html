@@ -1,0 +1,13 @@
+<% var data = {
+  title: "Третий элемент",
+}; %>
+<%= _.template(require('./../includes/header.html'))(data) %>
+
+<div class="container">
+  <div>
+    <h1>Третий элемент</h1>
+  </div>
+  <a href="menu.html">В меню</a>
+</div>
+
+<%= _.template(require('./../includes/footer.html'))(data) %>
