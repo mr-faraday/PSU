@@ -1,6 +1,7 @@
 #pragma once
 
 #include<algorithm>
+#include<set>
 
 template <class T>
 struct Node {
@@ -15,17 +16,26 @@ struct Node {
   }
 };
 
+/// <summary>
+/// Класс, представляюий бинарное дерево
+/// </summary>
+
 template <class T>
 class Binary_Tree {
 private:
   Node<T>* treeRoot = nullptr;
-  std::wostream &out = std::wcout;  // Поток для вывода
 
   void straight(Node<T>* root, void (Binary_Tree::*toDo)(Node<T>*)) {
     if (!root) return;
     (this->*toDo)(root);
     straight(root->left, toDo);
     straight(root->right, toDo);
+  }
+  void symmetric(Node<T>* root, void (Binary_Tree::* toDo)(Node<T>*)) {
+    if (!root) return;
+    symmetric(root->left, toDo);
+    (this->*toDo)(root);
+    symmetric(root->right, toDo);
   }
   void reverse(Node<T>* root, void (Binary_Tree::* toDo)(Node<T>*)) {
     if (!root) return;
@@ -35,17 +45,17 @@ private:
   }
 
   void printNode(Node<T>* node) {
-    out << node->key << L" : ";
-    out << node->data << L"\n\r";
+    std::wcout << node->key << L" : ";
+    std::wcout << node->data << L"\n\r";
   }
   void popNode(Node<T>* node) {
     delete node;
   }
-  Node<T>* findNode(Node<T>* root, size_t key) {
-    if (!root) return nullptr;
-    if (root->key == key) return root;
-    if (key < root->key) return findNode(root->left, key);
-    else return findNode(root->right, key);
+  Node<T>* findNode(Node<T>* r, size_t key) {
+    if (!r) return nullptr;
+    if (r->key == key) return r;
+    if (key < r->key) return findNode(r->left, key);
+    else return findNode(r->right, key);
   }
   Node<T>* findNode(size_t key) {
     return findNode(treeRoot, key);
@@ -70,24 +80,59 @@ private:
     if (getParent(treeRoot, node->key)->right == node) return 2;  // Потомок правой ветки
     return -1;
   }
-  /*Node<T>* push(Node<T>* newNode, Node<T>* root) {
-    if (root == nullptr) return newNode;
-    if (root->key == newNode->key) {
-      newNode->left = root->left;
-      newNode->right = root->right;
-      delete root;
-      return newNode;
-    }
-    if (root->key > newNode->key) root->left = push(newNode, root->left);
-    if (root->key < newNode->key) root->right = push(newNode, root->right);
-    return root;
-  }*/
-  size_t getLevel(Node<T>* node, Node<T>* root, size_t counter) {
-    if (root == node) return counter;
+  size_t getLevel(Node<T>* node, Node<T>* r, size_t counter) {
+    if (r == node) return counter;
     counter++;
-    if (node->key < root->key) return getLevel(node, root->left, counter);
-    if (node->key > root->key) return getLevel(node, root->right, counter);
+    if (node->key < r->key) return getLevel(node, r->left, counter);
+    if (node->key > r->key) return getLevel(node, r->right, counter);
     return -1;
+  }
+  Node<T>* insert(Node<T>* r, size_t key, T data) {
+    if (r == nullptr) {
+      r = new Node<T>(data, key);
+      return r;
+    } else if (r->key == key) {
+      Node<T>* newN = new Node<T>(data, key);
+      newN->left = r->left;
+      newN->right = r->right;
+      delete r;
+      return newN;
+    } else if (key < r->key) {
+      r->left = insert(r->left, key, data);
+      r = balance(r);
+    } else if (key > r->key) {
+      r->right = insert(r->right, key, data);
+      r = balance(r);
+    }
+    return r;
+  }
+
+  // Удаление
+  Node<T>* removeNode(Node<T>* r, size_t key) {
+    if (!r) return nullptr;
+    if (key < r->key) r->left = removeNode(r->left, key);
+    else if (key > r->key) r->right = removeNode(r->right, key);
+    else {
+      Node<T>*
+        L = r->left,
+        R = r->left;
+      delete r;
+      if (!R) return L;
+      Node<T>* min = findMin(R);
+      min->right = removeMin(R);
+      min->left = L;
+      return balance(min);
+    }
+
+    return balance(r);
+  }
+  Node<T>* findMin(Node<T>* r) {
+    return r->left ? findMin(r->left) : r;
+  }
+  Node<T>* removeMin(Node<T>* r) {
+    if (!r->left) return r->right;
+    r->left = removeMin(r->left);
+    return balance(r);
   }
 
   // Балансировка
@@ -148,18 +193,20 @@ private:
     }
     return node;
   }
-  Node<T>* insert(Node<T>* r, size_t key, T data) {
-    if (r == nullptr) {
-      r = new Node<T>(data, key);
-      return r;
-    } else if (key < r->key) {
-      r->left = insert(r->left, key, data);
-      r = balance(r);
-    } else if (key >= r->key) {
-      r->right = insert(r->right, key, data);
-      r = balance(r);
-    }
-    return r;
+
+  // Для лабораторной №6 задания 3
+  Node<T>* delRTree_lab6Func(Node<T>* r) {
+    if (!r) return nullptr;
+    r->left = delRTree_lab6Func(r->left);
+    r->right = delRTree_lab6Func(r->right);
+    delete r;
+    return nullptr;
+  }
+  void findVowel_lab6Func(std::set<wchar_t>& vowels, Node<T>* r) {
+    if (!r) return;
+    if (vowels.find(r->data) != vowels.end()) r->right = delRTree_lab6Func(r->right);
+    findVowel_lab6Func(vowels, r->left);
+    findVowel_lab6Func(vowels, r->right);
   }
 
 public:
@@ -172,7 +219,10 @@ public:
     return !treeRoot;
   }
   void printTree() {
-    straight(treeRoot, &Binary_Tree::printNode);
+    symmetric(treeRoot, &Binary_Tree::printNode);
+  }
+  void printTreeSymm() {
+    symmetric(treeRoot, &Binary_Tree::printNode);
   }
   void insert(T data, size_t key) {
     //Node<T>* newNode = new Node<T>(data, key);
@@ -182,26 +232,29 @@ public:
   void deleteNode(size_t key) {
     Node<T>* toDel = findNode(treeRoot, key);
     if (!toDel) {
-      out << L"Node not found: " << key << L"\n\r";
+      std::wcout << L"Node not found: " << key << L"\n\r";
       return;
     }
+
+    treeRoot = removeNode(treeRoot, key);
+
     // Если это лист
     if (!toDel->left && !toDel->right) {
       switch (whatIS(toDel)) {
       case 0:
         treeRoot = nullptr;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 1:
         getParent(treeRoot, key)->left = nullptr;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 2:
         getParent(treeRoot, key)->right = nullptr;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       default:
         break;
@@ -213,17 +266,17 @@ public:
       case 0:
         treeRoot = toDel->left;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 1:
         getParent(treeRoot, key)->left = toDel->left;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 2:
         getParent(treeRoot, key)->right = toDel->left;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       default:
         break;
@@ -235,17 +288,17 @@ public:
       case 0:
         treeRoot = toDel->right;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 1:
         getParent(treeRoot, key)->left = toDel->right;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       case 2:
         getParent(treeRoot, key)->right = toDel->right;
         delete toDel;
-        treeRoot = balance(treeRoot);
+        //treeRoot = balance(treeRoot);
         return;
       default:
         break;
@@ -278,7 +331,7 @@ public:
       treeRoot = nodeToMove;
       treeRoot->left = toDel->left;
       treeRoot->right = toDel->right;
-      treeRoot = balance(treeRoot);
+      //treeRoot = balance(treeRoot);
       delete toDel;
       return;
     }
@@ -287,7 +340,7 @@ public:
       getParent(toDel)->left = nodeToMove;
       nodeToMove->left = toDel->left;
       nodeToMove->right = toDel->right;
-      treeRoot = balance(treeRoot);
+      //treeRoot = balance(treeRoot);
       delete toDel;
       return;
     }
@@ -296,7 +349,7 @@ public:
       getParent(toDel)->right = nodeToMove;
       nodeToMove->left = toDel->left;
       nodeToMove->right = toDel->right;
-      treeRoot = balance(treeRoot);
+      //treeRoot = balance(treeRoot);
       delete toDel;
       return;
     }
@@ -343,5 +396,9 @@ public:
       if (isNode(i) && getLevel(i) == level)
         sum += findNode(i)->key;
     return sum;
+  }
+  void delTree_lab6Func(std::set<wchar_t>& vowels) {
+    if (!treeRoot) return;
+    findVowel_lab6Func(vowels, treeRoot);
   }
 };
