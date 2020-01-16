@@ -12,8 +12,12 @@
     + выводит наиболее востребованный тариф (по наибольшему числу абонентов).
  */
 
- //  онсольный вывод
-#define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
+//  онсольный вывод
+#define CONSOLE_OUTPUT      _setmode(_fileno(stdout), _O_U16TEXT); \
+                            _setmode(_fileno(stdin),  _O_U16TEXT); \
+                            _setmode(_fileno(stderr), _O_U16TEXT); \
+                            std::wostream& out = std::wcout; \
+                            std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
 #include <io.h>
@@ -92,8 +96,8 @@ int main() {
 
       for (size_t i = subs.getMinKey(); i <= subs.getMaxKey(); i++)
         if (subs.isNode(i))
-          if (subs.getVlue(i).phone == phone) {
-            out << subs.getVlue(i).name << L" ";
+          if (subs.getData(i).phone == phone) {
+            out << subs.getData(i).name << L" ";
             break;
           }
       _getwch();
@@ -108,9 +112,9 @@ std::wstring mostUT(Binary_Tree<Subscriber>& subs) {
   std::map<std::wstring, size_t>::iterator max, it = tariffs.begin();
   for (size_t i = subs.getMinKey(); i <= subs.getMaxKey(); i++)
     if (subs.isNode(i)) {
-      if ((it = tariffs.find(subs.getVlue(i).tariff)) == tariffs.end()) {
+      if ((it = tariffs.find(subs.getData(i).tariff)) == tariffs.end()) {
         it = tariffs.begin();
-        tariffs.insert(it, { subs.getVlue(i).tariff, 1 });
+        tariffs.insert(it, { subs.getData(i).tariff, 1 });
       } else it->second++;
     }
 

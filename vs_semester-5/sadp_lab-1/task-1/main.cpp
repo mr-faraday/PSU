@@ -31,7 +31,7 @@ int main() {
   #endif
 
   std::wcout << L"Здравствуйте.\n\r";
-  Planes planes = Planes();
+  Planes planes;
   std::wcout << L"\n\r";
 
   std::wcout << L"Введите лимит кол-ва часов для удаления: ";

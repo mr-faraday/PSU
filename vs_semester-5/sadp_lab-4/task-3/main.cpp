@@ -8,8 +8,12 @@
  * Найдите сумму элементов сбалансированного дерева, находящихся на уровне k.
  */
 
- // Консольный вывод
-#define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
+// Консольный вывод
+#define CONSOLE_OUTPUT      _setmode(_fileno(stdout), _O_U16TEXT); \
+                            _setmode(_fileno(stdin),  _O_U16TEXT); \
+                            _setmode(_fileno(stderr), _O_U16TEXT); \
+                            std::wostream& out = std::wcout; \
+                            std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
 #include <io.h>

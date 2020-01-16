@@ -11,8 +11,12 @@
  *  Выход: После ввода файла распечатать слова в алфавитном порядке вместе со счетчиками частоты и упорядоченными списками строк, где встречается каждое слово.
  */
 
- // Консольный вывод
-#define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
+// Консольный вывод
+#define CONSOLE_OUTPUT      _setmode(_fileno(stdout), _O_U16TEXT); \
+                            _setmode(_fileno(stdin),  _O_U16TEXT); \
+                            _setmode(_fileno(stderr), _O_U16TEXT); \
+                            std::wostream& out = std::wcout; \
+                            std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
 #include <io.h>
@@ -62,10 +66,6 @@ int main() {
     return 0;
   }
 
-  //std::wstring file((std::istreambuf_iterator<wchar_t>(fIn)),  // Считывание файла в сторку
-  //                  std::istreambuf_iterator<wchar_t>());
-  //std::wistringstream input = std::wistringstream(file);
-
   std::wstring word, line;
   std::wistringstream input;
   input.ignore(INT_MAX);
@@ -104,7 +104,7 @@ int main() {
       // Добавление слова в дерево
       size_t key = words.getMaxKey() + 1;
       words.insert({ word }, key);
-      words.getData(key).addStr(str);  /////////////////////////////////////////////
+      words.getData(key).addStr(str);
     }
   }
 

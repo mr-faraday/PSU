@@ -10,7 +10,7 @@
     - по фамилии списка номеров телефонов.
  */
 
- // Консольный вывод
+// Консольный вывод
 #define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT);
 #include <conio.h>
 #include <iostream>

@@ -8,8 +8,12 @@
  * Найдите количество четных элементов бинарного дерева. Укажите эти элементы и их уровни.
  */
 
- // Консольный вывод
-#define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
+// Консольный вывод
+#define CONSOLE_OUTPUT      _setmode(_fileno(stdout), _O_U16TEXT); \
+                            _setmode(_fileno(stdin),  _O_U16TEXT); \
+                            _setmode(_fileno(stderr), _O_U16TEXT); \
+                            std::wostream& out = std::wcout; \
+                            std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
 #include <io.h>
@@ -37,17 +41,11 @@ int main() {
     binTree.insert(L"PowerRangers", 4);
   }
 
-  /*out << binTree.getLevel(0) << L"\n\r";
-  out << binTree.isNode(0) << L"\n\r";
-  out << binTree.isNode(12) << L"\n\r";
-  out << binTree.getMinKey() << L"\n\r";
-  out << binTree.getMaxKey() << L"\n\r";*/
-
   size_t count = 0;
   for (size_t i = binTree.getMinKey(); i <= binTree.getMaxKey(); i++)
     if ((i % 2) == 0)
       if (binTree.isNode(i)) {
-        out<< i << L" : " << binTree.getVlue(i) << L"\n\r";
+        out<< i << L" : " << binTree.getData(i) << L"\n\r";
         count++;
       }
   out << L"Колличество четных элементов: " << count << L"\n\r";

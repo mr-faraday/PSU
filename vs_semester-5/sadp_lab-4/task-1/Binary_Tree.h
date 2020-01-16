@@ -1,7 +1,11 @@
 #pragma once
 
 #include<algorithm>
-#include<set>
+#include<set>  // Для лабораторной работы
+
+/// <summary>
+/// Узел бинарного дерева
+/// </summary>
 
 template <class T>
 struct Node {
@@ -57,29 +61,6 @@ private:
     if (key < r->key) return findNode(r->left, key);
     else return findNode(r->right, key);
   }
-  Node<T>* findNode(size_t key) {
-    return findNode(treeRoot, key);
-  }
-  Node<T>* getParent(Node<T>* root, size_t key) {
-    if (root->key == key) return nullptr;
-    if (root->left)
-      if (root->left->key == key) return root;
-      else if (root->key > key) return getParent(root->left, key);
-    if (root->right)
-      if (root->right->key == key) return root;
-      else if (root->key < key) return getParent(root->right, key);
-    return nullptr;
-  }
-  Node<T>* getParent(Node<T>* node) {
-    return getParent(treeRoot, node->key);
-    return nullptr;
-  }
-  int whatIS(Node<T>* node) {
-    if (node == treeRoot) return 0;  // Корень
-    if (getParent(treeRoot, node->key)->left == node) return 1;  // Потомок левой ветки
-    if (getParent(treeRoot, node->key)->right == node) return 2;  // Потомок правой ветки
-    return -1;
-  }
   size_t getLevel(Node<T>* node, Node<T>* r, size_t counter) {
     if (r == node) return counter;
     counter++;
@@ -113,9 +94,8 @@ private:
     if (key < r->key) r->left = removeNode(r->left, key);
     else if (key > r->key) r->right = removeNode(r->right, key);
     else {
-      Node<T>*
-        L = r->left,
-        R = r->left;
+      Node<T>* L = r->left;
+      Node<T>* R = r->right;
       delete r;
       if (!R) return L;
       Node<T>* min = findMin(R);
@@ -221,12 +201,7 @@ public:
   void printTree() {
     symmetric(treeRoot, &Binary_Tree::printNode);
   }
-  void printTreeSymm() {
-    symmetric(treeRoot, &Binary_Tree::printNode);
-  }
   void insert(T data, size_t key) {
-    //Node<T>* newNode = new Node<T>(data, key);
-    //treeRoot = push(newNode, treeRoot);
     treeRoot = insert(treeRoot, key, data);
   }
   void deleteNode(size_t key) {
@@ -237,129 +212,6 @@ public:
     }
 
     treeRoot = removeNode(treeRoot, key);
-
-    // Если это лист
-    if (!toDel->left && !toDel->right) {
-      switch (whatIS(toDel)) {
-      case 0:
-        treeRoot = nullptr;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 1:
-        getParent(treeRoot, key)->left = nullptr;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 2:
-        getParent(treeRoot, key)->right = nullptr;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      default:
-        break;
-      }
-    }
-    // Если узел с одной левой веткой
-    if (toDel->left && !toDel->right) {
-      switch (whatIS(toDel)) {
-      case 0:
-        treeRoot = toDel->left;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 1:
-        getParent(treeRoot, key)->left = toDel->left;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 2:
-        getParent(treeRoot, key)->right = toDel->left;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      default:
-        break;
-      }
-    }
-    // Если узел с одной правой веткой
-    if (!toDel->left && toDel->right) {
-      switch (whatIS(toDel)) {
-      case 0:
-        treeRoot = toDel->right;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 1:
-        getParent(treeRoot, key)->left = toDel->right;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      case 2:
-        getParent(treeRoot, key)->right = toDel->right;
-        delete toDel;
-        //treeRoot = balance(treeRoot);
-        return;
-      default:
-        break;
-      }
-    }
-
-    // Если узел с двумя потомками
-    Node<T>* nodeToMove;
-    // Получение потомка для перемещения
-    nodeToMove = toDel->right;
-    if (nodeToMove->left)
-      while (nodeToMove->left) nodeToMove = nodeToMove->left;
-    // Перенапрвление родительского узла
-    switch (whatIS(nodeToMove)) {
-    case 1:
-      if (nodeToMove->right) getParent(nodeToMove)->left = nodeToMove->right;
-      else getParent(nodeToMove)->left = nullptr;
-      break;
-    case 2:
-      if (nodeToMove->right) getParent(nodeToMove)->right = nodeToMove->right;
-      else getParent(nodeToMove)->right = nullptr;
-      break;
-    default:
-      break;
-    }
-    // В завиимсти от наследования удаляемого узла
-    switch (whatIS(toDel)) {
-      // Если это корень
-    case 0: {
-      treeRoot = nodeToMove;
-      treeRoot->left = toDel->left;
-      treeRoot->right = toDel->right;
-      //treeRoot = balance(treeRoot);
-      delete toDel;
-      return;
-    }
-      // Если потомок левой ветви
-    case 1: {
-      getParent(toDel)->left = nodeToMove;
-      nodeToMove->left = toDel->left;
-      nodeToMove->right = toDel->right;
-      //treeRoot = balance(treeRoot);
-      delete toDel;
-      return;
-    }
-      // Если потомок правой ветви
-    case 2: {
-      getParent(toDel)->right = nodeToMove;
-      nodeToMove->left = toDel->left;
-      nodeToMove->right = toDel->right;
-      //treeRoot = balance(treeRoot);
-      delete toDel;
-      return;
-    }
-    default:
-      break;
-    }
-  }
-  size_t getLevel(size_t key) {
-    size_t counter = 0;
-    return getLevel(findNode(treeRoot, key), treeRoot, counter);
   }
   bool isNode(size_t key) {
     return findNode(treeRoot, key);
@@ -390,13 +242,21 @@ public:
       return node->data;
     else exit(-1);
   }
+
+  // Для лаборатоных
+  size_t getLevel(size_t key) {
+    size_t counter = 0;
+    return getLevel(findNode(treeRoot, key), treeRoot, counter);
+  }
   size_t sumAtLevel(size_t level) {
     size_t sum = 0;
     for (size_t i = getMinKey(); i <= getMaxKey(); i++)
       if (isNode(i) && getLevel(i) == level)
-        sum += findNode(i)->key;
+        sum += findNode(treeRoot, i)->key;
     return sum;
   }
+
+  // Лабораторная №6 Задание 3
   void delTree_lab6Func(std::set<wchar_t>& vowels) {
     if (!treeRoot) return;
     findVowel_lab6Func(vowels, treeRoot);

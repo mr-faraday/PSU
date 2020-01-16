@@ -10,8 +10,12 @@
  * Вывести дерево любым известным Вам методом обхода. Написать подпрограмму, определяющую является ли город «городом-миллионником» и, если да, установить в структуре соответствующую метку. Вывести полученное дерево, количество «город-миллионников» и страну, с наибольшим количеством таких городов на экран.
  */
 
- // Консольный вывод
-#define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
+// Консольный вывод
+#define CONSOLE_OUTPUT      _setmode(_fileno(stdout), _O_U16TEXT); \
+                            _setmode(_fileno(stdin),  _O_U16TEXT); \
+                            _setmode(_fileno(stderr), _O_U16TEXT); \
+                            std::wostream& out = std::wcout; \
+                            std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
 #include <io.h>
@@ -64,7 +68,7 @@ int main() {
     cities.insert({ L"USA", L"Washington", 5084816, MILLION_PERSON_CITY }, 11);
   }
 
-  cities.printTreeSymm();
+  cities.printTree();
 
   // Подсчет городов миллионников
   std::map<STR, int> countriesMap;

@@ -15,7 +15,7 @@
    + удаление бинарного дерева.
  */
 
- // Консольный вывод
+// Консольный вывод
 #define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT); _setmode(_fileno(stdin),  _O_U16TEXT); _setmode(_fileno(stderr), _O_U16TEXT); std::wostream& out = std::wcout; std::wistream& in = std::wcin;
 #include <conio.h>
 #include <iostream>
@@ -42,7 +42,7 @@ int main() {
   binTree.insert(L"Complex", 8);
   binTree.insert(L"PowerRangers", 4);
 
-  //binTree.printTree();
+  binTree.printTree();
   out << L"deletion: " << 5 << L"\n\r";
   binTree.deleteNode(5);
   binTree.printTree();

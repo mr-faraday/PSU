@@ -8,7 +8,7 @@
  * Написать программу, которая получив на выходе выражение, состоящего из переменных (одна буква), констант (одна цифра). Знаков операций (+-* /) и круглых скобок, строит ПОЛИЗ этого выражения. Использовать стек.
  */
 
- // Консольный вывод
+// Консольный вывод
 #define CONSOLE_OUTPUT       _setmode(_fileno(stdout), _O_U16TEXT);
 #include <conio.h>
 #include <iostream>
@@ -32,7 +32,6 @@ int main() {
   std::wcin >> input;
   const wchar_t* p = input.c_str();
   
-  //std::wistringstream in = std::wistringstream(input);
   bool conToAdd;
   bool isOperator;
   int opPriority;

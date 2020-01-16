@@ -33,7 +33,7 @@ int main() {
     chars.insert((rand() % 33) + L'а', i);
   chars.printTree();
 
-  std::set<wchar_t> vowels = { L'у', L'е', L'ы', L'а', L'о', L'э', L'€', L'и', L'ю', };
+  std::set<wchar_t> vowels = { L'у', L'е', L'ы', L'а', L'о', L'э', L'€', L'и', L'ю' };
   chars.delTree_lab6Func(vowels);
   OUT << L"\r\n";
   OUT << L"ƒерево после удалени€ правах поддеревьев у гласных вершин:\r\n";
