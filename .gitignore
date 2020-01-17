@@ -1,6 +1,7 @@
 # Temp Files #
 ~*
 *.a
+.*/
 
 # QT #
 build*
@@ -26,6 +27,7 @@ x64
 *.o
 *.so
 *.out
+*.bin
 
 # Packages #
 ############
