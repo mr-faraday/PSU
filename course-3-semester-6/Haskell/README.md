@@ -1,0 +1,1 @@
+There are lessons from this course: [https://stepik.org/course/75/promo](https://stepik.org/course/75/promo)

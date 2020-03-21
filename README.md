@@ -6,7 +6,8 @@ Repository stores my code from various tasks. I use next technologis:
 * OpenGl
 * WinAPI
 * Asembly
-* Node.js
+* HTML, CSS
+* Haskell
 
 It includes two branches:
 
