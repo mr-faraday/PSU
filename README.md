@@ -1,6 +1,10 @@
 ![PSU_logo](https://www.psu.by/images/psu-logo.png)
 
-Repository stores my code from various tasks.
-It includes two branches:
-- master: finished works and projects
-- source: in development
+Repository stores my code from various tasks. I use next technologis:
+
+* C, C++, C#
+* OpenGl
+* WinAPI
+* Asembly
+* HTML, CSS
+* Haskell
