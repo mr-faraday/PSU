@@ -8,8 +8,3 @@ Repository stores my code from various tasks. I use next technologis:
 * Asembly
 * HTML, CSS
 * Haskell
-
-It includes two branches:
-
-* master: finished works and projects
-* dev: in development
