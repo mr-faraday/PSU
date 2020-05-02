@@ -19,4 +19,11 @@ tokenize input = undefined
 
 
 pythagoreanTriple :: Int -> [(Int, Int, Int)]
-pythagoreanTriple x = do undefined
+pythagoreanTriple x = do
+  if x > 0 then "N" else []
+  c <- [1..x]
+  b <- [1..c]
+  a <- [1..b]
+  if c^2 == a^2 + b^2 then "N" else []
+  return (a,b,c)
+
