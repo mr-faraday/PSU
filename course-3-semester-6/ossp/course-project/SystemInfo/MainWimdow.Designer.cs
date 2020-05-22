@@ -62,8 +62,9 @@
       this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.processesRefresh = new System.Windows.Forms.Button();
       this.TabControl.SuspendLayout();
       this.TabSystemInfo.SuspendLayout();
       this.TabProccesses.SuspendLayout();
@@ -125,6 +126,7 @@
       // 
       this.GPUs_driverVersion.Location = new System.Drawing.Point(291, 445);
       this.GPUs_driverVersion.Name = "GPUs_driverVersion";
+      this.GPUs_driverVersion.ReadOnly = true;
       this.GPUs_driverVersion.Size = new System.Drawing.Size(136, 20);
       this.GPUs_driverVersion.TabIndex = 35;
       // 
@@ -132,6 +134,7 @@
       // 
       this.GPUs_vramType.Location = new System.Drawing.Point(291, 421);
       this.GPUs_vramType.Name = "GPUs_vramType";
+      this.GPUs_vramType.ReadOnly = true;
       this.GPUs_vramType.Size = new System.Drawing.Size(136, 20);
       this.GPUs_vramType.TabIndex = 34;
       // 
@@ -139,6 +142,7 @@
       // 
       this.GPUs_vramSize.Location = new System.Drawing.Point(291, 397);
       this.GPUs_vramSize.Name = "GPUs_vramSize";
+      this.GPUs_vramSize.ReadOnly = true;
       this.GPUs_vramSize.Size = new System.Drawing.Size(136, 20);
       this.GPUs_vramSize.TabIndex = 33;
       // 
@@ -146,6 +150,7 @@
       // 
       this.GPUs_architecture.Location = new System.Drawing.Point(291, 373);
       this.GPUs_architecture.Name = "GPUs_architecture";
+      this.GPUs_architecture.ReadOnly = true;
       this.GPUs_architecture.Size = new System.Drawing.Size(136, 20);
       this.GPUs_architecture.TabIndex = 32;
       // 
@@ -153,6 +158,7 @@
       // 
       this.GPUs_proccessor.Location = new System.Drawing.Point(291, 349);
       this.GPUs_proccessor.Name = "GPUs_proccessor";
+      this.GPUs_proccessor.ReadOnly = true;
       this.GPUs_proccessor.Size = new System.Drawing.Size(136, 20);
       this.GPUs_proccessor.TabIndex = 31;
       // 
@@ -160,6 +166,7 @@
       // 
       this.GPUs_deviceId.Location = new System.Drawing.Point(291, 325);
       this.GPUs_deviceId.Name = "GPUs_deviceId";
+      this.GPUs_deviceId.ReadOnly = true;
       this.GPUs_deviceId.Size = new System.Drawing.Size(136, 20);
       this.GPUs_deviceId.TabIndex = 30;
       // 
@@ -167,6 +174,7 @@
       // 
       this.GPUs_name.Location = new System.Drawing.Point(291, 301);
       this.GPUs_name.Name = "GPUs_name";
+      this.GPUs_name.ReadOnly = true;
       this.GPUs_name.Size = new System.Drawing.Size(136, 20);
       this.GPUs_name.TabIndex = 29;
       // 
@@ -390,6 +398,7 @@
       // 
       // TabProccesses
       // 
+      this.TabProccesses.Controls.Add(this.processesRefresh);
       this.TabProccesses.Controls.Add(this.Processes);
       this.TabProccesses.Location = new System.Drawing.Point(4, 22);
       this.TabProccesses.Name = "TabProccesses";
@@ -410,9 +419,9 @@
       this.Processes.FullRowSelect = true;
       this.Processes.GridLines = true;
       this.Processes.HideSelection = false;
-      this.Processes.Location = new System.Drawing.Point(0, 0);
+      this.Processes.Location = new System.Drawing.Point(0, 36);
       this.Processes.Name = "Processes";
-      this.Processes.Size = new System.Drawing.Size(455, 484);
+      this.Processes.Size = new System.Drawing.Size(455, 448);
       this.Processes.TabIndex = 0;
       this.Processes.UseCompatibleStateImageBehavior = false;
       this.Processes.View = System.Windows.Forms.View.Details;
@@ -432,16 +441,26 @@
       this.columnHeader3.Text = "Название окна";
       this.columnHeader3.Width = 120;
       // 
+      // columnHeader5
+      // 
+      this.columnHeader5.Text = "Память";
+      this.columnHeader5.Width = 70;
+      // 
       // columnHeader4
       // 
       this.columnHeader4.Text = "Приоретет";
       this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       this.columnHeader4.Width = 67;
       // 
-      // columnHeader5
+      // processesRefresh
       // 
-      this.columnHeader5.Text = "Память";
-      this.columnHeader5.Width = 70;
+      this.processesRefresh.Location = new System.Drawing.Point(368, 7);
+      this.processesRefresh.Name = "processesRefresh";
+      this.processesRefresh.Size = new System.Drawing.Size(75, 23);
+      this.processesRefresh.TabIndex = 1;
+      this.processesRefresh.Text = "Обновить";
+      this.processesRefresh.UseVisualStyleBackColor = true;
+      this.processesRefresh.Click += new System.EventHandler(this.processesRefresh_Click);
       // 
       // MainWimdow
       // 
@@ -504,6 +523,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
-    }
+    private System.Windows.Forms.Button processesRefresh;
+  }
 }
 
