@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -40,21 +39,32 @@ namespace UdpServer {
 
     private static void ReceiveMessage () {
       UdpClient server = new UdpClient(localPort);
-      IPEndPoint remoteIp = new IPEndPoint(IPAddress.Any, localPort);
+      IPEndPoint clientIp = new IPEndPoint(IPAddress.Any, localPort);
 
       try {
         while (true) {
-          byte[] bytes = server.Receive(ref remoteIp);
+          byte[] bytes = server.Receive(ref clientIp);
 
-          // Announcement
-          string announce = "Coonected IP: " + remoteIp.ToString();
-          connections.announcement(announce, server);
+          // Send new connection information about all 
+          List<IPEndPoint> ips = connections.clients;
+          if (ips.Count > 0) {
+            string newConnectMessage = "Coonected IP: " + string.Join(", ", ips);
+            byte[] newConnectData = Encoding.Unicode.GetBytes(newConnectMessage);
+            server.Send(newConnectData, newConnectData.Length, clientIp);
+          } else {
+            string newConnectMessage = "Server is empty";
+            byte[] newConnectData = Encoding.Unicode.GetBytes(newConnectMessage);
+            server.Send(newConnectData, newConnectData.Length, clientIp);
+          }
+          
+          // Send to new connection all connects
+          string announce = "New IP joined: " + clientIp.ToString();
+          byte[] sendData = Encoding.Unicode.GetBytes(announce);
+          connections.clients.ForEach(c => {
+            server.Send(sendData, sendData.Length, c);
+          });
 
-          // connections.addConnection(remoteIp);
-          // List<string> ips = connections.getConnectedClientsIp();
-          // string data = string.Join(", ", ips);
-          // byte[] response = Encoding.Unicode.GetBytes(data);
-          // server.Send(response, response.Length, remoteIp);
+          connections.addConnection(clientIp);
         }
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);

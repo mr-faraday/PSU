@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\Server.csproj",
+      "projectUniqueName": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\Server.csproj",
+      "projectPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\Faraday\\.nuget\\packages\\",
-      "outputPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\obj\\",
+      "outputPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Faraday\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -32,6 +32,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -43,6 +44,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "imports": [
           "net461",
           "net462",
@@ -58,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
