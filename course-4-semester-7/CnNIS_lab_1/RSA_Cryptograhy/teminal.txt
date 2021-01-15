@@ -1,0 +1,1 @@
+openssl genrsa -out mykey.pem 1024
