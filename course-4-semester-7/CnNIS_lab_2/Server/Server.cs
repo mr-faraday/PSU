@@ -14,7 +14,6 @@
  * Server.cs
  */
 
-using Server;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -71,6 +70,19 @@ namespace UdpServer {
       } finally {
         server.Close();
       }
+    }
+  }
+
+  class Connections {
+    public List<IPEndPoint> clients = new List<IPEndPoint>();
+
+    public bool addConnection (IPEndPoint ip) {
+      bool foundClient = clients.Exists(c => c.ToString() == ip.ToString());
+      if (foundClient) return false;
+
+      clients.Add(ip);
+
+      return true;
     }
   }
 }
