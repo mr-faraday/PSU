@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\Client.csproj",
+      "projectUniqueName": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\Client.csproj",
+      "projectPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\Client.csproj",
       "packagesPath": "C:\\Users\\Faraday\\.nuget\\packages\\",
-      "outputPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\obj\\",
+      "outputPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_2\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Faraday\\AppData\\Roaming\\NuGet\\NuGet.Config",
