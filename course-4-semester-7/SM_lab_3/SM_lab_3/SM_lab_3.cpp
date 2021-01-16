@@ -57,9 +57,9 @@ int main() {
       printf("x(%.2lf)=%.8lf y(%.2lf)=%.8lf \n", t, x, t, y, t);
     }
   }
- 
+
   remove("105.txt");
-  FILE * file;
+  FILE* file;
   file = fopen("105.txt", "w");
 
   for (i = 0; i <= n1; i++) {
@@ -72,9 +72,11 @@ int main() {
 }
 
 double f1(double t, double x, double y) {
-  return alpha * x - y - x * (x * x + y * y);
+  return y;
 }
 
 double f2(double t, double x, double y) {
-  return x + alpha * y - y * (x * x + y * y);
+  double g, l;
+  g = 10.0; l = 9.0;
+  return -g / l * sin(x);
 }
