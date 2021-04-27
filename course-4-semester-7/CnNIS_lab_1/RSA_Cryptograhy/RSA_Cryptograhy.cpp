@@ -1,166 +1,107 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
-#include <conio.h>
-#include <io.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <openssl/rsa.h>
-#include <openssl/pem.h>
+#include <fstream>
+#include <streambuf>
+#include <string>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
 
-const char* publicKeyName = "rsa.public";
-const char* privateKeyName = "rsa.private";
+#define BUFSIZE 1024
 
-using namespace std;
-void GenKeys(char secret[]);
-void Enc();
-void Dec(char secret[]);
-void GenKeysMenu();
-void EncryptMenu();
-void DecryptMenu();
+int encrypt();
+int decrypt();
+void clearBuffer();
 
-int main() {
-	setlocale(LC_ALL, "Russian");
+std::ifstream fIn;
+std::ofstream fOut;
 
-	char key;
-	int status = 1;
-	while (status) {
-		system("cls");
-		cout << "-------------- Шифрование RSA --------------" << endl << endl;
-		cout << "  1. Получение ключей" << endl;
-		cout << "  2. Зашифровать содержимое файла" << endl;
-		cout << "  3. Дешифровать содержимое файла" << endl << endl;
-		cout << "Ваш выбор: ";
-		cin >> key;
+unsigned char key[24];
+unsigned char iv[] = "vector-vector-ve";
+unsigned char inbuf[BUFSIZE], outbuf[BUFSIZE];
 
-		switch (key) {
-			case '1':
-				GenKeysMenu();
-				break;
-			case '2':
-				EncryptMenu();
-				break;
-			case '3':
-				DecryptMenu();
-				break;
-			default:
-				break;
-		}
-	}
+int inlen, outlen;
+EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+const EVP_CIPHER *cipher;
 
-	return 0;
+int main(int argc, char *argv[]) {
+    std::cout << argv[1] << std::endl;
+    std::cout << argv[2] << std::endl;
+    std::cout << argv[3] << std::endl;
+    std::cout << argv[4] << std::endl;
+
+    // Открытие ключа
+    std::ifstream fKey(argv[2]);
+    std::string keyStr((std::istreambuf_iterator<char>(fKey)), std::istreambuf_iterator<char>());
+    strcpy((char *) key, keyStr.c_str());
+    fKey.close();
+
+    fIn = std::ifstream(argv[1], std::ifstream::binary);
+    fOut = std::ofstream(argv[4], std::ofstream::binary);
+
+    EVP_CIPHER_CTX_init(ctx);
+    cipher = EVP_aes_192_cfb();
+
+    std::cout << "Cipher IV length: " << EVP_CIPHER_iv_length(cipher) << std::endl;
+
+    if (argv[3][0] == 'e') encrypt();
+    if (argv[3][0] == 'd') decrypt();
+
+    EVP_CIPHER_CTX_free(ctx);
+    fIn.close();
+    fOut.close();
+
+    return 0;
 }
 
-void GenKeys(char secret[]) {
-	/* указатель на структуру для хранения ключей */
-	RSA* rsa = NULL;
-	unsigned long bits = 1024; /* длина ключа в битах */
-	FILE* privKey_file = NULL, * pubKey_file = NULL;
-	/* контекст алгоритма шифрования */
-	const EVP_CIPHER* cipher = NULL;
-	/*Создаем файлы ключей*/
-	privKey_file = fopen("\private.key", "wb");
-	pubKey_file = fopen("\public.key", "wb");
-	/* Генерируем ключи */
-	rsa = RSA_generate_key(bits, RSA_F4, NULL, NULL);
-	/* Формируем контекст алгоритма шифрования */
-	cipher = EVP_get_cipherbyname("bf-ofb");
-	/* Получаем из структуры rsa открытый и секретный ключи и сохраняем в файлах.
-	* Секретный ключ шифруем с помощью парольной фразы
-	*/
-	PEM_write_RSAPrivateKey(privKey_file, rsa, cipher, NULL, 0, NULL, secret);
-	PEM_write_RSAPublicKey(pubKey_file, rsa);
-	/* Освобождаем память, выделенную под структуру rsa */
-	RSA_free(rsa);
-	fclose(privKey_file);
-	fclose(pubKey_file);
-	cout << "Ключи сгенерированы и помещены в папку с исполняемым файлом" << endl;
+int encrypt() {
+    EVP_EncryptInit(ctx, cipher, key, iv);
+
+    while (!fIn.eof()) {
+        clearBuffer();
+
+        fIn.read((char *) inbuf, BUFSIZE);
+        inlen = strlen((char *) inbuf);
+
+        if (inlen <= 0) break;
+
+        EVP_EncryptUpdate(ctx, outbuf, &outlen, inbuf, inlen);
+        fOut << outbuf;
+    }
+
+    clearBuffer();
+
+    EVP_EncryptFinal(ctx, outbuf, &outlen);
+    fOut << outbuf;
+    EVP_CIPHER_CTX_cleanup(ctx);
+
+    return 0;
 }
 
-void Encrypt() {
-	/* структура для хранения открытого ключа */
-	RSA* pubKey = NULL;
-	FILE* pubKey_file = NULL;
-	unsigned char* ctext, * ptext;
-	int inlen, outlen;
-	/* Считываем открытый ключ */
-	pubKey_file = fopen("\public.key", "rb");
-	pubKey = PEM_read_RSAPublicKey(pubKey_file, NULL, NULL, NULL);
-	fclose(pubKey_file);
+int decrypt() {
+    EVP_DecryptInit(ctx, cipher, key, iv);
 
-	/* Определяем длину ключа */
-	int key_size = RSA_size(pubKey);
-	ctext = (unsigned char*)malloc(key_size);
-	ptext = (unsigned char*)malloc(key_size);
-	OpenSSL_add_all_algorithms();
+    while (!fIn.eof()) {
+        clearBuffer();
 
-	int out = _open("rsa.file", O_CREAT | O_TRUNC | O_RDWR, 0600);
-	int in = _open("in.txt", O_RDWR);
-	/* Шифруем содержимое входного файла */
-	while (1) {
-		inlen = _read(in, ptext, key_size - 11);
-		if (inlen <= 0) break;
-		outlen = RSA_public_encrypt(inlen, ptext, ctext, pubKey, RSA_PKCS1_PADDING);
-		if (outlen != RSA_size(pubKey)) exit(-1);
-		_write(out, ctext, outlen);
-	}
-	cout << "Содержимое файла in.txt было зашифровано и помещено в файл rsa.file" << endl;
+        fIn.read((char *) inbuf, BUFSIZE);
+        inlen = strlen((char *) inbuf);
+
+        if (inlen <= 0) break;
+
+        EVP_DecryptUpdate(ctx, outbuf, &outlen, inbuf, inlen);
+        fOut << outbuf;
+    }
+
+    clearBuffer();
+
+    EVP_DecryptFinal(ctx, outbuf, &outlen);
+    fOut << outbuf;
+
+    return 0;
 }
 
-void Decrypt(char secret[]) {
-	RSA* privKey = NULL;
-	FILE* privKey_file;
-	unsigned char* ptext, * ctext;
-	int inlen, outlen;
-
-	/* Открываем ключевой файл и считываем секретный ключ */
-	OpenSSL_add_all_algorithms();
-	privKey_file = fopen("private.key", "rb");
-	privKey = PEM_read_RSAPrivateKey(privKey_file, NULL, NULL, secret);
-
-	/* Определяем размер ключа */
-	int key_size = RSA_size(privKey);
-	ptext = (unsigned char*)malloc(key_size);
-	ctext = (unsigned char*)malloc(key_size);
-
-	int out = _open("out.txt", O_CREAT | O_TRUNC | O_RDWR, 0600);
-	int in = _open("rsa.file", O_RDWR);
-
-	/* Дешифруем файл */
-	while (1) {
-		inlen = _read(in, ctext, key_size);
-		if (inlen <= 0) break;
-		outlen = RSA_private_decrypt(inlen, ctext, ptext, privKey, RSA_PKCS1_PADDING);
-		if (outlen < 0) exit(0);
-		_write(out, ptext, outlen);
-	}
-	cout << "Содержимое файла rsa.file было дешифровано и помещено в файл out.txt" << endl;
-
-}
-void GenKeysMenu() {
-	char secret[] = "";
-	system("cls");
-	cout << "-------------- Шифрование RSA --------------" << endl << endl;
-	cout << "Введите парольную фразу для закрытого ключа: ";
-	cin >> secret;
-	GenKeys(secret);
-	cout << "Нажмите любую кнопку для возврата в меню...";
-	_getch();
-}
-void EncryptMenu() {
-	system("cls");
-	cout << "-------------- Шифрование RSA --------------" << endl << endl;
-	Encrypt();
-	cout << "Нажмите любую кнопку для возврата в меню...";
-	_getch();
-}
-void DecryptMenu() {
-	char secret[] = "";
-	system("cls");
-	cout << "-------------- Шифрование RSA --------------" << endl << endl;
-	cout << "Введите парольную фразу для закрытого ключа: ";
-	cin >> secret;
-	Decrypt(secret);
-	cout << "Нажмите любую кнопку для возврата в меню...";
-	_getch();
+void clearBuffer() {
+    memset(inbuf, 0, BUFSIZE);
+    memset(outbuf, 0, BUFSIZE);
 }

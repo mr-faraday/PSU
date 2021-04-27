@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Security.Cryptography;
-using System.Text;
+using System.IO;
 
 namespace CnNIS_lab_4 {
   class Program {
+    private static readonly SHA256 encryptor = SHA256.Create();
+
     static void Main (string[] args) {
-      string input = Console.ReadLine();
+      Console.Write("File name: ");
+      string filePath = Console.ReadLine();
 
-      SHA256 coder = SHA256.Create();
+      FileStream stream = File.OpenRead(filePath);
+      byte[] outputBuffer = encryptor.ComputeHash(stream);
 
-      byte[] inputBuffer = Encoding.Unicode.GetBytes(input);
-      byte[] outputBuffer = coder.ComputeHash(inputBuffer);
-
+      Console.WriteLine("\nChecksum:");
       for (int i = 0; i < outputBuffer.Length; i++) {
         Console.Write($"{outputBuffer[i]:X2}");
-        if ((i % 4) == 3) Console.Write(" ");
+        if (i + 1 != outputBuffer.Length) Console.Write(":");
       }
 
+
+      Console.WriteLine();
     }
   }
 }

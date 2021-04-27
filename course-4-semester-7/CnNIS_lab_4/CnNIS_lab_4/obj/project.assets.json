@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\CnNIS_lab_4.csproj",
+      "projectUniqueName": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\CnNIS_lab_4.csproj",
       "projectName": "CnNIS_lab_4",
-      "projectPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\CnNIS_lab_4.csproj",
+      "projectPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\CnNIS_lab_4.csproj",
       "packagesPath": "C:\\Users\\Faraday\\.nuget\\packages\\",
-      "outputPath": "F:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\obj\\",
+      "outputPath": "D:\\PSU\\course-4-semester-7\\CnNIS_lab_4\\CnNIS_lab_4\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Faraday\\AppData\\Roaming\\NuGet\\NuGet.Config",
