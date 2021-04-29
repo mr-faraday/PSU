@@ -1,0 +1,36 @@
+{
+    "root": true,
+    "env": {
+        "node": true
+    },
+
+    "extends": ["eslint:recommended"],
+
+    "rules": {
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "max-len": [
+            "error",
+            {
+                "code": 100,
+                "tabWidth": 4,
+                "ignoreUrls": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreRegExpLiterals": true,
+                "ignoreComments": true,
+                "ignoreTrailingComments": true
+            }
+        ],
+        "object-curly-spacing": ["error", "always"],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "never"],
+        "comma-dangle": ["error", "never"],
+        "space-before-function-paren": ["warn", "always"],
+        "arrow-parens": "off",
+        "no-unused-expressions": "off",
+        "no-unused-vars": "warn",
+
+        "vue/no-multiple-template-root": "off"
+    }
+}

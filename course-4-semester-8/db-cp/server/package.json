@@ -1,10 +1,13 @@
 {
-  "name": "db-cp-server",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "mr-faraday",
-  "license": "MIT"
+    "name": "db-cp-server",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "mr-faraday",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.17.1"
+    }
 }
