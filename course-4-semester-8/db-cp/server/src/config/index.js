@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV === 'development') {
-    require('dotenv').config()
-}
-
 module.exports.PORT = 3000
 
 module.exports.POSTGRES_HOST = process.env.POSTGRES_HOST

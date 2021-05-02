@@ -6,22 +6,13 @@ services:
         env_file: ./.env
         volumes:
             - ./db-init/init.sql:/docker-entrypoint-initdb.d/init.sql
-        ports:
-            - '5432:5432' # for be able to access via pgAdmin and local development
     server:
         container_name: server
-        build: ./server
+        build:
+            context: ./server
         restart: always
         env_file: ./.env
         depends_on:
             - database
         ports:
             - '3000:3000'
-    client:
-        container_name: client
-        build: ./client
-        restart: always
-        depends_on:
-            - server
-        ports:
-            - '5000:5000'

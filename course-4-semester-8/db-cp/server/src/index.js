@@ -12,7 +12,7 @@ const app = express()
 app.get('/', async (req, res) => {
     try {
         console.log((await query('SELECT * FROM rack')).rows)
-        res.send('Hello World')
+        res.send('Hello World!')
     } catch (error) {
         console.log(error.message)
         res.sendStatus(500)

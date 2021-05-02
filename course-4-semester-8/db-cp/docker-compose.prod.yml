@@ -1,0 +1,14 @@
+services:
+    server:
+        environment:
+            - NODE_ENV=production
+    client:
+        container_name: client
+        build: ./client
+        restart: always
+        depends_on:
+            - server
+        environment:
+            - NODE_ENV=production
+        ports:
+            - '5000:5000'

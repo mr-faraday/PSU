@@ -1,0 +1,11 @@
+services:
+    database:
+        ports:
+            - '5432:5432' # for be able to access via pgAdmin
+    server:
+        build:
+            dockerfile: Dockerfile.dev
+        environment:
+            - NODE_ENV=development
+        volumes:
+            - ./server:/app

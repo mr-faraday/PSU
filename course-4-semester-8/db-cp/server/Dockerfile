@@ -7,6 +7,6 @@ RUN npm ci
 COPY . .
 RUN npm prune --production
 
-EXPOSE ${SERVER_PORT}
+EXPOSE 3000
 
 CMD [ "npm", "start" ]

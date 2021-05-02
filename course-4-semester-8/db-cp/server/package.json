@@ -4,7 +4,7 @@
     "description": "",
     "scripts": {
         "start": "node src",
-        "dev": "cross-env NODE_ENV=development nodemon src"
+        "dev": "nodemon -L src"
     },
     "author": "mr-faraday",
     "license": "MIT",
@@ -13,7 +13,6 @@
         "pg": "^8.6.0"
     },
     "devDependencies": {
-        "cross-env": "^7.0.3",
         "dotenv": "^8.2.0",
         "nodemon": "^2.0.7"
     }
