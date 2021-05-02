@@ -1,13 +1,21 @@
 {
     "root": true,
     "env": {
+        "es6": true,
         "node": true
     },
-
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
     "extends": ["eslint:recommended"],
-
     "rules": {
-        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "indent": [
+            "warn",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
         "max-len": [
             "error",
             {
@@ -30,7 +38,6 @@
         "arrow-parens": "off",
         "no-unused-expressions": "off",
         "no-unused-vars": "warn",
-
         "vue/no-multiple-template-root": "off"
     }
 }

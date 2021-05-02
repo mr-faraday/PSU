@@ -1,9 +1,13 @@
-FROM node:14
-WORKDIR /usr/src/app
+FROM alpine
+RUN apk add --update nodejs nodejs-npm
 
+WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
-EXPOSE 8080
+RUN npm run build
+RUN npm prune --production
 
-CMD [ "npm", "run", "serve" ]
+EXPOSE 5000
+
+CMD [ "npm", "run", "server:start" ]
