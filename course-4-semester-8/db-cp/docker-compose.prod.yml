@@ -10,5 +10,6 @@ services:
             - server
         environment:
             - NODE_ENV=production
+            - POSTGRES_HOST=database
         ports:
             - '5000:5000'

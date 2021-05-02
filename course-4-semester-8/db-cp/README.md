@@ -1,9 +1,10 @@
 # Database Course Project 4.2
 
-Run server/client:
+Run server/client in development mode:
 
 ```sh
-docker-compose up -d
+./startup.sh dev # server
+npm run --prefix client start # client
 ```
 
 Stopping:
@@ -15,15 +16,15 @@ docker-compose down
 Backup database:
 
 ```sh
-docker exec -t db-cp-db pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+docker exec -t database pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 # or compressed
-docker exec -t db-cp-db pg_dumpall -c -U postgres | gzip > dump_`date +%d-%m-%Y"_"%H_%M_%S`.gz
+docker exec -t database pg_dumpall -c -U postgres | gzip > dump_`date +%d-%m-%Y"_"%H_%M_%S`.gz
 ```
 
 Restore database:
 
 ```sh
-cat %DUMB_FILE% | docker exec -i db-cp-db psql -U postgres
+cat %DUMB_FILE% | docker exec -i database psql -U postgres
 ```
 
 Reuired .env config:

@@ -1,11 +1,14 @@
 services:
     database:
+        container_name: dev-database
         ports:
             - '5432:5432' # for be able to access via pgAdmin
     server:
+        container_name: dev-server
         build:
             dockerfile: Dockerfile.dev
         environment:
             - NODE_ENV=development
+            - POSTGRES_HOST=dev-database
         volumes:
             - ./server:/app
