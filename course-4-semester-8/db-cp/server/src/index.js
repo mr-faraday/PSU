@@ -2,7 +2,7 @@
 
 const express = require('express')
 const { PORT } = require('./config')
-const { query } = require('./db')
+// const { query } = require('./db')
 
 // константы
 const host = '0.0.0.0'
@@ -11,7 +11,7 @@ const host = '0.0.0.0'
 const app = express()
 app.get('/', async (req, res) => {
     try {
-        console.log((await query('SELECT * FROM rack')).rows)
+        // console.log((await query('SELECT * FROM rack')).rows)
         res.send('Hello World!')
     } catch (error) {
         console.log(error.message)

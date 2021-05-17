@@ -34,7 +34,11 @@
     (Star (star_name CY_Canis_Major) (mass 30) (stellar_type M))
 )
 
-(facts)
+(deffunction flushStarsData ()
+    (retract )
+)
+
+; (facts)
 
 (exit)
 ; empty line at the end
