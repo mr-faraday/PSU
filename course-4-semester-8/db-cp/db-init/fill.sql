@@ -79,7 +79,7 @@ set session my.number_of_documents = '700';
 set session my.number_of_subjects = '8';
 set session my.number_of_copies = '7550';
 set session my.number_of_subscribers = '40';
-set session my.number_of_extraditios = '14964';
+set session my.number_of_extraditios = '21589';
 
 set session my.start_date = '2019-01-01 00:00:00';
 set session my.end_date = '2020-02-01 00:00:00';
@@ -128,25 +128,49 @@ FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 -- extraditions
 
-CREATE FUNCTION create_extradition() returns timestamp
-	language plpgsql
-	AS $$
-    declare
-        document_id int;
-        extradition_date timestamp;
-	begin
-	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2020-01-20 20:00:00';
-	end;
-	$$;
+CREATE PROCEDURE create_extradition()
+BEGIN
+    DECLARE done BOOLEAN;
+    DECLARE cday, cmenu_id INT;
+    DECLARE days_cur CURSOR FOR
+        SELECT `day`, `menu_id` FROM menus_days_mealslists GROUP BY day, menu_id ORDER BY menu_id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-INSERT INTO extradition
-select
-    id
-    random_timestamp(), -- extradition_date
-    random_timestamp(), -- return_date
-    floor(random() * (current_setting('my.number_of_subscribers')::int + 1))::int,
-    floor(random() * (current_setting('my.number_of_documents')::int + 1))::int,
+    OPEN days_cur;
 
-FROM GENERATE_SERIES(1, current_setting('my.number_of_extraditios')::int) as id;
+    read_loop: LOOP
+        FETCH days_cur INTO cday, cmenu_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
 
-DROP FUNCTION random_timestamp, create_extradition;
+        INSERT INTO menus_days (`menu_id`, `day`) VALUES (cmenu_id, cday);
+        UPDATE menus_days_mealslists SET `day_id` = (SELECT `id` FROM menus_days WHERE `menu_id` = cmenu_id AND `day` = cday LIMIT 1) WHERE menu_id = cmenu_id AND `day` = cday;
+    END LOOP;
+
+    CLOSE days_cur;
+END
+
+
+
+-- 	language plpgsql
+-- 	AS $$
+--     declare
+--         document_id int;
+--         extradition_date timestamp;
+-- 	begin
+-- 	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2020-01-20 20:00:00';
+-- 	end;
+-- 	$$;
+
+-- INSERT INTO extradition
+-- select
+--     id
+--     random_timestamp(), -- extradition_date
+--     random_timestamp(), -- return_date
+--     floor(random() * (current_setting('my.number_of_subscribers')::int + 1))::int,
+--     floor(random() * (current_setting('my.number_of_documents')::int + 1))::int,
+
+-- FROM GENERATE_SERIES(1, current_setting('my.number_of_extraditios')::int) as id;
+
+-- DROP FUNCTION random_timestamp, create_extradition;
