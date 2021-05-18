@@ -32,11 +32,21 @@
     (Star (star_name Rigel) (mass 0.5) (stellar_type B))
     (Star (star_name 10_Lacerta) (mass 0.4) (stellar_type O))
     (Star (star_name CY_Canis_Major) (mass 30) (stellar_type M))
+    (Star (star_name Deneb) (mass 19.0) (stellar_type A))
 )
 
-(deffunction flushStarsData ()
-    (retract )
+(deffunction showStarsWithType (?type)
+    (defrule show
+        (Star (star_name ?name) (mass ?mass) (stellar_type ?s_type))
+        (test (str-compare (?type ?s_type)))
+        =>
+        (printout t ?name "with mass" ?mass crlf)
+    )
+
+    (run)
 )
+
+(showStarsWithType M)
 
 ; (facts)
 

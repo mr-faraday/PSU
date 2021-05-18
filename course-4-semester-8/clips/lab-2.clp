@@ -32,6 +32,7 @@
     (Star (star_name Rigel) (mass 0.5) (stellar_type B))
     (Star (star_name 10_Lacerta) (mass 0.4) (stellar_type O))
     (Star (star_name CY_Canis_Major) (mass 30.0) (stellar_type M))
+    (Star (star_name Deneb) (mass 19.0) (stellar_type A))
 )
 
 ; 1
@@ -103,7 +104,7 @@
 
 (printout t "6:" crlf)
 (defrule isStarsGTypeExists
-    (exists (Star (stellar_type "G")))
+    (exists (Star (stellar_type G)))
     =>
     (printout t "There are stars with G type" crlf)
 )
@@ -116,11 +117,44 @@
 (printout t "7:" crlf)
 (defrule areThereExtreamlyLightStars
     (forall
-        (Star (mass ?mass))
+        (mass ?mass)
         (not (test (< ?mass 0.3)))
     )
     =>
     (printout t "There are no extreamly light stars" crlf)
+)
+
+(run)
+(printout t crlf)
+
+; 8
+
+(defrule createSnippet
+    (logical (Star (star_name ?name) (stellar_type ?type)))
+    =>
+    (assert (There are star with name ?name and type ?type))
+)
+
+(run)
+
+; 9
+
+(defrule removeHevyStars
+    ?f <- (Star (mass ?mass))
+    (test (> ?mass 2))
+    =>
+    (retract (fact-index ?f))
+)
+
+(run)
+
+; 10
+
+(printout t "10:" crlf)
+(defrule showStarsWithOType
+    (Star (star_name ?name) (stellar_type O))
+    =>
+    (printout t ?name)
 )
 
 (run)
