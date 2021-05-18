@@ -2,7 +2,7 @@ CREATE FUNCTION random_timestamp() returns timestamp
 	language plpgsql
 	AS $$
 	begin
-	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2020-01-20 20:00:00';
+	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2022-01-20 20:00:00';
 	end;
 	$$;
 
@@ -130,26 +130,66 @@ FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 CREATE PROCEDURE create_extradition()
 BEGIN
-    DECLARE done BOOLEAN;
-    DECLARE cday, cmenu_id INT;
-    DECLARE days_cur CURSOR FOR
-        SELECT `day`, `menu_id` FROM menus_days_mealslists GROUP BY day, menu_id ORDER BY menu_id;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE extradition_length, i INT;
+    DECLARE extradition_date, return_date, returned_at timestamp;
+    DECLARE document_ids_currently_in_use, available_document_ids int;
+    -- DECLARE some_cur CURSOR FOR
+        -- SELECT `day`, `menu_id` FROM menus_days_mealslists GROUP BY day, menu_id ORDER BY menu_id;
+        -- some cursor
+    -- DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    OPEN days_cur;
+    extradition_length := current_setting('my.number_of_extraditios')::int;
+    i := 0;
 
-    read_loop: LOOP
-        FETCH days_cur INTO cday, cmenu_id;
-        IF done THEN
-            LEAVE read_loop;
+    -- OPEN some_cur;
+
+    extraditions_loop LOOP
+        IF i > extradition_length THEN
+            LEAVE extraditions_loop;
         END IF;
 
-        INSERT INTO menus_days (`menu_id`, `day`) VALUES (cmenu_id, cday);
-        UPDATE menus_days_mealslists SET `day_id` = (SELECT `id` FROM menus_days WHERE `menu_id` = cmenu_id AND `day` = cday LIMIT 1) WHERE menu_id = cmenu_id AND `day` = cday;
-    END LOOP;
+        extradition_date := random_timestamp()
+        return_date := extradition_date + random() * 3600 * 24 * 365
 
-    CLOSE days_cur;
+        IF now() > return_date THEN
+            returned_at := return_date
+        ELSE
+            returned_at := NULL
+        END IF;
+
+
+        -- FETCH some_cur INTO var1, var2;
+
+        -- Get documents currently in use
+        SELECT document_id INTO document_ids_currently_in_use FROM extradition AS item
+        WHERE
+            returned_at > item.extradition_date AND
+            (returned_at < item.return_date OR returned_at = null)
+        GROUP BY document_id;
+
+        SELECT document_id INTO available_document_ids FROM document AS doc
+        WHERE
+            extradition_date > doc.arrival_date AND
+            (SELECT COUNT(*) FROM document_ids_currently_in_use WHERE doc.documet_id = document_id) = 0;
+
+        IF (SELECT COUNT(*) FROM available_document_ids) = 0
+            RAISE EXCEPTION 'No available in available_document_ids, please restart';
+        END IF;
+
+        -- get documet_id
+        
+
+        INSERT INTO extradition (extradition_date, return_date, subscriber_id, document_id)
+            VALUES (/* data */);
+        
+        i := i + 1;
+    END LOOP extraditions_loop;
+
+    -- CLOSE some_cur;
 END
+
+CALL create_extradition();
+DROP PROCEDURE IF EXISTS create_extradition;
 
 
 
