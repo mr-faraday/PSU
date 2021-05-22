@@ -1,8 +1,14 @@
-CREATE FUNCTION random_timestamp() returns timestamp
+CREATE OR REPLACE FUNCTION random_timestamp() returns timestamptz
 	language plpgsql
 	AS $$
 	begin
-	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2022-01-20 20:00:00';
+	    return TO_TIMESTAMP(
+			EXTRACT(EPOCH FROM timestamptz '2001-01-10T20:00:00Z') +
+			floor(random() * (
+				EXTRACT(EPOCH FROM timestamptz '2023-01-10T20:00:00Z') -
+				EXTRACT(EPOCH FROM timestamptz '2001-01-20T20:00:00Z'
+			)))
+		);
 	end;
 	$$;
 
@@ -89,104 +95,109 @@ CREATE EXTENSION pgcrypto;
 
 -- Filling of racks
 INSERT INTO rack
-select id, concat(num + 100000000)
+select id, concat(id + 100000000)
 FROM GENERATE_SERIES(1, current_setting('my.number_of_racks')::int) as id;
 
 -- Filling of shelfs
 INSERT INTO shelf
 select
-    id
+    id,
     concat(id + 200000000),
-    floor(random() * (current_setting('my.number_of_racks')::int + 1))::int
+    floor(random() * current_setting('my.number_of_racks')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_shelfs')::int) as id;
 
 -- Filling of cells
 INSERT INTO cell
 select
-    id
+    id,
     concat(id + 300000000),
-    floor(random() * (current_setting('my.number_of_shelfs')::int + 1))::int
+    floor(random() * current_setting('my.number_of_shelfs')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_cells')::int) as id;
 
 INSERT INTO document
 select
-    id
+    id,
     concat('DOC_', id + 1000),
     concat(id + 400000000),
     random_timestamp(),
-    floor(random() * (current_setting('my.number_of_cells')::int + 1))::int,
-    floor(random() * (current_setting('my.number_of_subjects')::int + 1))::int
+    floor(random() * current_setting('my.number_of_cells')::int) + 1,
+    floor(random() * current_setting('my.number_of_subjects')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 INSERT INTO document_copy
 select
-    id
+    id,
     concat('COPY_', id + 1000),
     concat(id + 500000000),
-    floor(random() * (current_setting('my.number_of_documents')::int + 1))::int
+    floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 -- extraditions
 
+CREATE TEMP TABLE IF NOT EXISTS id_table ( id int );
+-- set session my.number_of_extraditios = '21589';
+
 CREATE PROCEDURE create_extradition()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    extradition_length INT := current_setting('my.number_of_extraditios')::int;
+    i INT := 0;
+    doc_id INT;
+    extradition_date timestamptz;
+    return_date timestamptz;
+    returned_at timestamptz;
+	
+	document_ids_currently_in_use id_table;
+	available_document_ids id_table;
 BEGIN
-    DECLARE extradition_length, i INT;
-    DECLARE extradition_date, return_date, returned_at timestamp;
-    DECLARE document_ids_currently_in_use, available_document_ids int;
-    -- DECLARE some_cur CURSOR FOR
-        -- SELECT `day`, `menu_id` FROM menus_days_mealslists GROUP BY day, menu_id ORDER BY menu_id;
-        -- some cursor
-    -- DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    extradition_date := random_timestamp();
 
-    extradition_length := current_setting('my.number_of_extraditios')::int;
-    i := 0;
-
-    -- OPEN some_cur;
-
-    extraditions_loop LOOP
+    <<extraditions_loop>> LOOP
         IF i > extradition_length THEN
-            LEAVE extraditions_loop;
+            EXIT extraditions_loop;
         END IF;
 
-        extradition_date := random_timestamp()
-        return_date := extradition_date + random() * 3600 * 24 * 365
+        extradition_date := random_timestamp();
+        return_date := TO_TIMESTAMP(EXTRACT(EPOCH FROM extradition_date) + floor(random() * 3600 * 24 * 365));
 
         IF now() > return_date THEN
-            returned_at := return_date
+            returned_at := return_date;
         ELSE
-            returned_at := NULL
+            returned_at := NULL;
         END IF;
 
-
-        -- FETCH some_cur INTO var1, var2;
-
         -- Get documents currently in use
-        SELECT document_id INTO document_ids_currently_in_use FROM extradition AS item
+        SELECT document_id AS id INTO document_ids_currently_in_use FROM extradition AS item
         WHERE
             returned_at > item.extradition_date AND
             (returned_at < item.return_date OR returned_at = null)
-        GROUP BY document_id;
+        GROUP BY id;
 
-        SELECT document_id INTO available_document_ids FROM document AS doc
+		-- write join
+        SELECT document_id AS id INTO available_document_ids FROM document AS doc
         WHERE
             extradition_date > doc.arrival_date AND
             (SELECT COUNT(*) FROM document_ids_currently_in_use WHERE doc.documet_id = document_id) = 0;
 
         IF (SELECT COUNT(*) FROM available_document_ids) = 0
+		THEN
             RAISE EXCEPTION 'No available in available_document_ids, please restart';
         END IF;
 
         -- get documet_id
-        
+        doc_id := 1;
 
         INSERT INTO extradition (extradition_date, return_date, subscriber_id, document_id)
-            VALUES (/* data */);
-        
+            VALUES (extradition_date, returned_at, 1, 1);
+
+        DELETE FROM document_ids_currently_in_use;
+        DELETE FROM available_document_ids;
+
         i := i + 1;
     END LOOP extraditions_loop;
-
-    -- CLOSE some_cur;
 END
+$$;
 
 CALL create_extradition();
 DROP PROCEDURE IF EXISTS create_extradition;
@@ -197,9 +208,9 @@ DROP PROCEDURE IF EXISTS create_extradition;
 -- 	AS $$
 --     declare
 --         document_id int;
---         extradition_date timestamp;
+--         extradition_date timestamptz;
 -- 	begin
--- 	    return timestamp '2001-01-10 20:00:00' + random() * timestamp '2020-01-20 20:00:00';
+-- 	    return timestamptz '2001-01-10 20:00:00' + random() * timestamptz '2020-01-20 20:00:00';
 -- 	end;
 -- 	$$;
 

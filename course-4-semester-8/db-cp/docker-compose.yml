@@ -15,5 +15,18 @@ services:
         env_file: ./.env
         depends_on:
             - database
+        environment:
+            - NODE_ENV=production
         ports:
             - '3000:3000'
+    client:
+        container_name: client
+        build: ./client
+        restart: always
+        depends_on:
+            - server
+        environment:
+            - NODE_ENV=production
+            - POSTGRES_HOST=database
+        ports:
+            - '5000:5000'

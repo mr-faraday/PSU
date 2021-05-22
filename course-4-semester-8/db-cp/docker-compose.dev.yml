@@ -1,14 +1,11 @@
 services:
     database:
         container_name: dev-database
+        image: postgres
+        restart: always
+        env_file: ./.env
+        volumes:
+            - ./db-init/init.sql:/docker-entrypoint-initdb.d/1.sql
+            - ./db-init/fill.sql:/docker-entrypoint-initdb.d/2.sql
         ports:
             - '5432:5432' # for be able to access via pgAdmin
-    server:
-        container_name: dev-server
-        build:
-            dockerfile: Dockerfile.dev
-        environment:
-            - NODE_ENV=development
-            - POSTGRES_HOST=dev-database
-        volumes:
-            - ./server:/app
