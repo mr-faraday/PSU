@@ -38,7 +38,7 @@
 ; 1
 
 (printout t "1:" crlf)
-(defrule showHeavyStars 
+(defrule show-heavy-stars 
     (Star (star_name ?name) (mass ?mass))
     (test (> ?mass 1))
     =>
@@ -51,7 +51,7 @@
 ; 2
 
 (printout t "2:" crlf)
-(defrule showLightWeightStars 
+(defrule show-light-weight-stars 
     (Star (star_name ?name) (mass ?mass))
     (test (<= ?mass 1))
     =>
@@ -64,7 +64,7 @@
 ; 3
 
 (printout t "3:" crlf)
-(defrule showVeryLigthOrHeavyStars 
+(defrule show-very-ligth-or-heavy-stars 
     (Star (star_name ?name) (mass ?mass))
     (or (test (<= ?mass 0.5)) (test (>= ?mass 20)))
     =>
@@ -77,7 +77,7 @@
 ; 4
 
 (printout t "4:" crlf)
-(defrule showHeavyStarsWithMType
+(defrule show-heavy-stars-with-m-type
     (Star (star_name ?name) (mass ?mass) (stellar_type ?type))
     (and (test (str-compare ?type "M")) (test (>= ?mass 20)))
     =>
@@ -90,9 +90,9 @@
 ; 5
 
 (printout t "5:" crlf)
-(defrule showHeavyStarsWithMType
+(defrule show-heavy-stars-with-k-type
     (Star (star_name ?name) (mass ?mass) (stellar_type ?type))
-    (and (test (str-compare ?type "M")) (test (>= ?mass 20)))
+    (and (test (str-compare ?type "K")) (test (>= ?mass 20)))
     =>
     (printout t ?name crlf)
 )
@@ -103,7 +103,7 @@
 ;6
 
 (printout t "6:" crlf)
-(defrule isStarsGTypeExists
+(defrule is-stars-g-type-exists
     (exists (Star (stellar_type G)))
     =>
     (printout t "There are stars with G type" crlf)
@@ -115,7 +115,7 @@
 ;7
 
 (printout t "7:" crlf)
-(defrule areThereExtreamlyLightStars
+(defrule are-there-extreamly-light-stars
     (forall
         (mass ?mass)
         (not (test (< ?mass 0.3)))
@@ -129,7 +129,7 @@
 
 ; 8
 
-(defrule createSnippet
+(defrule create-snippet
     (logical (Star (star_name ?name) (stellar_type ?type)))
     =>
     (assert (There are star with name ?name and type ?type))
@@ -139,7 +139,7 @@
 
 ; 9
 
-(defrule removeHevyStars
+(defrule remove-hevy-stars
     ?f <- (Star (mass ?mass))
     (test (> ?mass 2))
     =>
@@ -151,7 +151,7 @@
 ; 10
 
 (printout t "10:" crlf)
-(defrule showStarsWithOType
+(defrule show-stars-with-o-type
     (Star (star_name ?name) (stellar_type O))
     =>
     (printout t ?name)

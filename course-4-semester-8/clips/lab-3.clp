@@ -27,34 +27,34 @@
 )
 
 
-(deffunction calcGravityRadius (?relative_mass) ; mass in kg
+(deffunction calc-gravity-radius (?relative_mass) ; mass in kg
     (printout t (/ (* 2 ?relative_mass ?*sun_mass* ?*gravity_constant*) (** ?*light_speed* 2)))
 )
 
-(defgeneric printMass)
-(defmethod printMass ( (?mass NUMBER (<= ?mass 0.3) ) )
+(defgeneric print-mass)
+(defmethod print-mass ( (?mass NUMBER (<= ?mass 0.3) ) )
     (printout t "very light")
 )
-(defmethod printMass ( (?mass NUMBER (<= ?mass 0.7) ) )
+(defmethod print-mass ( (?mass NUMBER (<= ?mass 0.7) ) )
     (printout t "light")
 )
-(defmethod printMass ( (?mass NUMBER (<= ?mass 1.1) ) )
+(defmethod print-mass ( (?mass NUMBER (<= ?mass 1.1) ) )
     (printout t "medium")
 )
-(defmethod printMass ( (?mass NUMBER (<= ?mass 5) ) )
+(defmethod print-mass ( (?mass NUMBER (<= ?mass 5) ) )
     (printout t "heavy")
 )
-(defmethod printMass ( (?mass NUMBER (> ?mass 5)) )
+(defmethod print-mass ( (?mass NUMBER (> ?mass 5)) )
     (printout t "huge")
 )
 
 
-(defrule printVYCanisMajorGravityRadius
+(defrule print-vy-canis-major-gravity-radius
     (Star (star_name VY_Canis_Major) (mass ?mass))
     =>
     
-    (printout t (calcGravityRadius ?mass) crlf)
-    (printout t (printMass ?mass) crlf)
+    (printout t (calc-gravity-radius ?mass) crlf)
+    (printout t (print-mass ?mass) crlf)
 )
 
 (run)
