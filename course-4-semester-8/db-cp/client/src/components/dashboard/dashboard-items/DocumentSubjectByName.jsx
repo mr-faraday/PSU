@@ -12,9 +12,9 @@ export default {
         const fetch = async () => {
             try {
                 setLoading(true)
-                const result = await archiveApi.REQUEST(name)
+                const { data } = await archiveApi.getDocumentSubjectName(name)
 
-                setSubject(result)
+                setSubject(data.result)
             } catch (error) {
                 setSubject('Error')
             } finally {
@@ -25,7 +25,11 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <input value={name} placeholder="Document name..." onChange={(e) => setName(e.target.value)} />
+                <input
+                    value={name}
+                    placeholder="Document name..."
+                    onChange={(e) => setName(e.target.value)}
+                />
                 <button onClick={fetch}>Submit</button>
                 <p>Reuslt: {loading ? 'Loading...' : subject}</p>
             </div>

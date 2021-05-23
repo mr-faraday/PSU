@@ -27,7 +27,42 @@ export default {
     },
 
     async getMostClaimedDocument () {
-        return await this.send('GET', '/get-most-claimed-document')
+        return await this.send('GET', '/most-claimed-document')
     },
-    getDocumentsCountBySubject () {}
+    async getDocumentsCountBySubject (subject) {
+        return await this.send(
+            'GET',
+            `/document-count-by-subject?subject=${subject}`
+        )
+    },
+    async getEmptyCellsCount () {
+        return await this.send('GET', '/empty-cells-count')
+    },
+    async getDocumentSubjectName (document) {
+        return await this.send(
+            'GET',
+            `/document-subject-name?document=${document}`
+        )
+    },
+    async getDocumentWithLargestCopiesNumber () {
+        return await this.send(
+            'GET',
+            '/document-with-largest-copies-number'
+        )
+    },
+    async getDocumentLastSubscriber (document) {
+        return await this.send(
+            'GET',
+            `/document-last-subscriber?document=${document}`
+        )
+    },
+    async getEmptySpace () {
+        return await this.send('GET', '/empty-space')
+    },
+    async getUnclaimedDocuments () {
+        return await this.send('GET', '/unclaimed-documents')
+    },
+    async getClaimedDocuments () {
+        return await this.send('GET', '/claimed-documents')
+    }
 }

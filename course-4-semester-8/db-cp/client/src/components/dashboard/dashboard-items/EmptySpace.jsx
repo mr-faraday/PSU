@@ -12,9 +12,15 @@ export default {
             const fetch = async () => {
                 try {
                     setLoading(true)
-                    const result = await archiveApi.REQUEST()
+                    const { data } = await archiveApi.getEmptySpace()
 
-                    setData(result)
+                    const { racks, shelfs, cells } = data.result
+
+                    setData(
+                        `Racks: ${racks ?? 'NONE'}\nShelfs: ${
+                            shelfs ?? 'NONE'
+                        }\nCells: ${cells ?? 'NONE'}`
+                    )
                 } catch (error) {
                     setData('Error')
                 } finally {

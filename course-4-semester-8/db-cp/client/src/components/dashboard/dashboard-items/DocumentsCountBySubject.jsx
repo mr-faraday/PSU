@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import archiveApi from '../../../api/archive-api'
 
 export default {
@@ -6,28 +6,33 @@ export default {
     href: '/documnets-conunt-by-subject/',
     component ({ header }) {
         const [loading, setLoading] = useState(false)
+        const [subject, setSubject] = useState('')
         const [count, setCount] = useState(null)
 
-        useEffect(() => {
-            const fetch = async () => {
-                try {
-                    setLoading(true)
-                    const result = await archiveApi.REQUEST()
+        const fetch = async () => {
+            try {
+                setLoading(true)
+                const { data } = await archiveApi.getDocumentsCountBySubject(
+                    subject
+                )
 
-                    setCount(result)
-                } catch (error) {
-                    setCount('Error')
-                } finally {
-                    setLoading(false)
-                }
+                setCount(data.result)
+            } catch (error) {
+                setCount('Error')
+            } finally {
+                setLoading(false)
             }
-
-            fetch()
-        }, [archiveApi])
+        }
 
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
+                <input
+                    value={subject}
+                    placeholder="Subject..."
+                    onChange={(e) => setSubject(e.target.value)}
+                />
+                <button onClick={fetch}>Submit</button>
                 <p>Reuslt: {loading ? 'Loading...' : count}</p>
             </div>
         )

@@ -12,9 +12,9 @@ export default {
             const fetch = async () => {
                 try {
                     setLoading(true)
-                    const result = await archiveApi.REQUEST()
+                    const { data } = await archiveApi.getClaimedDocuments()
 
-                    setData(result)
+                    setData(data.result)
                 } catch (error) {
                     setData('Error')
                 } finally {
@@ -28,7 +28,7 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <p>Reuslt: {loading ? 'Loading...' : data}</p>
+                <p>Reuslt: {loading ? 'Loading...' : '\n' + data.join('\n')}</p>
             </div>
         )
     }

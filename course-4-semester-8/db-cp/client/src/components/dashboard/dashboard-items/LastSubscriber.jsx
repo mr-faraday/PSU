@@ -12,9 +12,11 @@ export default {
         const fetch = async () => {
             try {
                 setLoading(true)
-                const result = await archiveApi.REQUEST(document)
+                const { data } = await archiveApi.getDocumentLastSubscriber(
+                    document
+                )
 
-                setData(result)
+                setData(data.result)
             } catch (error) {
                 setData('Error')
             } finally {

@@ -12,9 +12,11 @@ export default {
             const fetch = async () => {
                 try {
                     setLoading(true)
-                    const result = await archiveApi.REQUEST()
+                    const {
+                        data
+                    } = await archiveApi.getDocumentWithLargestCopiesNumber()
 
-                    setCount(result)
+                    setCount(data.result)
                 } catch (error) {
                     setCount('Error')
                 } finally {
