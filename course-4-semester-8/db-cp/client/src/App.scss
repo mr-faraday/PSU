@@ -48,12 +48,16 @@ header {
     a.active {
         @include active;
     }
+    a.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
     a + a {
         margin-left: 12px;
     }
 
     h1 {
-        margin-left: auto;
+        margin-right: auto;
         font-size: 24px;
         color: white;
     }
