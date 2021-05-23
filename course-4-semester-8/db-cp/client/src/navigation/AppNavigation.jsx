@@ -48,6 +48,10 @@ export default function AppNavigation () {
                 >
                     Dashboard
                 </Link>
+
+                <h1>
+                    DOCUMENTS ARCHIVE
+                </h1>
             </header>
 
             <Switch>

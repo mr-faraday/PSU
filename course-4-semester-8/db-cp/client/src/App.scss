@@ -8,7 +8,7 @@
 
 :root {
     --primary-color: #2bae66ff;
-    --primary-color-l: rgb(86, 212, 143);
+    --primary-color-l: rgb(59, 201, 123);
     --secondary-color: #fcf6f5ff;
     --black: #101820ff;
     --grey: rgb(231, 231, 231);
@@ -50,6 +50,12 @@ header {
     }
     a + a {
         margin-left: 12px;
+    }
+
+    h1 {
+        margin-left: auto;
+        font-size: 24px;
+        color: white;
     }
 }
 

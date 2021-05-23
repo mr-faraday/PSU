@@ -1,15 +1,21 @@
 import React, { useState } from 'react'
+import authApi from '../../api/auth-api'
 
 import './style.scss'
 
 export default function LoginForm () {
-    const [userName, setUserName] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const onSubmitHandler = (e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault()
 
-        console.log('asdf')
+        try {
+            const res = await authApi.login(username, password)
+            console.log(res)
+        } catch (error) {
+            alert('Error')
+        }
     }
 
     return (
@@ -17,11 +23,21 @@ export default function LoginForm () {
             <h2>Login</h2>
 
             <div className="input">
-                <input type="text" placeholder="Username" />
+                <input
+                    value={username}
+                    type="text"
+                    placeholder="Username"
+                    onChange={(e) => setUsername(e.target.value)}
+                />
             </div>
 
             <div className="input">
-                <input type="password" placeholder="Password" />
+                <input
+                    value={password}
+                    type="password"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
             </div>
 
             <input type="submit" value="Login" />
