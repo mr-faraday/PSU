@@ -85,7 +85,7 @@ set session my.number_of_documents = '700';
 set session my.number_of_subjects = '8';
 set session my.number_of_copies = '7550';
 set session my.number_of_subscribers = '40';
-set session my.number_of_extraditios = '21589';
+set session my.number_of_issuess = '21589';
 
 set session my.start_date = '2019-01-01 00:00:00';
 set session my.end_date = '2020-02-01 00:00:00';
@@ -132,46 +132,46 @@ select
     floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
--- extraditions
+-- issuess
 
-CREATE OR REPLACE PROCEDURE create_extradition()
+CREATE OR REPLACE PROCEDURE create_issues()
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    extradition_length INT := current_setting('my.number_of_extraditios')::int;
+    issues_length INT := current_setting('my.number_of_issuess')::int;
     i INT := 0;
     doc_id INT;
 	sub_id INT;
-    extradition_date timestamptz;
+    p_issued_at timestamptz;
     return_date timestamptz;
-    returned_at timestamptz;
+    p_returned_at timestamptz;
 BEGIN
-	RAISE INFO 'Fill Extraditions ...';
+	RAISE INFO 'Fill Issues ...';
 	
-    <<extraditions_loop>> LOOP
-        IF i > extradition_length THEN
-            EXIT extraditions_loop;
+    <<issues_loop>> LOOP
+        IF i > issues_length THEN
+            EXIT issues_loop;
         END IF;
 
-        extradition_date := random_timestamp(timestamptz '2007-05-22T22:14:12Z');
-        return_date := TO_TIMESTAMP(EXTRACT(EPOCH FROM extradition_date) + floor(random() * 3600 * 24 * 30));
+        p_issued_at := random_timestamp(timestamptz '2007-05-22T22:14:12Z');
+        return_date := TO_TIMESTAMP(EXTRACT(EPOCH FROM p_issued_at) + floor(random() * 3600 * 24 * 30));
 
         IF now() > return_date THEN
-            returned_at := return_date;
+            p_issued_at := return_date;
         ELSE
-            returned_at := null;
+            p_issued_at := null;
         END IF;
 
         SELECT document_id INTO doc_id FROM
 		(
 			SELECT document_id FROM document AS doc
 			WHERE
-				extradition_date > doc.arrival_date
+				p_issued_at > doc.arrived_at
 			EXCEPT
-			SELECT document_id FROM extradition
+			SELECT document_id FROM document_issue
 			WHERE
-				returned_at > extradition.extradition_date AND
-				(returned_at < extradition.return_date OR returned_at = null)
+				p_issued_at > document_issue.issued_at AND
+				(p_issued_at < document_issue.returned_at OR p_issued_at = null)
 			
 		) AS res
 		ORDER BY RANDOM()
@@ -179,18 +179,18 @@ BEGIN
 
         IF doc_id = null
 		THEN
-            RAISE EXCEPTION 'No available documents for extradition, restart script';
+            RAISE EXCEPTION 'No available documents for issuing, restart script manually';
         END IF;
 		
 		SELECT subscriber_id INTO sub_id FROM subscriber ORDER BY RANDOM() LIMIT 1;
 
-        INSERT INTO extradition (extradition_date, return_date, subscriber_id, document_id)
-            VALUES (extradition_date, returned_at, sub_id, doc_id);
+        INSERT INTO document_issue (issued_at, returned_at, subscriber_id, document_id)
+            VALUES (p_issued_at, p_issued_at, sub_id, doc_id);
 
         i := i + 1;
-    END LOOP extraditions_loop;
+    END LOOP issues_loop;
 END
 $$;
 
-CALL create_extradition();
-DROP PROCEDURE IF EXISTS create_extradition;
+CALL create_issues();
+DROP PROCEDURE IF EXISTS create_issues;
