@@ -1,13 +1,13 @@
-CREATE OR REPLACE FUNCTION random_timestamp() returns timestamptz
+CREATE OR REPLACE FUNCTION random_timestamp(since timestamptz DEFAULT timestamptz '2001-01-10T20:00:00Z') returns timestamptz
 	language plpgsql
 	AS $$
 	begin
 	    return TO_TIMESTAMP(
-			EXTRACT(EPOCH FROM timestamptz '2001-01-10T20:00:00Z') +
+			EXTRACT(EPOCH FROM since) +
 			floor(random() * (
-				EXTRACT(EPOCH FROM timestamptz '2023-01-10T20:00:00Z') -
-				EXTRACT(EPOCH FROM timestamptz '2001-01-20T20:00:00Z'
-			)))
+				EXTRACT(EPOCH FROM timestamptz '2021-01-10T20:00:00Z') -
+				EXTRACT(EPOCH FROM since)
+            ))
 		);
 	end;
 	$$;
@@ -134,70 +134,76 @@ FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 -- extraditions
 
-CREATE TEMP TABLE IF NOT EXISTS id_table ( id int );
--- set session my.number_of_extraditios = '21589';
+-- set session my.number_of_extraditios = '21589'; -- pg_admin
 
-CREATE PROCEDURE create_extradition()
+set session my.number_of_extraditios = '21589';
+
+CREATE OR REPLACE PROCEDURE create_extradition()
 LANGUAGE plpgsql
 AS $$
 DECLARE
     extradition_length INT := current_setting('my.number_of_extraditios')::int;
     i INT := 0;
     doc_id INT;
+	sub_id INT;
     extradition_date timestamptz;
     return_date timestamptz;
     returned_at timestamptz;
-	
-	document_ids_currently_in_use id_table;
-	available_document_ids id_table;
 BEGIN
-    extradition_date := random_timestamp();
-
+	RAISE INFO 'Fill Extraditions ...';
+	
     <<extraditions_loop>> LOOP
         IF i > extradition_length THEN
             EXIT extraditions_loop;
         END IF;
 
-        extradition_date := random_timestamp();
-        return_date := TO_TIMESTAMP(EXTRACT(EPOCH FROM extradition_date) + floor(random() * 3600 * 24 * 365));
+        extradition_date := random_timestamp(timestamptz '2007-05-22T22:14:12Z');
+        return_date := TO_TIMESTAMP(EXTRACT(EPOCH FROM extradition_date) + floor(random() * 3600 * 24 * 30));
 
         IF now() > return_date THEN
             returned_at := return_date;
         ELSE
-            returned_at := NULL;
+            returned_at := null;
         END IF;
 
         -- Get documents currently in use
-        SELECT document_id AS id INTO document_ids_currently_in_use FROM extradition AS item
-        WHERE
-            returned_at > item.extradition_date AND
-            (returned_at < item.return_date OR returned_at = null)
-        GROUP BY id;
 
 		-- write join
-        SELECT document_id AS id INTO available_document_ids FROM document AS doc
-        WHERE
-            extradition_date > doc.arrival_date AND
-            (SELECT COUNT(*) FROM document_ids_currently_in_use WHERE doc.documet_id = document_id) = 0;
+        SELECT document_id INTO doc_id FROM
+		(
+			SELECT document_id FROM document AS doc
+			WHERE
+				extradition_date > doc.arrival_date
+			EXCEPT
+			SELECT document_id FROM extradition
+			WHERE
+				returned_at > extradition.extradition_date AND
+				(returned_at < extradition.return_date OR returned_at = null)
+			
+		) AS res
+		ORDER BY RANDOM()
+		LIMIT 1;
 
-        IF (SELECT COUNT(*) FROM available_document_ids) = 0
+        IF doc_id = NULL
 		THEN
-            RAISE EXCEPTION 'No available in available_document_ids, please restart';
+            RAISE EXCEPTION 'No available in available_document_ids, please restart %', now();
         END IF;
-
-        -- get documet_id
-        doc_id := 1;
+		
+		SELECT subscriber_id INTO sub_id FROM subscriber ORDER BY RANDOM() LIMIT 1;
 
         INSERT INTO extradition (extradition_date, return_date, subscriber_id, document_id)
-            VALUES (extradition_date, returned_at, 1, 1);
+            VALUES (extradition_date, returned_at, sub_id, doc_id);
 
-        DELETE FROM document_ids_currently_in_use;
-        DELETE FROM available_document_ids;
+        -- DELETE FROM document_ids_currently_in_use;
+        -- DELETE FROM available_document_ids;
 
         i := i + 1;
     END LOOP extraditions_loop;
 END
 $$;
+
+CALL create_extradition();
+DROP PROCEDURE IF EXISTS create_extradition;
 
 CALL create_extradition();
 DROP PROCEDURE IF EXISTS create_extradition;
