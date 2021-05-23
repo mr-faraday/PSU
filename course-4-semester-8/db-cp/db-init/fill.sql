@@ -134,10 +134,6 @@ FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
 
 -- extraditions
 
--- set session my.number_of_extraditios = '21589'; -- pg_admin
-
-set session my.number_of_extraditios = '21589';
-
 CREATE OR REPLACE PROCEDURE create_extradition()
 LANGUAGE plpgsql
 AS $$
@@ -166,9 +162,6 @@ BEGIN
             returned_at := null;
         END IF;
 
-        -- Get documents currently in use
-
-		-- write join
         SELECT document_id INTO doc_id FROM
 		(
 			SELECT document_id FROM document AS doc
@@ -184,18 +177,15 @@ BEGIN
 		ORDER BY RANDOM()
 		LIMIT 1;
 
-        IF doc_id = NULL
+        IF doc_id = null
 		THEN
-            RAISE EXCEPTION 'No available in available_document_ids, please restart %', now();
+            RAISE EXCEPTION 'No available documents for extradition, restart script';
         END IF;
 		
 		SELECT subscriber_id INTO sub_id FROM subscriber ORDER BY RANDOM() LIMIT 1;
 
         INSERT INTO extradition (extradition_date, return_date, subscriber_id, document_id)
             VALUES (extradition_date, returned_at, sub_id, doc_id);
-
-        -- DELETE FROM document_ids_currently_in_use;
-        -- DELETE FROM available_document_ids;
 
         i := i + 1;
     END LOOP extraditions_loop;
@@ -204,30 +194,3 @@ $$;
 
 CALL create_extradition();
 DROP PROCEDURE IF EXISTS create_extradition;
-
-CALL create_extradition();
-DROP PROCEDURE IF EXISTS create_extradition;
-
-
-
--- 	language plpgsql
--- 	AS $$
---     declare
---         document_id int;
---         extradition_date timestamptz;
--- 	begin
--- 	    return timestamptz '2001-01-10 20:00:00' + random() * timestamptz '2020-01-20 20:00:00';
--- 	end;
--- 	$$;
-
--- INSERT INTO extradition
--- select
---     id
---     random_timestamp(), -- extradition_date
---     random_timestamp(), -- return_date
---     floor(random() * (current_setting('my.number_of_subscribers')::int + 1))::int,
---     floor(random() * (current_setting('my.number_of_documents')::int + 1))::int,
-
--- FROM GENERATE_SERIES(1, current_setting('my.number_of_extraditios')::int) as id;
-
--- DROP FUNCTION random_timestamp, create_extradition;
