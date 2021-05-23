@@ -69,7 +69,7 @@ export default function AppNavigation () {
                         <LoginPage />
                     </Route>
                     <Route path="/dashboard/">
-                        {/* {!token && <Redirect to="/login/" />} */}
+                        {!token && <Redirect to="/login/" />}
 
                         <DashboardPage />
                     </Route>

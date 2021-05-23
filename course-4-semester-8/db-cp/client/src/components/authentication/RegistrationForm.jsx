@@ -3,7 +3,7 @@ import authApi from '../../api/auth-api'
 
 import './style.scss'
 
-export default function RegistrationForm () {
+export default function RegistrationForm ({ onLogin }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [rPassword, setRPassword] = useState('')
@@ -17,7 +17,7 @@ export default function RegistrationForm () {
 
         try {
             const res = await authApi.register(username, password)
-            console.log(res)
+            onLogin(res.jwt)
         } catch (error) {
             alert('Error')
         }
@@ -58,4 +58,3 @@ export default function RegistrationForm () {
         </form>
     )
 }
-

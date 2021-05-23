@@ -3,8 +3,11 @@ import { useHistory } from 'react-router'
 import LoginForm from '../../components/authentication/LoginForm'
 import RegistrationForm from '../../components/authentication/RegistrationForm'
 import { useAppContext } from '../../context'
+import Cookies from 'universal-cookie'
 
 import './style.scss'
+
+const cookies = new Cookies()
 
 export default function LoginPage () {
     const history = useHistory()
@@ -12,6 +15,7 @@ export default function LoginPage () {
 
     const onLogin = (jwt) => {
         appContext.token = jwt
+        cookies.set('jwt_token', jwt, { maxAge: 3600 * 24 * 30, path: '/' })
         history.push('/dashboard/')
     }
 

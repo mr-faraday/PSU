@@ -23,17 +23,6 @@ export default function DashboardPage () {
                     <i.component header={i.name} />
                 </Route>
             ))}
-
-            {/* <Route exact path="/dashboard/most-claimed/"></Route>
-            <Route exact path="/dashboard/documnets-conunt-by-subject/"></Route>
-            <Route exact path="/dashboard/empty-cells/"></Route>
-            <Route exact path="/dashboard/document-subject-by-name/"></Route>
-            <Route exact path="/dashboard/most-copies-document/"></Route>
-            
-            <Route exact path="/dashboard/last-subscriber-by-document/"></Route>
-            <Route exact path="/dashboard/empty-space/"></Route>
-            <Route exact path="/dashboard/unclaimed-document/s"></Route>
-            <Route exact path="/dashboard/claimed-documents/"></Route> */}
         </div>
     )
 }

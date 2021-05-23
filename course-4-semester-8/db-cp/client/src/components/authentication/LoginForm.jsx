@@ -3,7 +3,7 @@ import authApi from '../../api/auth-api'
 
 import './style.scss'
 
-export default function LoginForm () {
+export default function LoginForm ({ onLogin }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -12,7 +12,7 @@ export default function LoginForm () {
 
         try {
             const res = await authApi.login(username, password)
-            console.log(res)
+            onLogin(res.jwt)
         } catch (error) {
             alert('Error')
         }

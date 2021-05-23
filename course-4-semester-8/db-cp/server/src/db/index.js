@@ -1,3 +1,5 @@
+'use strict'
+
 const { Pool } = require('pg')
 const {
     POSTGRES_USER,
