@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 
     next()
 })
+app.options('/*', (req, res) => res.sendStatus(200))
 
 app.use(require('body-parser').json({ type: 'application/json' }))
 
@@ -26,7 +27,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use(require('./routes/auth'))
+app.use('/auth', require('./routes/auth'))
+app.use('/archive', require('./routes/archive'))
 
 app.listen(PORT, () => {
     console.log(`Listening at http://localhost:${PORT}`)

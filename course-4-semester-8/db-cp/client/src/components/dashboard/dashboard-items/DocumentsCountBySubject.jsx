@@ -10,13 +10,15 @@ export default {
         const [count, setCount] = useState(null)
 
         const fetch = async () => {
+            if (!subject) return
+
             try {
                 setLoading(true)
                 const { data } = await archiveApi.getDocumentsCountBySubject(
                     subject
                 )
 
-                setCount(data.result)
+                setCount(String(data.result))
             } catch (error) {
                 setCount('Error')
             } finally {

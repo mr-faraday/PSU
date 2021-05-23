@@ -1,3 +1,5 @@
+'use strict'
+
 const { query } = require('../db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -7,7 +9,7 @@ const saltRounds = 10
 
 const router = require('express').Router()
 
-router.post('/auth/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {
@@ -18,7 +20,7 @@ router.post('/auth/login', async (req, res) => {
         'SELECT operator_password FROM operator WHERE operator_name = $1',
         [username]
     )
- 
+
     if (existingUser.rowCount === 0) {
         return res.sendStatus(404)
     }
@@ -34,7 +36,7 @@ router.post('/auth/login', async (req, res) => {
     res.json({ jwt: token })
 })
 
-router.post('/auth/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {

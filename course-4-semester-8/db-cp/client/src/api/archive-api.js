@@ -2,20 +2,23 @@ import { API_BASEURL } from '../app/constants'
 
 export default {
     token: null,
-    baseUrls: API_BASEURL,
+    baseUrl: API_BASEURL,
     setToken (jwt) {
         this.token = jwt
     },
     async send (method, path, body) {
         const url = this.baseUrl + path
-        const requestInit = { headers: {}, method }
+        const requestInit = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method
+        }
 
         if (body) Object.assign(requestInit, { body })
 
         if (this.token) {
-            Object.assign(requestInit.headers, {
-                authorization: `Bearer ${this.token}`
-            })
+            requestInit.headers.Authorization = `Bearer ${this.token}`
         }
 
         const request = new Request(url, requestInit)
@@ -27,42 +30,42 @@ export default {
     },
 
     async getMostClaimedDocument () {
-        return await this.send('GET', '/most-claimed-document')
+        return await this.send('GET', '/archive/most-claimed-document')
     },
     async getDocumentsCountBySubject (subject) {
         return await this.send(
             'GET',
-            `/document-count-by-subject?subject=${subject}`
+            `/archive/document-count-by-subject?subject=${subject}`
         )
     },
     async getEmptyCellsCount () {
-        return await this.send('GET', '/empty-cells-count')
+        return await this.send('GET', '/archive/empty-cells-count')
     },
     async getDocumentSubjectName (document) {
         return await this.send(
             'GET',
-            `/document-subject-name?document=${document}`
+            `/archive/document-subject-name?document=${document}`
         )
     },
     async getDocumentWithLargestCopiesNumber () {
         return await this.send(
             'GET',
-            '/document-with-largest-copies-number'
+            '/archive/document-with-largest-copies-number'
         )
     },
     async getDocumentLastSubscriber (document) {
         return await this.send(
             'GET',
-            `/document-last-subscriber?document=${document}`
+            `/archive/document-last-subscriber?document=${document}`
         )
     },
     async getEmptySpace () {
-        return await this.send('GET', '/empty-space')
+        return await this.send('GET', '/archive/empty-space')
     },
     async getUnclaimedDocuments () {
-        return await this.send('GET', '/unclaimed-documents')
+        return await this.send('GET', '/archive/unclaimed-documents')
     },
     async getClaimedDocuments () {
-        return await this.send('GET', '/claimed-documents')
+        return await this.send('GET', '/archive/claimed-documents')
     }
 }
