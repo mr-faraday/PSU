@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import archiveApi from '../../../api/archive-api'
 
 export default {
-    name: 'Archive Empty Cells',
-    href: '/empty-cells/',
+    name: 'Claimed Documents',
+    href: '/claimed-documents/',
     component ({ header }) {
         const [loading, setLoading] = useState(false)
-        const [count, setCount] = useState(null)
+        const [data, setData] = useState(null)
 
         useEffect(() => {
             const fetch = async () => {
@@ -14,9 +14,9 @@ export default {
                     setLoading(true)
                     const result = await archiveApi.REQUEST()
 
-                    setCount(result)
+                    setData(result)
                 } catch (error) {
-                    setCount('Error')
+                    setData('Error')
                 } finally {
                     setLoading(false)
                 }
@@ -28,7 +28,7 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <p>Reuslt: {loading ? 'Loading...' : count}</p>
+                <p>Reuslt: {loading ? 'Loading...' : data}</p>
             </div>
         )
     }

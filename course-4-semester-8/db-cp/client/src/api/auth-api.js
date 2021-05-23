@@ -1,4 +1,4 @@
-import { API_URLBASE } from '../app/constants'
+import { API_BASEURL } from '../app/constants'
 
 export default {
     async login (...params) {
@@ -10,7 +10,7 @@ export default {
     },
 
     async _authRequest (route, username, password) {
-        const req = await fetch(API_URLBASE, {
+        const req = await fetch(API_BASEURL, {
             url: route,
             method: 'POST',
             body: JSON.stringify({ username, password })

@@ -1,6 +1,24 @@
-nav.control-pannel {
-    width: 320px;
+.scroll {
     height: calc(100vh - 64px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
+nav.control-pannel {
+    @extend .scroll;
+    width: 320px;
     background-color: var(--black);
 
     ul {
@@ -12,7 +30,7 @@ nav.control-pannel {
         color: white;
         text-decoration: none;
         display: block;
-        height: 32px;
+        padding: 12px 0;
         display: flex;
         align-items: center;
         transition: all 0.15s;
@@ -22,6 +40,18 @@ nav.control-pannel {
         }
     }
     .nav-item.active {
-        color: var(--primary-color)
+        color: var(--primary-color);
+    }
+}
+
+.operation-window {
+    @extend .scroll;
+
+    flex: 1;
+    padding: 0 20px;
+    padding-bottom: 20px;
+
+    input {
+        margin-bottom: 10px;
     }
 }

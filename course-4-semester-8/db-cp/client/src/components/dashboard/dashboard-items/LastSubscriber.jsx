@@ -2,21 +2,21 @@ import React, { useState } from 'react'
 import archiveApi from '../../../api/archive-api'
 
 export default {
-    name: 'Document Subject by Name',
-    href: '/document-subject-by-name/',
+    name: 'Last Subscripber that Tooked Document',
+    href: '/last-subscriber/',
     component ({ header }) {
         const [loading, setLoading] = useState(false)
-        const [name, setName] = useState('')
-        const [subject, setSubject] = useState(null)
+        const [document, setDocument] = useState('')
+        const [data, setData] = useState(null)
 
         const fetch = async () => {
             try {
                 setLoading(true)
-                const result = await archiveApi.REQUEST(name)
+                const result = await archiveApi.REQUEST(document)
 
-                setSubject(result)
+                setData(result)
             } catch (error) {
-                setSubject('Error')
+                setData('Error')
             } finally {
                 setLoading(false)
             }
@@ -25,9 +25,12 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <input value={name} placeholder="Document name..." onChange={(e) => setName(e.target.value)} />
+                <input
+                    value={document}
+                    onChange={(e) => setDocument(e.target.value)}
+                />
                 <button onClick={fetch}>Submit</button>
-                <p>Reuslt: {loading ? 'Loading...' : subject}</p>
+                <p>Reuslt: {loading ? 'Loading...' : data}</p>
             </div>
         )
     }
