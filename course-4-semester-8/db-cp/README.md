@@ -1,18 +1,5 @@
 # Database Course Project 4.2
 
-Run server/client in development mode:
-
-```sh
-./startup.sh dev # server
-npm run --prefix client start # client
-```
-
-Stopping:
-
-```sh
-docker-compose down
-```
-
 Backup database:
 
 ```sh
@@ -33,4 +20,6 @@ Reuired .env config:
 POSTGRES_PASSWORD= ... # database password
 POSTGRES_USER= ... # database password
 POSTGRES_DB= ... # database name
+
+JWT_SECRET= # secret for generate JWT tokens
 ```
