@@ -10,6 +10,8 @@ export default {
         const [data, setData] = useState(null)
 
         const fetch = async () => {
+            if (!document) return
+
             try {
                 setLoading(true)
                 const { data } = await archiveApi.getDocumentLastSubscriber(
