@@ -10,6 +10,8 @@ export default {
         const [subject, setSubject] = useState(null)
 
         const fetch = async () => {
+            if (!name) return
+
             try {
                 setLoading(true)
                 const { data } = await archiveApi.getDocumentSubjectName(name)

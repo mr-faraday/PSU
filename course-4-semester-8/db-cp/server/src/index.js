@@ -30,6 +30,11 @@ app.get('/', (req, res) => {
 app.use('/auth', require('./routes/auth'))
 app.use('/archive', require('./routes/archive'))
 
+app.use((error, req, res, next) => {
+    console.warn(error)
+    return res.status(500).json({ error: error.toString() })
+})
+
 app.listen(PORT, () => {
     console.log(`Listening at http://localhost:${PORT}`)
 })

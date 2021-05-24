@@ -114,15 +114,52 @@ select
     floor(random() * current_setting('my.number_of_shelfs')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_cells')::int) as id;
 
-INSERT INTO document
-select
-    id,
-    concat('DOC_', id + 1000),
-    concat(id + 400000000),
-    random_timestamp(),
-    floor(random() * current_setting('my.number_of_cells')::int) + 1,
-    floor(random() * current_setting('my.number_of_subjects')::int) + 1
-FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
+-- fill documents
+CREATE OR REPLACE PROCEDURE fill_documents()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    documents_length INT := current_setting('my.number_of_documents')::int;
+    i INT := 1;
+    cell INT := null;
+    is_occupied INT := 0;
+BEGIN
+    <<doc_loop>> LOOP
+        IF i > documents_length THEN
+            EXIT doc_loop;
+        END IF;
+
+        WHILE cell IS NULL LOOP
+            cell := floor(random() * current_setting('my.number_of_cells')::int) + 1;
+
+            SELECT COUNT(*) INTO is_occupied FROM document
+            WHERE cell_id = cell;
+
+            IF is_occupied > 0
+			THEN
+                cell := null;
+            END IF;
+
+        END LOOP;
+
+        INSERT INTO document (document_id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
+        VALUES (
+            i,
+            concat('DOC_', i + 1000),
+            concat(i + 400000000),
+            random_timestamp(),
+            cell,
+            floor(random() * current_setting('my.number_of_subjects')::int) + 1
+        );
+
+        cell := null;
+        i := i + 1;
+    END LOOP doc_loop;
+END
+$$;
+
+CALL fill_documents();
+DROP PROCEDURE IF EXISTS fill_documents;
 
 INSERT INTO document_copy
 select
@@ -130,7 +167,7 @@ select
     concat('COPY_', id + 1000),
     concat(id + 500000000),
     floor(random() * current_setting('my.number_of_documents')::int) + 1
-FROM GENERATE_SERIES(1, current_setting('my.number_of_documents')::int) as id;
+FROM GENERATE_SERIES(1, current_setting('my.number_of_copies')::int) as id;
 
 -- issuess
 
@@ -171,13 +208,13 @@ BEGIN
 			SELECT document_id FROM document_issue
 			WHERE
 				p_issued_at > document_issue.issued_at AND
-				(p_issued_at < document_issue.returned_at OR p_issued_at = null)
+				(p_issued_at < document_issue.returned_at OR p_issued_at IS NULL)
 			
 		) AS res
 		ORDER BY RANDOM()
 		LIMIT 1;
 
-        IF doc_id = null
+        IF doc_id IS NULL
 		THEN
             RAISE EXCEPTION 'No available documents for issuing, restart script manually';
         END IF;
