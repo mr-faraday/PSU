@@ -41,6 +41,6 @@
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
-        "node-sass": "^4.14.1"
+        "sass": "^1.34.0"
     }
 }
