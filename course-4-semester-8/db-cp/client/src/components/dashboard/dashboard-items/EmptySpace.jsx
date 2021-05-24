@@ -34,7 +34,7 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <p>Reuslt: {loading ? 'Loading...' : data}</p>
+                <p>Reuslt: {loading ? 'Loading...' : '\n' + data}</p>
             </div>
         )
     }

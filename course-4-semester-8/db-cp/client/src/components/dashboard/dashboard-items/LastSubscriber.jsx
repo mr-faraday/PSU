@@ -9,7 +9,9 @@ export default {
         const [document, setDocument] = useState('')
         const [data, setData] = useState(null)
 
-        const fetch = async () => {
+        const fetch = async (e) => {
+            e.preventDefault()
+
             if (!document) return
 
             try {
@@ -29,11 +31,14 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <input
-                    value={document}
-                    onChange={(e) => setDocument(e.target.value)}
-                />
-                <button onClick={fetch}>Submit</button>
+
+                <form onSubmit={fetch}>
+                    <input
+                        value={document}
+                        onChange={(e) => setDocument(e.target.value)}
+                    />
+                    <input type="submit" value="Submit" />
+                </form>
                 <p>Reuslt: {loading ? 'Loading...' : data}</p>
             </div>
         )

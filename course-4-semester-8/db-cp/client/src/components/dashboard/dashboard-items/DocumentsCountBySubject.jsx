@@ -9,7 +9,9 @@ export default {
         const [subject, setSubject] = useState('')
         const [count, setCount] = useState(null)
 
-        const fetch = async () => {
+        const fetch = async (e) => {
+            e.preventDefault()
+
             if (!subject) return
 
             try {
@@ -29,12 +31,14 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <input
-                    value={subject}
-                    placeholder="Subject..."
-                    onChange={(e) => setSubject(e.target.value)}
-                />
-                <button onClick={fetch}>Submit</button>
+                <form onSubmit={fetch}>
+                    <input
+                        value={subject}
+                        placeholder="Subject..."
+                        onChange={(e) => setSubject(e.target.value)}
+                    />
+                    <input type="submit" value="Submit" />
+                </form>
                 <p>Reuslt: {loading ? 'Loading...' : count}</p>
             </div>
         )

@@ -3,7 +3,7 @@
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
 
-module.exports = function authncticationMiddleware (req, res, next) {
+module.exports = function authenticationMiddleware (req, res, next) {
     if (!req.headers.authorization) {
         res.sendStatus(401)
     }

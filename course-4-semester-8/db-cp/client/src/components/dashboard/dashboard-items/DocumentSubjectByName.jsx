@@ -9,7 +9,9 @@ export default {
         const [name, setName] = useState('')
         const [subject, setSubject] = useState(null)
 
-        const fetch = async () => {
+        const fetch = async (e) => {
+            e.preventDefault()
+
             if (!name) return
 
             try {
@@ -27,12 +29,14 @@ export default {
         return (
             <div className="operation-window">
                 <h2>{header}</h2>
-                <input
-                    value={name}
-                    placeholder="Document name..."
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <button onClick={fetch}>Submit</button>
+                <form onSubmit={fetch}>
+                    <input
+                        value={name}
+                        placeholder="Document name..."
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <input type="submit" value="Submit" />
+                </form>
                 <p>Reuslt: {loading ? 'Loading...' : subject}</p>
             </div>
         )

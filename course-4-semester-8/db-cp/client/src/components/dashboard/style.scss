@@ -51,7 +51,7 @@ nav.control-pannel {
     padding: 0 20px;
     padding-bottom: 20px;
 
-    input {
+    input:not([type="submit"]) {
         margin-bottom: 10px;
         width: 400px;
     }
