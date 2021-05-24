@@ -6,7 +6,7 @@ export default {
     href: '/unclaimed-claimed/',
     component ({ header }) {
         const [loading, setLoading] = useState(false)
-        const [data, setData] = useState(null)
+        const [data, setData] = useState([])
 
         useEffect(() => {
             const fetch = async () => {
@@ -16,7 +16,8 @@ export default {
 
                     setData(data.result)
                 } catch (error) {
-                    setData('Error')
+                    setData([])
+                    alert('Error')
                 } finally {
                     setLoading(false)
                 }

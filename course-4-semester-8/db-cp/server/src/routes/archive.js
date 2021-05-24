@@ -164,14 +164,14 @@ router.get('/empty-space', async (req, res, next) => {
                 SELECT COUNT(*) FROM (
                     SELECT rack_id FROM rack
                     EXCEPT
-                    (SELECT rack_id FROM shelf GROUP BY rack_id)
+                    (SELECT rack_id FROM shelf)
                 ) AS res
             `),
             client.query(`
                 SELECT COUNT(*) FROM (
                     SELECT shelf_id FROM shelf
                     EXCEPT
-                    (SELECT shelf_id FROM cell GROUP BY shelf_id)
+                    (SELECT shelf_id FROM cell)
                 ) AS res
             `),
             client.query(`
@@ -208,23 +208,34 @@ router.get('/empty-space', async (req, res, next) => {
 router.get('/unclaimed-documents', async (req, res, next) => {
     try {
         const result = await query(`
-            SELECT document_name FROM document
-            INNER JOIN (
-                SELECT document_id, COUNT(document_id) AS occurrence FROM document_copy
-                GROUP BY document_id
-                ORDER BY occurrence DESC
-                LIMIT 1
-            ) AS res
-            ON res.document_id = document.document_id
+            SELECT document_name FROM document RIGHT JOIN
+            (
+                SELECT document_id FROM document_issue
+                EXCEPT
+                (SELECT document_id FROM document_issue WHERE issued_at > now() - interval '3 year')
+            ) AS res ON res.document_id = document.document_id
         `)
 
-        res.json({ result: result.rows[0].document_name })
+        res.json({ result: result.rows.map((row) => row.document_name) })
     } catch (error) {
         next(error)
     }
 })
 
 // 9
-router.get('/claimed-documents', async (req, res) => {})
+router.get('/claimed-documents', async (req, res, next) => {
+    try {
+        const result = await query(`
+            SELECT document_name FROM document RIGHT JOIN
+            (
+                SELECT document_id, returned_at FROM document_issue WHERE returned_at is null
+            ) AS res ON res.document_id = document.document_id
+        `)
+
+        res.json({ result: result.rows.map((row) => row.document_name) })
+    } catch (error) {
+        next(error)
+    }
+})
 
 module.exports = router
