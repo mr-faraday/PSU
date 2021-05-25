@@ -4,7 +4,7 @@ const { query, getClient } = require('../db')
 
 const router = require('express').Router()
 
-router.use(require('../middleware/authenticationMiddleware'))
+router.use(require('../middleware/authentication-middleware'))
 
 // 1
 router.get('/most-claimed-document', async (req, res, next) => {
