@@ -208,8 +208,7 @@ router.get('/empty-space', async (req, res, next) => {
 router.get('/unclaimed-documents', async (req, res, next) => {
     try {
         const result = await query(`
-            SELECT document_name FROM document RIGHT JOIN
-            (
+            SELECT document_name FROM document RIGHT JOIN (
                 SELECT document_id FROM document_issue
                 EXCEPT
                 (SELECT document_id FROM document_issue WHERE issued_at > now() - interval '3 year')
@@ -226,8 +225,7 @@ router.get('/unclaimed-documents', async (req, res, next) => {
 router.get('/claimed-documents', async (req, res, next) => {
     try {
         const result = await query(`
-            SELECT document_name FROM document RIGHT JOIN
-            (
+            SELECT document_name FROM document RIGHT JOIN (
                 SELECT document_id, returned_at FROM document_issue WHERE returned_at is null
             ) AS res ON res.document_id = document.document_id
         `)
