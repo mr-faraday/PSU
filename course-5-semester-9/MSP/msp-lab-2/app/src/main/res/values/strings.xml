@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">msp-lab-2</string>
+    <string name="label_text">Введите текст:</string>
+    <string name="entry_hint">Поле ввода</string>
+</resources>
