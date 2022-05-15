@@ -1,0 +1,22 @@
+{
+    "name": "db-cp-server",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "node src",
+        "dev": "cross-env NODE_ENV=development nodemon src"
+    },
+    "author": "mr-faraday",
+    "license": "MIT",
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "pg": "^8.6.0"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.3",
+        "dotenv": "^10.0.0",
+        "nodemon": "^2.0.7"
+    }
+}

@@ -1,0 +1,12 @@
+# VS Code
+.vscode
+
+# NPM
+node_modules
+!package-lock.json
+
+# cfg
+.env
+
+# build
+build

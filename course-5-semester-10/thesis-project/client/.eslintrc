@@ -1,0 +1,17 @@
+{
+    "extends": ["plugin:react/recommended"],
+
+    "env": {
+        "browser": true,
+        "jest/globals": true,
+        "node": false
+    },
+
+    "plugins": ["jest", "eslint-plugin-react"],
+
+    "parser": "babel-eslint",
+
+    "rules": {
+        "react/prop-types": 0
+    }
+}
