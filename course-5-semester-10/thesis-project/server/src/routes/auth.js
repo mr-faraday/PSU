@@ -5,8 +5,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
 
-const saltRounds = 10
-
 const router = require('express').Router()
 
 router.post('/login', async (req, res) => {
@@ -17,50 +15,30 @@ router.post('/login', async (req, res) => {
     }
 
     const existingUser = await query(
-        'SELECT operator_password FROM operator WHERE operator_name = $1',
+        'SELECT user_password FROM user WHERE user_name = $1',
         [username]
     )
 
-    if (existingUser.rowCount === 0) {
+    const user = existingUser.rows[0]
+
+    if (!user) {
         return res.sendStatus(404)
     }
 
-    const hash = existingUser.rows[0].operator_password
+    const hash = user.user_password
 
     if (!(await bcrypt.compare(password, hash))) {
         return res.sendStatus(401)
     }
 
-    const token = jwt.sign({ user: username }, JWT_SECRET)
+    const token = jwt.sign({ userId: user.user_id }, JWT_SECRET)
 
-    res.json({ jwt: token })
-})
+    res.cookie('token', token, {
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        path: '/'
+    })
 
-router.post('/register', async (req, res) => {
-    const { username, password } = req.body
-
-    if (!username || !password) {
-        return res.sendStatus(400)
-    }
-
-    const existingUser = await query(
-        'SELECT operator_name FROM operator WHERE operator_name = $1',
-        [username]
-    )
-
-    if (existingUser.rowCount > 0) {
-        return res.sendStatus(409)
-    }
-
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-    await query(
-        'INSERT INTO operator (operator_name, operator_password) VALUES ($1, $2)',
-        [username, passwordHash]
-    )
-
-    const token = jwt.sign({ user: username }, JWT_SECRET)
-
-    res.json({ jwt: token })
+    res.json({ success: true })
 })
 
 module.exports = router

@@ -2,6 +2,9 @@
 
 const express = require('express')
 const { PORT } = require('./config')
+const { RoleId } = require('./constants')
+const UserController = require('./controllers/user-controller')
+const { query } = require('./db')
 
 const app = express()
 
@@ -29,12 +32,18 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./routes/auth'))
 app.use('/archive', require('./routes/archive'))
+app.use('/user', require('./routes/user'))
 
 app.use((error, req, res, next) => {
     console.warn(error)
     return res.status(500).json({ error: error.toString() })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Listening at http://localhost:${PORT}`)
+
+    const rootUser = await query('SELECT * FROM "user" WHERE user_id = 1')
+    if (rootUser.rowCount === 0) {
+        await UserController.createUser('root', 'root', RoleId.ADMIN)
+    }
 })

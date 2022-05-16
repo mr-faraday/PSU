@@ -83,7 +83,8 @@ set session my.number_of_shelfs = '200';
 set session my.number_of_cells = '1200';
 set session my.number_of_documents = '700';
 set session my.number_of_subjects = '8';
-set session my.number_of_copies = '7550';
+-- set session my.number_of_copies = '7550';
+set session my.number_of_copies = '1500';
 set session my.number_of_subscribers = '40';
 
 set session my.start_date = '2019-01-01 00:00:00';
@@ -167,3 +168,6 @@ select
     concat(id + 500000000),
     floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_copies')::int) as id;
+
+INSERT INTO user_role (user_role_id, user_role_name) VALUES (1, 'admin');
+INSERT INTO user_role (user_role_id, user_role_name) VALUES (2, 'user');
