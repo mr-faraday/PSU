@@ -23,4 +23,15 @@ module.exports = class UserController {
             [username, passwordHash, roleId]
         )
     }
+
+    static async getUser(userId) {
+        assert(userId, 'userId is required')
+
+        const user = await db.query(
+            'SELECT * FROM "user" WHERE user_id = $1',
+            [userId]
+        )
+
+        return user.rows[0]
+    }
 }

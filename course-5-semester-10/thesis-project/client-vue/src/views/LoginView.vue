@@ -1,18 +1,11 @@
 <script setup>
-import { useRouter } from 'vue-router'
 import LoginForm from '@/components/forms/LoginForm.vue'
-
-const router = useRouter()
-
-const onLogin = () => {
-  router.push('/dashboard')
-}
 </script>
 
 <template>
   <div class="login-page">
     <div class="login-form-container">
-      <LoginForm @login="onLogin" />
+      <LoginForm />
     </div>
   </div>
 </template>

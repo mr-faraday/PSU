@@ -6,6 +6,7 @@ const state = () => ({
 
 const getters = {
   user: (state) => state.user,
+  authenticated: (state) => !!state.user,
 }
 
 const mutations = {
@@ -13,7 +14,7 @@ const mutations = {
 }
 
 const actions = {
-  async getUser({ commit }) {
+  async fetch({ commit }) {
     const user = await UserApi.get()
     commit('setUser', user.data.result)
 

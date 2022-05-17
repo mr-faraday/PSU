@@ -1,13 +1,14 @@
 'use strict'
 
-const db = require('../db')
+const UserController = require('../controllers/user-controller')
 const router = require('express').Router()
 
 router.use(require('../middleware/authentication-middleware'))
 
 router.get('/', async (req, res) => {
-    //
-    res.json({ success: true, user: 'user' })
+    const user = await UserController.getUser(res.locals.userId)
+
+    res.json({ success: true, result: user })
 })
 
 module.exports = router

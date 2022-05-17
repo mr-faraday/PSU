@@ -15,14 +15,14 @@ router.post('/login', async (req, res) => {
     }
 
     const existingUser = await query(
-        'SELECT user_password FROM user WHERE user_name = $1',
+        'SELECT * FROM "user" WHERE user_name = $1',
         [username]
     )
 
     const user = existingUser.rows[0]
 
     if (!user) {
-        return res.sendStatus(404)
+        return res.sendStatus(401)
     }
 
     const hash = user.user_password
@@ -34,8 +34,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ userId: user.user_id }, JWT_SECRET)
 
     res.cookie('token', token, {
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        path: '/'
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     })
 
     res.json({ success: true })

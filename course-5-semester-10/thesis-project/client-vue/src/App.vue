@@ -1,19 +1,26 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-// const { cookies } = useCookies()
+const store = useStore()
 const router = useRouter()
-const route = useRoute()
 
-// const authToken = cookies.get('auth_token')
-// const redirectRoute = true ? '/dashboard' : '/login'
+const authenticated = computed(() => store.getters['user/authenticated'])
 
 onMounted(async () => {
-  await router.isReady()
+  try {
+    await store.dispatch('user/fetch')
 
-  if (route.path === '/') {
-    // router.push('/login')
+    // loading
+
+    router.push('/dashboard')
+  } catch (error) {
+    if (error.response.status === 401) {
+      router.push('/login')
+    } else {
+      throw error
+    }
   }
 })
 </script>
@@ -22,34 +29,11 @@ onMounted(async () => {
   <header>
     <h1>warehouse management system</h1>
 
-    <router-link to="/dashboard" :class="{ disabled: !authToken }">Dashboard</router-link>
+    <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
     <router-link to="/login">Login</router-link>
   </header>
 
   <router-view />
-
-  <!-- <div className="App">
-    <header>
-      <h1>DOCUMENTS ARCHIVE</h1>
-
-      <Link to="/dashboard/" class="active?disabled?"> Dashboard </Link>
-      <Link to="/login/" class="active?"> Login </Link>
-    </header>
-
-    <Switch>
-      <Route exact path="/login/">
-        <LoginPage />
-      </Route>
-      <Route path="/dashboard/">
-        {!token && <Redirect to="/login/" />}
-
-        <DashboardPage />
-      </Route>
-      <Route exact path="/">
-        <Redirect to="{redirectRoute}" />
-      </Route>
-    </Switch>
-  </div> -->
 </template>
 
 <style lang="scss">
@@ -147,6 +131,7 @@ button {
   color: white;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 32px;
   padding: 0 12px;
   background-color: var(--primary-color);
