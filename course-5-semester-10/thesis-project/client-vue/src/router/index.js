@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import dashboardItems from './dashboard'
 
 /**
  * @type {import('vue-router').RouteRecordRaw[]}
@@ -13,6 +14,12 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@views/DashboardView.vue'),
+    children: dashboardItems.map((item) => ({
+      path: item.href,
+      name: `dashboard-${item.name}`,
+      component: () => import(`@views/dashboard/${item.component}`),
+      meta: item.meta,
+    })),
   },
 
   { path: '/:pathMatch(.*)*', component: () => import('@views/IndexView.vue') },

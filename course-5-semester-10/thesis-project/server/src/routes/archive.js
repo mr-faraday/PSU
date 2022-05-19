@@ -20,6 +20,8 @@ router.get('/most-claimed-document', async (req, res, next) => {
         ON res.document_id = document.document_id
     `)
 
+    // todo: если !result.rows.length
+
         res.json({ result: result.rows[0].document_name })
     } catch (error) {
         next(error)
