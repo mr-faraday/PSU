@@ -1,23 +1,13 @@
-import { API_BASEURL } from '../app/constants'
+import { API_URL } from '@/config'
+import axios from 'axios'
 
-export default {
-    async login (...params) {
-        return await this._authRequest('/auth/login', ...params)
-    },
+const instance = axios.create({
+  baseURL: `${API_URL}/auth`,
+  withCredentials: true,
+})
 
-    async register (...params) {
-        return await this._authRequest('/auth/register', ...params)
-    },
-
-    async _authRequest (route, username, password) {
-        const req = await fetch(API_BASEURL + route, {
-            method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        return await req.json()
-    }
+export default class AuthApi {
+  static async login({ username, password }) {
+    return instance.post('/login', { username, password })
+  }
 }

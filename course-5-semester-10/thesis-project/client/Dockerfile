@@ -6,10 +6,9 @@ COPY package*.json /app
 RUN npm ci
 COPY . /app
 RUN npm run build
-# RUN npm prune --production
 
 FROM nginx:latest
-COPY --from=build /app/build /var/www/html
+COPY --from=build /app/dist /var/www/html
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
