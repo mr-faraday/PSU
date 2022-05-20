@@ -14,7 +14,10 @@ const db = new Sequelize({
     dialect: 'postgres',
     username: POSTGRES_USER,
     password: POSTGRES_PASSWORD,
-    database: POSTGRES_DB
+    database: POSTGRES_DB,
+    define: {
+        timestamps: false
+    }
 })
 
 module.exports.db = db

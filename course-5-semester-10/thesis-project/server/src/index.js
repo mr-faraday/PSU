@@ -4,7 +4,7 @@ const express = require('express')
 const { PORT } = require('./config')
 const { RoleId } = require('./constants')
 const UserController = require('./controllers/user-controller')
-const { query } = require('./db')
+const { query, db } = require('./db')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
@@ -40,8 +40,10 @@ app.use((error, req, res, next) => {
 app.listen(PORT, async () => {
     console.log(`Listening at http://localhost:${PORT}`)
 
-    const rootUser = await query('SELECT * FROM "user" WHERE user_id = 1')
-    if (rootUser.rowCount === 0) {
-        await UserController.createUser('root', 'root', RoleId.ADMIN)
-    }
+    await db.sync({ alter: true })
+
+    // const rootUser = await query('SELECT * FROM "user" WHERE user_id = 1')
+    // if (rootUser.rowCount === 0) {
+    //     await UserController.createUser('root', 'root', RoleId.ADMIN)
+    // }
 })
