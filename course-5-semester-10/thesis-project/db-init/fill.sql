@@ -12,7 +12,7 @@ CREATE OR REPLACE FUNCTION random_timestamp(since timestamptz DEFAULT timestampt
 	end;
 	$$;
 
-INSERT INTO document_subjects (document_subject_name)
+INSERT INTO document_subjects (name)
 VALUES
     ('Организационно-распорядительной документация'),
     ('Плановой документация'),
@@ -141,7 +141,7 @@ BEGIN
 
         END LOOP;
 
-        INSERT INTO documents (id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
+        INSERT INTO documents (id, name, inventory_number, arrived_at, cell_id, subject_id)
         VALUES (
             i,
             concat('DOC_', i + 1000),
@@ -168,5 +168,5 @@ select
     floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_copies')::int) as id;
 
-INSERT INTO user_roles (id, user_role_name) VALUES (1, 'admin');
-INSERT INTO user_roles (id, user_role_name) VALUES (2, 'user');
+INSERT INTO employee_roles (id, name) VALUES (1, 'admin');
+INSERT INTO employee_roles (id, name) VALUES (2, 'user');
