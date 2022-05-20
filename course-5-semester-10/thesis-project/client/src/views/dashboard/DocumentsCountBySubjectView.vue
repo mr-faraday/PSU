@@ -4,7 +4,7 @@ import { useDataFetch } from '@/hooks/use-data-fetch'
 import { ref } from 'vue'
 
 const inputText = ref('')
-const [loading, data, fetchData] = useDataFetch(() => ArchiveApi.getDocumentSubjectName(inputText))
+const [loading, data, fetchData] = useDataFetch(() => ArchiveApi.getDocumentsCountBySubject(inputText.value), 0)
 
 const submitHandler = (e) => {
   e.preventDefault()
@@ -17,7 +17,7 @@ const submitHandler = (e) => {
     <input v-model="inputText" placeholder="Subject..." />
     <input type="submit" value="Submit" />
   </form>
-  <p>Reuslt: {{ loading ? 'Loading...' : String(data) }}</p>
+  <p>Reuslt: {{ loading ? 'Loading...' : data }}</p>
 </template>
 
 

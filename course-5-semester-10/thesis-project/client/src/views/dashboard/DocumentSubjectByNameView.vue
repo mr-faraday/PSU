@@ -4,7 +4,7 @@ import { useDataFetch } from '@/hooks/use-data-fetch'
 import { ref } from 'vue'
 
 const inputText = ref('')
-const [loading, data, fetchData] = useDataFetch(() => ArchiveApi.getDocumentSubjectName(inputText.value))
+const [loading, data, fetchData] = useDataFetch(() => ArchiveApi.getDocumentSubjectName(inputText.value), '')
 
 const submitHandler = (e) => {
   e.preventDefault()

@@ -1,13 +1,3 @@
-// import ClaimedDocuments from './ClaimedDocuments.vue'
-// import DocumentsCountBySubject from './DocumentsCountBySubject.vue'
-// import DocumentSubjectByName from './DocumentSubjectByName.vue'
-// import DocumentWithLargestCopiesNumber from './DocumentWithLargestCopiesNumber.vue'
-// import EmptyCells from './EmptyCells.vue'
-// import EmptySpace from './EmptySpace.vue'
-// import LastSubscriber from './LastSubscriber.vue'
-// import MostClaimedDocument from './MostClaimedDocument.vue'
-// import UnclaimedDocuments from './UnclaimedDocuments.vue'
-
 const dashboardItems = [
   {
     name: 'Claimed Documents',

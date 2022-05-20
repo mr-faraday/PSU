@@ -20,9 +20,7 @@ router.get('/most-claimed-document', async (req, res, next) => {
         ON res.document_id = document.document_id
     `)
 
-    // todo: если !result.rows.length
-
-        res.json({ result: result.rows[0].document_name })
+        res.json({ result: result.rows[0] })
     } catch (error) {
         next(error)
     }
@@ -232,7 +230,7 @@ router.get('/claimed-documents', async (req, res, next) => {
             ) AS res ON res.document_id = document.document_id
         `)
 
-        res.json({ result: result.rows.map((row) => row.document_name) })
+        res.json({ result: result.rows })
     } catch (error) {
         next(error)
     }

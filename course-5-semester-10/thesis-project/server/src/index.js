@@ -34,7 +34,7 @@ app.use('/user', require('./routes/user'))
 
 app.use((error, req, res, next) => {
     console.warn(error)
-    return res.status(500).json({ error: error.toString() })
+    return res.status(500).json({ error: error.message })
 })
 
 app.listen(PORT, async () => {
