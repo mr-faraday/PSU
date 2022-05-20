@@ -3,10 +3,11 @@
 const express = require('express')
 const { PORT } = require('./config')
 const { RoleId } = require('./constants')
-const UserController = require('./controllers/user-controller')
-const { query, db } = require('./db')
+const { EmployeeController } = require('./controllers/employee-controller')
+const { db } = require('./db')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const { Employee } = require('./db/models/employees')
 
 const app = express()
 
@@ -40,10 +41,18 @@ app.use((error, req, res, next) => {
 app.listen(PORT, async () => {
     console.log(`Listening at http://localhost:${PORT}`)
 
-    await db.sync({ alter: true })
+    // await db.sync({ alter: true })
 
-    // const rootUser = await query('SELECT * FROM "user" WHERE user_id = 1')
-    // if (rootUser.rowCount === 0) {
-    //     await UserController.createUser('root', 'root', RoleId.ADMIN)
-    // }
+    try {
+        const rootEmployee = await Employee.findByPk(1)
+        if (!rootEmployee) {
+            await EmployeeController.createEmployee(
+                'root',
+                'root',
+                RoleId.ADMIN
+            )
+        }
+    } catch (error) {
+        console.log(error)
+    }
 })

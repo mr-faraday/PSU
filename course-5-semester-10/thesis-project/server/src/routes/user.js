@@ -1,6 +1,6 @@
 'use strict'
 
-const UserController = require('../controllers/user-controller')
+const UserController = require('../controllers/employee-controller')
 const router = require('express').Router()
 
 router.use(require('../middleware/authentication-middleware'))

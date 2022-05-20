@@ -8,7 +8,7 @@ const {
     POSTGRES_HOST
 } = require('../config')
 
-const db = new Sequelize({
+exports.db = new Sequelize({
     host: POSTGRES_HOST,
     port: 5432,
     dialect: 'postgres',
@@ -19,5 +19,3 @@ const db = new Sequelize({
         timestamps: false
     }
 })
-
-module.exports.db = db
