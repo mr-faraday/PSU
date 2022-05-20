@@ -23,7 +23,7 @@ VALUES
     ('Финансовая и расчётно-денежная документация'),
     ('Статистической и ведомственной отчётности');
 
-INSERT INTO departments (department_id, phone_number)
+INSERT INTO departments (id, phone_number)
 VALUES
     (1, '80214667788'),
     (2, '80214468413'),
@@ -141,7 +141,7 @@ BEGIN
 
         END LOOP;
 
-        INSERT INTO documents (document_id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
+        INSERT INTO documents (id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
         VALUES (
             i,
             concat('DOC_', i + 1000),
@@ -168,5 +168,5 @@ select
     floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_copies')::int) as id;
 
-INSERT INTO user_roles (user_role_id, user_role_name) VALUES (1, 'admin');
-INSERT INTO user_roles (user_role_id, user_role_name) VALUES (2, 'user');
+INSERT INTO user_roles (id, user_role_name) VALUES (1, 'admin');
+INSERT INTO user_roles (id, user_role_name) VALUES (2, 'user');

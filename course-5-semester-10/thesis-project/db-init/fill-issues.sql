@@ -31,7 +31,7 @@ BEGIN
 
         SELECT document_id INTO doc_id FROM
 		(
-			SELECT document_id FROM documents AS doc
+			SELECT id as document_id FROM documents AS doc
 			WHERE
 				p_issued_at > doc.arrived_at
 			EXCEPT
@@ -49,7 +49,7 @@ BEGIN
             RAISE EXCEPTION 'No available documents for issuing, restart script manually';
         END IF;
 		
-		SELECT subscriber_id INTO sub_id FROM subscribers ORDER BY RANDOM() LIMIT 1;
+		SELECT id as subscriber_id INTO sub_id FROM subscribers ORDER BY RANDOM() LIMIT 1;
 
         INSERT INTO document_issues (issued_at, returned_at, subscriber_id, document_id)
             VALUES (p_issued_at, p_returned_at, sub_id, doc_id);
