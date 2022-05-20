@@ -30,6 +30,5 @@ exports.Employee = db.define(
                 key: 'id'
             }
         }
-    },
-    { tableName: 'employees' }
+    }
 )

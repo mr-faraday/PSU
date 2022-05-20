@@ -4,7 +4,6 @@ const express = require('express')
 const { PORT } = require('./config')
 const { RoleId } = require('./constants')
 const { EmployeeController } = require('./controllers/employee-controller')
-const { db } = require('./db')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const { Employee } = require('./db/models/employees')
@@ -40,8 +39,6 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, async () => {
     console.log(`Listening at http://localhost:${PORT}`)
-
-    // await db.sync({ alter: true })
 
     try {
         const rootEmployee = await Employee.findByPk(1)

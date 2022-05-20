@@ -9,16 +9,13 @@ const name = 'Shelf'
 
 exports.Shelf = db.define(name, {
     id: SERIAL,
-    shelf_number: {
-        type: DataTypes.INTEGER,
+    shelfNumber: {
+        type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
-        validate: {
-            notEmpty: true,
-            isInt: true
-        }
+        validate: { notEmpty: true }
     },
-    rack_id: {
+    rackId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

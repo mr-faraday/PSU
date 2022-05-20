@@ -16,6 +16,7 @@ exports.db = new Sequelize({
     password: POSTGRES_PASSWORD,
     database: POSTGRES_DB,
     define: {
-        timestamps: false
+        timestamps: false,
+        underscored: true
     }
 })

@@ -16,6 +16,5 @@ exports.EmployeeRole = db.define(
             unique: true,
             validate: { notEmpty: true }
         }
-    },
-    { tableName: 'employee_roles' }
+    }
 )
