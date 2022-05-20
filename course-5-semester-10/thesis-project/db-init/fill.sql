@@ -12,7 +12,7 @@ CREATE OR REPLACE FUNCTION random_timestamp(since timestamptz DEFAULT timestampt
 	end;
 	$$;
 
-INSERT INTO document_subject (document_subject_name)
+INSERT INTO document_subjects (document_subject_name)
 VALUES
     ('Организационно-распорядительной документация'),
     ('Плановой документация'),
@@ -23,7 +23,7 @@ VALUES
     ('Финансовая и расчётно-денежная документация'),
     ('Статистической и ведомственной отчётности');
 
-INSERT INTO department (department_id, phone_number)
+INSERT INTO departments (department_id, phone_number)
 VALUES
     (1, '80214667788'),
     (2, '80214468413'),
@@ -33,7 +33,7 @@ VALUES
     (6, '80214168796'),
     (7, '80214468981');
 
-INSERT INTO subscriber (first_name, last_name, middle_name, subscriber_number, department_id)
+INSERT INTO subscribers (first_name, last_name, middle_name, subscriber_number, department_id)
 VALUES
     ('Tabor', 'Clemmens', 'Siana', '2044160315', 1),
     ('Mindy', 'Courson', 'Renee', '3542421065', 2),
@@ -83,8 +83,7 @@ set session my.number_of_shelfs = '200';
 set session my.number_of_cells = '1200';
 set session my.number_of_documents = '700';
 set session my.number_of_subjects = '8';
--- set session my.number_of_copies = '7550';
-set session my.number_of_copies = '1500';
+set session my.number_of_copies = '7550';
 set session my.number_of_subscribers = '40';
 
 set session my.start_date = '2019-01-01 00:00:00';
@@ -94,12 +93,12 @@ set session my.end_date = '2020-02-01 00:00:00';
 CREATE EXTENSION pgcrypto;
 
 -- Filling of racks
-INSERT INTO rack
+INSERT INTO racks
 select id, concat(id + 100000000)
 FROM GENERATE_SERIES(1, current_setting('my.number_of_racks')::int) as id;
 
 -- Filling of shelfs
-INSERT INTO shelf
+INSERT INTO shelfs
 select
     id,
     concat(id + 200000000),
@@ -107,7 +106,7 @@ select
 FROM GENERATE_SERIES(1, current_setting('my.number_of_shelfs')::int) as id;
 
 -- Filling of cells
-INSERT INTO cell
+INSERT INTO cells
 select
     id,
     concat(id + 300000000),
@@ -132,7 +131,7 @@ BEGIN
         WHILE cell IS NULL LOOP
             cell := floor(random() * current_setting('my.number_of_cells')::int) + 1;
 
-            SELECT COUNT(*) INTO is_occupied FROM document
+            SELECT COUNT(*) INTO is_occupied FROM documents
             WHERE cell_id = cell;
 
             IF is_occupied > 0
@@ -142,7 +141,7 @@ BEGIN
 
         END LOOP;
 
-        INSERT INTO document (document_id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
+        INSERT INTO documents (document_id, document_name, inventory_number, arrived_at, cell_id, document_subject_id)
         VALUES (
             i,
             concat('DOC_', i + 1000),
@@ -161,7 +160,7 @@ $$;
 CALL fill_documents();
 DROP PROCEDURE IF EXISTS fill_documents;
 
-INSERT INTO document_copy
+INSERT INTO document_copies
 select
     id,
     concat('COPY_', id + 1000),
@@ -169,5 +168,5 @@ select
     floor(random() * current_setting('my.number_of_documents')::int) + 1
 FROM GENERATE_SERIES(1, current_setting('my.number_of_copies')::int) as id;
 
-INSERT INTO user_role (user_role_id, user_role_name) VALUES (1, 'admin');
-INSERT INTO user_role (user_role_id, user_role_name) VALUES (2, 'user');
+INSERT INTO user_roles (user_role_id, user_role_name) VALUES (1, 'admin');
+INSERT INTO user_roles (user_role_id, user_role_name) VALUES (2, 'user');

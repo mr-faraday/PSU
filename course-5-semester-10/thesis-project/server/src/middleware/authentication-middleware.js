@@ -2,6 +2,7 @@
 
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
+const { db } = require('../db')
 
 /**
  * @type {import('express').RequestHandler}
