@@ -1,4 +1,4 @@
-# Database Course Project 4.2
+# Theis Project
 
 Backup database:
 
