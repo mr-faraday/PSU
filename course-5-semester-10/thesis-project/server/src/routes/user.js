@@ -1,12 +1,12 @@
 'use strict'
 
-const UserController = require('../controllers/employee-controller')
+const { Employee } = require('../db/models/employees')
 const router = require('express').Router()
 
 router.use(require('../middleware/authentication-middleware'))
 
 router.get('/', async (req, res) => {
-    const user = await UserController.getUser(res.locals.userId)
+    const user = await Employee.findOne({ where: { id: res.locals.userId } })
 
     res.json({ success: true, result: user })
 })
