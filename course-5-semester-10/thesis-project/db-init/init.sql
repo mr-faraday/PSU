@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS racks (
     rack_number varchar(50) NOT NULL CHECK (length(rack_number) > 0) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS shelfs (
+CREATE TABLE IF NOT EXISTS shelves (
     id SERIAL PRIMARY KEY,
     shelf_number varchar(50) NOT NULL CHECK (length(shelf_number) > 0) UNIQUE,
     rack_id int NOT NULL REFERENCES racks(id)
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS employee_roles (
 
 CREATE TABLE IF NOT EXISTS employees (
     id SERIAL PRIMARY KEY,
-    username varchar(255) NOT NULL CHECK (length(username) > 0) UNIQUE,
+    login varchar(255) NOT NULL CHECK (length(login) > 0) UNIQUE,
     password varchar(255) NOT NULL CHECK (length(password) > 0),
     role_id int NOT NULL REFERENCES employee_roles(id)        
 );

@@ -1,6 +1,6 @@
 'use strict'
 
-const { Employee } = require('../db/models/employees')
+const { Employee } = require('../db/models/employee')
 const router = require('express').Router()
 
 router.use(require('../middleware/authentication-middleware'))

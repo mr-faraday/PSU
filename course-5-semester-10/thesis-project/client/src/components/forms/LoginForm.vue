@@ -7,7 +7,7 @@ import { useStore } from 'vuex'
 const router = useRouter()
 const store = useStore()
 
-const username = ref('')
+const login = ref('')
 const password = ref('')
 
 const submitHandler = async (e) => {
@@ -15,7 +15,7 @@ const submitHandler = async (e) => {
 
   try {
     await AuthApi.login({
-      username: username.value,
+      login: login.value,
       password: password.value,
     })
 
@@ -34,7 +34,7 @@ const submitHandler = async (e) => {
     <h2>Login</h2>
 
     <div class="input">
-      <input v-model="username" type="text" placeholder="Username" />
+      <input v-model="login" type="text" placeholder="Login" />
     </div>
 
     <div class="input">

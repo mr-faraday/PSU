@@ -4,9 +4,9 @@ services:
         image: postgres
         restart: always
         env_file: ./.env
-        volumes:
-            - ./db-init/init.sql:/docker-entrypoint-initdb.d/1.sql
-            - ./db-init/fill.sql:/docker-entrypoint-initdb.d/2.sql
-            - ./db-init/fill-issues.sql:/docker-entrypoint-initdb.d/3.sql
+        # volumes:
+        #     - ./db-init/init.sql:/docker-entrypoint-initdb.d/1.sql
+        #     - ./db-init/fill.sql:/docker-entrypoint-initdb.d/2.sql
+        #     - ./db-init/fill-issues.sql:/docker-entrypoint-initdb.d/3.sql
         ports:
             - '5432:5432' # for be able to access via pgAdmin

@@ -6,7 +6,7 @@ const { JWT_SECRET } = require('../config')
 /**
  * @type {import('express').RequestHandler}
  */
-module.exports = function authenticationMiddleware(req, res, next) {
+module.exports = function authenticationMiddleware (req, res, next) {
     if (!req.cookies || !req.cookies.token) {
         return res.sendStatus(401)
     }
@@ -20,7 +20,7 @@ module.exports = function authenticationMiddleware(req, res, next) {
 
         next()
     } catch (error) {
-        console.log(error);
+        console.log(error)
         res.sendStatus(401)
     }
 }

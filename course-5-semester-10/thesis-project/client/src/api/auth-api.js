@@ -7,7 +7,7 @@ const instance = axios.create({
 })
 
 export default class AuthApi {
-  static async login({ username, password }) {
-    return instance.post('/login', { username, password })
+  static async login({ login, password }) {
+    return instance.post('/login', { login, password })
   }
 }
