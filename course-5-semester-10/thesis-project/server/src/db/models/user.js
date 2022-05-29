@@ -3,12 +3,12 @@
 const { DataTypes, Model } = require('sequelize')
 const { db } = require('..')
 const { SERIAL } = require('../utils/field-types')
-const { EmployeeRole } = require('./employee-role')
+const { UserRole } = require('./user-role')
 const bcrypt = require('bcrypt')
 
 const saltRounds = 10
 
-class Employee extends Model {
+class User extends Model {
     async setPassword (password) {
         this.password = await bcrypt.hash(password, saltRounds)
     }
@@ -18,14 +18,14 @@ class Employee extends Model {
     }
 
     /**
-     * create guard
+     * creation guard
      */
     static create () {
         throw new Error('Must be done by .setPassword() and .save()')
     }
 }
 
-Employee.init(
+User.init(
     {
         id: SERIAL,
         login: {
@@ -55,12 +55,12 @@ Employee.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: EmployeeRole,
+                model: UserRole,
                 key: 'id'
             }
         }
     },
-    { sequelize: db, modelName: 'Employee' }
+    { sequelize: db, modelName: 'User' }
 )
 
-exports.Employee = Employee
+exports.User = User

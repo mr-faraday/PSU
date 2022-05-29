@@ -2,7 +2,7 @@
 
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
-const { Employee } = require('../db/models/employee')
+const { User } = require('../db/models/user')
 
 const router = require('express').Router()
 
@@ -14,18 +14,18 @@ router.post('/login', async (req, res) => {
             return res.sendStatus(400)
         }
 
-        const employee = await Employee.findOne({
+        const user = await User.findOne({
             where: { login }
         })
 
-        if (!employee) {
+        if (!user) {
             return res.sendStatus(401)
         }
 
-        if (!(await employee.comparePasword(password))) {
+        if (!(await user.comparePasword(password))) {
             return res.sendStatus(401)
         }
-        const token = jwt.sign({ userId: employee.id }, JWT_SECRET)
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET)
 
         res.cookie('token', token, {
             maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days

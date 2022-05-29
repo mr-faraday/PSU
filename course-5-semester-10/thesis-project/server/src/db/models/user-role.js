@@ -4,9 +4,9 @@ const { DataTypes } = require('sequelize')
 const { db } = require('..')
 const { SERIAL } = require('../utils/field-types')
 
-const name = 'EmployeeRole'
+const name = 'UserRole'
 
-exports.EmployeeRole = db.define(
+exports.UserRole = db.define(
     name,
     {
         id: SERIAL,

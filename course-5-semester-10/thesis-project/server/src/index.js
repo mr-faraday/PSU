@@ -5,7 +5,7 @@ const { PORT } = require('./config')
 const { RoleId } = require('./constants')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const { Employee } = require('./db/models/employee')
+const { User } = require('./db/models/user')
 const { db } = require('./db')
 
 const app = express()
@@ -43,9 +43,9 @@ app.listen(PORT, async () => {
     await db.sync()
 
     try {
-        // const rootEmployee = await Employee.findByPk(1)
-        // if (!rootEmployee) {
-        //     const rootUser = new Employee({
+        // const rootUser = await User.findByPk(1)
+        // if (!rootUser) {
+        //     const rootUser = new User({
         //         id: 1,
         //         login: 'root',
         //         firstName: 'Jhon',

@@ -9,12 +9,6 @@ const name = 'Shelf'
 
 exports.Shelf = db.define(name, {
     id: SERIAL,
-    shelfNumber: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        unique: true,
-        validate: { notEmpty: true }
-    },
     rackId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -22,5 +16,13 @@ exports.Shelf = db.define(name, {
             model: Rack,
             key: 'id'
         }
+    },
+    long: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    levelHeight: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 })

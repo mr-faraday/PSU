@@ -3,5 +3,6 @@
  */
 module.exports.RoleId = {
     ADMIN: 1,
-    USER: 2
+    OPERATOR: 2,
+    MANAGER: 3
 }

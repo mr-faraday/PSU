@@ -8,10 +8,12 @@ const name = 'Rack'
 
 exports.Rack = db.define(name, {
     id: SERIAL,
-    rackNumber: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        unique: true,
-        validate: { notEmpty: true }
+    levelsHeight: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    postionRow: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 })
