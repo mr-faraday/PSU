@@ -3,25 +3,25 @@
 const { DataTypes } = require('sequelize')
 const { db } = require('..')
 const { SERIAL } = require('../utils/field-types')
-const { Rack } = require('./rack')
+const { Client } = require('./client')
 
-const name = 'Shelf'
+const name = 'Cargo'
 
-exports.Shelf = db.define(name, {
+exports.Cargo = db.define(name, {
     id: SERIAL,
-    rackId: {
+    clientId: {
         type: DataTypes.INTEGER,
         references: {
-            model: Rack,
+            model: Client,
             key: 'id'
         }
     },
-    long: {
+    weight: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    levelHeight: {
-        type: DataTypes.INTEGER,
+    arrived_at: {
+        type: DataTypes.DATE,
         allowNull: false
     }
 })
