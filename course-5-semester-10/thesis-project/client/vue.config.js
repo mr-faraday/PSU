@@ -20,5 +20,15 @@ module.exports = defineConfig({
   },
   devServer: {
     allowedHosts: 'all',
+    proxy: {
+      '^/api': {
+        target: 'http://localhost:3000',
+        ws: true,
+        changeOrigin: true,
+        pathRewrite(path) {
+          return path.replace('/api', '')
+        },
+      },
+    },
   },
 })

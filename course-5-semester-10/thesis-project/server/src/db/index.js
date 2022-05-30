@@ -7,8 +7,6 @@ const {
     POSTGRES_DB,
     POSTGRES_HOST
 } = require('../config')
-const { importModels } = require('./import-models')
-const { insertInitialData } = require('./initial-insertion')
 
 exports.db = new Sequelize({
     host: POSTGRES_HOST,
@@ -24,6 +22,6 @@ exports.db = new Sequelize({
 })
 
 exports.initDb = async () => {
-    importModels()
-    await insertInitialData()
+    require('./import-models').importModels()
+    await require('./initial-insertion').insertInitialData()
 }
