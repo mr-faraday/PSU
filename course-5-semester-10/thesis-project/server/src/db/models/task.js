@@ -3,6 +3,7 @@
 const { DataTypes } = require('sequelize')
 const { db } = require('..')
 const { SERIAL } = require('../utils/field-types')
+const { Cargo } = require('./cargo')
 const { Client } = require('./client')
 const { Shelf } = require('./shelf')
 const { TaskStatus } = require('./task-status')
@@ -15,7 +16,7 @@ exports.Task = db.define(name, {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Cargo',
+            model: Cargo,
             key: 'id'
         }
     },

@@ -6,16 +6,6 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 
-// app.use(
-//     require('cors')({
-//         credentials: true,
-//         origin: (origin, callback) => {
-//             callback(null, true)
-//             // callback(new Error('Not allowed by CORS'))
-//         }
-//     })
-// )
-
 app.use(cookieParser())
 
 app.use(require('body-parser').json({ type: 'application/json' }))
@@ -33,7 +23,8 @@ app.use((error, req, res, next) => {
 })
 
 app.listen(PORT, async () => {
-    // await require('./db').initDb().catch(console.error)
+    await require('./db').initDb().catch(console.error)
 
+    console.log()
     console.log(`Listening at http://localhost:${PORT}`)
 })

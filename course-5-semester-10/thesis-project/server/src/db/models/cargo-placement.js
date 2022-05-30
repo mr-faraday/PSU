@@ -3,6 +3,8 @@
 const { DataTypes } = require('sequelize')
 const { db } = require('..')
 const { SERIAL } = require('../utils/field-types')
+const { Cargo } = require('./cargo')
+const { Shelf } = require('./shelf')
 
 const name = 'CargoPlacement'
 
@@ -12,14 +14,14 @@ exports.CargoPlacement = db.define(name, {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Cargo',
+            model: Cargo,
             key: 'id'
         }
     },
     shelfId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Shelf',
+            model: Shelf,
             key: 'id'
         }
     },

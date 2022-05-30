@@ -3,7 +3,8 @@ const { UserRoleId, TaskStatusId } = require('../constants')
 const { Rack } = require('./models/rack')
 const { Shelf } = require('./models/shelf')
 const { TaskStatus } = require('./models/task-status')
-const { User } = require('./models/user-role')
+const { User } = require('./models/user')
+const { UserRole } = require('./models/user-role')
 
 const createRootUser = async () => {
     try {
@@ -29,9 +30,9 @@ exports.insertInitialData = async function () {
     if (rootUser) return
 
     await Promise.allSettled([
-        User.create({ id: UserRoleId.ADMIN, name: 'Администратор' }),
-        User.create({ id: UserRoleId.OPERATOR, name: 'Оператор' }),
-        User.create({ id: UserRoleId.MANAGER, name: 'Менеджер' }),
+        UserRole.create({ id: UserRoleId.ADMIN, name: 'Администратор' }),
+        UserRole.create({ id: UserRoleId.OPERATOR, name: 'Оператор' }),
+        UserRole.create({ id: UserRoleId.MANAGER, name: 'Менеджер' }),
 
         TaskStatus.create({ id: TaskStatusId.NEW, name: 'Новое' }),
         TaskStatus.create({ id: TaskStatusId.IN_PROGRESS, name: 'В работе' }),
