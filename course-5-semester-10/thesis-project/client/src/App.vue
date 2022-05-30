@@ -7,9 +7,12 @@ const store = useStore()
 const router = useRouter()
 
 const authenticated = computed(() => store.getters['user/authenticated'])
+const user = computed(() => store.getters['user/user'])
+const userRole = computed(() => store.getters['user/role'])
 
 onMounted(async () => {
   try {
+    await store.dispatch('fetchSettings')
     await store.dispatch('user/fetch')
 
     // loading
@@ -29,16 +32,27 @@ onMounted(async () => {
   <header>
     <h1>warehouse management system</h1>
 
-    <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
-    <router-link to="/login">Login</router-link>
+    <template v-if="authenticated">
+      <!-- <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
+      <router-link to="/login">Login</router-link> -->
+
+      <div class="user-info">
+        <p class="login">{{ user.login }}</p>
+        <p class="fullname">{{ user.firstName }} {{ user.lastName }}</p>
+        <p class="role">{{ userRole.name }}</p>
+      </div>
+
+      <button>Выйти</button>
+    </template>
   </header>
 
   <router-view />
 </template>
 
 <style lang="scss">
-body {
+body, p {
   margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -90,15 +104,15 @@ header {
     background-color: rgba(0, 0, 0, 0.1);
   }
 
-  a {
+  button {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 24px;
+    height: 40px;
     padding: 8px 16px;
     text-decoration: none;
     color: darken(white, 5);
-    font-weight: bold;
+    font-weight: 600;
     font-size: 20px;
     transition: all 0.15s ease-in-out;
 

@@ -4,9 +4,15 @@ const state = () => ({
   user: null,
 })
 
+/**
+ * @type {import('vuex').GetterTree<*, *>}
+ */
 const getters = {
   user: (state) => state.user,
   authenticated: (state) => !!state.user,
+  role: (state, getters, rootState, rootGetters) => {
+    return rootGetters.settings.userRoles.find((r) => r.id === getters.user.roleId)
+  },
 }
 
 const mutations = {

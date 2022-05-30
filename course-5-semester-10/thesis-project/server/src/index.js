@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./routes/auth'))
 app.use('/user', require('./routes/user'))
+app.use('/settings', require('./routes/settings'))
 
 app.use((error, req, res, next) => {
     console.warn(error)

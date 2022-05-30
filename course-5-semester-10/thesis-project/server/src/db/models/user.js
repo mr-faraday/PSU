@@ -13,8 +13,8 @@ class User extends Model {
         this.password = await bcrypt.hash(password, saltRounds)
     }
 
-    async comparePasword (hash) {
-        return await bcrypt.compare(this.password, hash)
+    async comparePasword (password) {
+        return await bcrypt.compare(password, this.password)
     }
 
     /**
