@@ -8,10 +8,10 @@ const state = () => ({
  * @type {import('vuex').GetterTree<*, *>}
  */
 const getters = {
-  user: (state) => state.user,
+  info: (state) => state.user,
   authenticated: (state) => !!state.user,
   role: (state, getters, rootState, rootGetters) => {
-    return rootGetters.settings.userRoles.find((r) => r.id === getters.user.roleId)
+    return rootGetters.settings.userRoles.find((r) => r.id === getters.info.roleId)
   },
 }
 
@@ -25,6 +25,11 @@ const actions = {
     commit('setUser', user.data.result)
 
     return user.data.result
+  },
+
+  logout() {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/'
+    window.location.href = '/login'
   },
 }
 

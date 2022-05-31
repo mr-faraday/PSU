@@ -1,3 +1,4 @@
+import store from '@/store'
 import { createRouter, createWebHistory } from 'vue-router'
 import dashboardItems from './dashboard'
 
@@ -14,6 +15,13 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@views/DashboardView.vue'),
+    async beforeEnter(to, from, next) {
+      if (!store.getters['user/info']) {
+        return next('/login')
+      }
+
+      next()
+    },
     children: dashboardItems.map((item) => ({
       path: item.href,
       name: `dashboard-${item.name}`,

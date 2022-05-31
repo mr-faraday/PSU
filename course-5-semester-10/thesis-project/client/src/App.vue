@@ -1,17 +1,29 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import SpinnerIndicator from './components/SpinnerIndicator.vue'
 
 const store = useStore()
 const router = useRouter()
 
 const authenticated = computed(() => store.getters['user/authenticated'])
-const user = computed(() => store.getters['user/user'])
+const user = computed(() => store.getters['user/info'])
 const userRole = computed(() => store.getters['user/role'])
+
+const loading = ref(false)
+
+const logout = () => {
+  store.dispatch('user/logout')
+  router.push('/')
+}
 
 onMounted(async () => {
   try {
+    loading.value = true
+
+    await router.isReady()
+
     await store.dispatch('fetchSettings')
     await store.dispatch('user/fetch')
 
@@ -19,74 +31,45 @@ onMounted(async () => {
 
     router.push('/dashboard')
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
+      console.log('asdf')
       router.push('/login')
     } else {
       throw error
     }
+  } finally {
+    loading.value = false
   }
 })
 </script>
 
 <template>
   <header>
-    <h1>warehouse management system</h1>
+    <h1 v-if="!authenticated">warehouse management system</h1>
 
-    <template v-if="authenticated">
+    <template v-else>
       <!-- <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
       <router-link to="/login">Login</router-link> -->
 
       <div class="user-info">
+        <p class="fullname">
+          {{ user.firstName }} {{ user.lastName }} <span class="role">{{ userRole.name }}</span>
+        </p>
         <p class="login">{{ user.login }}</p>
-        <p class="fullname">{{ user.firstName }} {{ user.lastName }}</p>
-        <p class="role">{{ userRole.name }}</p>
       </div>
 
-      <button>Выйти</button>
+      <button @click="logout">Выйти</button>
     </template>
   </header>
 
-  <router-view />
+  <div v-if="loading" class="spinner-container">
+    <SpinnerIndicator />
+  </div>
+  <router-view v-show="!loading" />
 </template>
 
 <style lang="scss">
-body, p {
-  margin: 0;
-  padding: 0;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-@mixin appearance($value: none) {
-  -webkit-appearance: $value;
-  -moz-appearance: $value;
-  -ms-appearance: $value;
-  -o-appearance: $value;
-  appearance: $value;
-}
-
-div {
-  box-sizing: border-box;
-}
-
-:root {
-  --primary-color: #2bae66ff;
-  --primary-color-l: rgb(59, 201, 123);
-  --secondary-color: #fcf6f5ff;
-  --black: #101820ff;
-  --grey: rgb(231, 231, 231);
-
-  --horizontal-padding: 32px;
-  --vertical-padding: 24px;
-}
+@import '@styles';
 
 h1 {
   text-transform: uppercase;
@@ -98,6 +81,7 @@ header {
   display: flex;
   align-items: center;
   padding: 0 var(--horizontal-padding);
+  color: white;
 
   @mixin active {
     color: white;
@@ -138,45 +122,28 @@ header {
   }
 }
 
-input[type='submit'],
-button {
-  border-radius: 0;
-  border: none;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 32px;
-  padding: 0 12px;
-  background-color: var(--primary-color);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
+.user-info {
+  margin-right: auto;
 
-  &:hover {
-    background-color: var(--primary-color-l);
+  .fullname {
+    font-size: 20px;
+    font-weight: 600;
   }
-  &:focus {
-    text-decoration: dotted underline;
-    text-underline-offset: 5px;
+  .role {
+    font-size: 14px;
+    font-weight: 400;
+    color: #eee;
+    text-transform: lowercase;
+  }
+  .login {
+    color: #ddd;
   }
 }
 
-input:not([type='submit']) {
-  @include appearance(none);
-
-  display: block;
-  border-radius: unset;
-  outline: none;
-  border: none;
-  background-color: var(--grey);
-  height: 32px;
-  padding: 0 12px;
-  border-bottom: 1px solid transparent;
-  transition: all 0.15s;
-
-  &:focus {
-    border-bottom-color: rgb(177, 177, 177);
-  }
+.spinner-container {
+  padding: 300px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
