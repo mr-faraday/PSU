@@ -24,7 +24,7 @@ const submitHandler = async (e) => {
     router.push('/dashboard')
   } catch (error) {
     console.log(error)
-    alert('Invalid credentials')
+    alert('Неправильный логин или пароль')
   }
 }
 </script>

@@ -1,10 +1,10 @@
 const dashboardItems = [
   {
-    name: 'Claimed Documents',
-    href: '/dashboard/claimed-documents',
-    component: 'ClaimedDocumentsView',
+    name: 'Управелние персоналом',
+    href: '/dashboard/employees',
+    component: 'EmployeesView',
     meta: {
-      title: 'Claimed Documents',
+      title: 'Управелние персоналом',
     }
   },
   {
