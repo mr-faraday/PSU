@@ -1,11 +1,18 @@
 <script setup>
 import dashboardItems from '@/router/dashboard'
+import { computed } from '@vue/runtime-core'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const user = computed(() => store.getters['user/info'])
+const items = computed(() => dashboardItems.filter((item) => item.roles.includes(user.value.roleId)))
 </script>
 
 <template>
   <nav class="control-pannel">
     <ul>
-      <li v-for="(item, i) in dashboardItems" :key="i">
+      <li v-for="(item, i) in items" :key="i">
         <router-link :to="item.href" class="nav-item">{{ item.name }}</router-link>
       </li>
     </ul>

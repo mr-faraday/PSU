@@ -27,6 +27,14 @@ const routes = [
       name: `dashboard-${item.name}`,
       component: () => import(`@views/dashboard/${item.component}`),
       meta: item.meta,
+      beforeEnter(to, from, next) {
+        const roleId = store.getters['user/info'].roleId
+        if (item.roles && !item.roles.includes(roleId)) {
+          return next('/dashboard')
+        }
+
+        next()
+      },
     })),
   },
 
