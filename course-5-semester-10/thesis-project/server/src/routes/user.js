@@ -9,7 +9,11 @@ router.use(require('../middleware/authentication-middleware'))
 router.get(
     '/',
     asyncHandler(async (req, res) => {
-        const user = await User.findOne({ where: { id: res.locals.userId } })
+        const user = await User.findOne({ where: { id: res.locals.user.id } })
+
+        if (!user) {
+            return res.sendStatus(404)
+        }
 
         res.json({ success: true, result: user })
     })
@@ -24,7 +28,7 @@ router.post(
             return res.sendStatus(400)
         }
 
-        const user = await User.findOne({ where: { id: res.locals.userId } })
+        const user = await User.findOne({ where: { id: res.locals.user.id } })
 
         if (!(await user.comparePasword(oldPassword))) {
             return res.sendStatus(401)

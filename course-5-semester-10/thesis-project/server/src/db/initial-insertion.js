@@ -9,7 +9,6 @@ const { UserRole } = require('./models/user-role')
 const createRootUser = async () => {
     try {
         const rootUser = new User({
-            id: 1,
             login: 'root',
             firstName: 'Jhon',
             lastName: 'Doe',

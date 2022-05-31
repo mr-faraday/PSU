@@ -57,6 +57,11 @@ User.init(
                 model: UserRole,
                 key: 'id'
             }
+        },
+
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
         }
     },
     { sequelize: db, modelName: 'User' }

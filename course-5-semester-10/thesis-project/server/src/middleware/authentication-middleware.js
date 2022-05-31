@@ -1,12 +1,18 @@
 'use strict'
 
+const asyncHandler = require('express-async-handler')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
+const { User } = require('../db/models/user')
 
 /**
  * @type {import('express').RequestHandler}
  */
-module.exports = function authenticationMiddleware (req, res, next) {
+module.exports = asyncHandler(async function authenticationMiddleware (
+    req,
+    res,
+    next
+) {
     if (!req.cookies || !req.cookies.token) {
         return res.sendStatus(401)
     }
@@ -16,11 +22,19 @@ module.exports = function authenticationMiddleware (req, res, next) {
     try {
         const payload = jwt.verify(token, JWT_SECRET)
 
-        res.locals.userId = payload.userId
+        const user = await User.findOne({
+            where: { id: payload.userId }
+        })
+
+        if (!user || !user.active) {
+            return res.sendStatus(401)
+        }
+
+        res.locals.user = user
 
         next()
     } catch (error) {
         console.log(error)
         res.sendStatus(401)
     }
-}
+})

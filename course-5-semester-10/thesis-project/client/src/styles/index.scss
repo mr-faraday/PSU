@@ -59,6 +59,10 @@ button {
     text-decoration: dotted underline;
     text-underline-offset: 5px;
   }
+  &:disabled {
+    background-color: var(--grey);
+    cursor: not-allowed;
+  }
 }
 
 input:not([type='submit']) {

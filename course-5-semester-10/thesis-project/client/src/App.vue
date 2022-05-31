@@ -51,12 +51,12 @@ onMounted(async () => {
       <!-- <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
       <router-link to="/login">Login</router-link> -->
 
-      <div class="user-info">
+      <router-link to="/dashboard" class="user-info">
         <p class="fullname">
           {{ user.firstName }} {{ user.lastName }} <span class="role">{{ userRole.name }}</span>
         </p>
         <p class="login">{{ user.login }}</p>
-      </div>
+      </router-link>
 
       <button @click="logout">Выйти</button>
     </template>
@@ -104,16 +104,6 @@ header {
       @include active;
     }
   }
-  a.active {
-    @include active;
-  }
-  a.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  a + a {
-    margin-left: 12px;
-  }
 
   h1 {
     margin-right: auto;
@@ -124,6 +114,8 @@ header {
 
 .user-info {
   margin-right: auto;
+  color: white;
+  text-decoration: none;
 
   .fullname {
     font-size: 20px;
