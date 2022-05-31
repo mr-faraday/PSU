@@ -14,10 +14,12 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use('/auth', require('./routes/auth'))
-app.use('/user', require('./routes/user'))
-app.use('/settings', require('./routes/settings'))
-app.use('/employees', require('./routes/employees'))
+app.use('/auth', require('./routers/auth'))
+app.use('/user', require('./routers/user'))
+app.use('/settings', require('./routers/settings'))
+app.use('/employees', require('./routers/employees'))
+app.use('/clients', require('./routers/clients'))
+app.use('/cargos', require('./routers/cargos'))
 
 app.use((error, req, res, next) => {
     console.warn(error)
