@@ -62,10 +62,13 @@ const fetchEmployees = async () => {
 
     const res = await EmployeesApi.get()
 
-    employees.value = res.data.result.map((employee) => ({
-      ...employee,
-      roleName: store.getters.settings.userRoles.find((role) => role.id === employee.roleId).name,
-    }))
+    employees.value = res.data.result
+      .map((employee) => ({
+        ...employee,
+        roleName: store.getters.settings.userRoles.find((role) => role.id === employee.roleId).name,
+      }))
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => (a.active === b.active ? 0 : a.active ? -1 : 1))
   } catch (error) {
     console.warn(error)
   } finally {
