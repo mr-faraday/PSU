@@ -29,11 +29,11 @@ const dashboardItems = [
     roles: [UserRoleId.ADMIN, UserRoleId.MANAGER],
   },
   {
-    name: 'Оформление заявок на перемещение ТМЦ',
+    name: 'Оформление заявки на возврат ТМЦ',
     href: '/dashboard/move-cargo',
     component: 'MoveCargoView',
     meta: {
-      title: 'Оформление заявки на принятие ТМЦ',
+      title: 'Оформление заявки на возврат ТМЦ',
     },
     roles: [UserRoleId.ADMIN, UserRoleId.MANAGER],
   },

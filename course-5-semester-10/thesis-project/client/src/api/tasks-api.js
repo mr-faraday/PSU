@@ -7,4 +7,8 @@ export default class TasksApi {
   static async get() {
     return instance.get('/')
   }
+
+  static async complete(id) {
+    return instance.post(`/${id}/complete`)
+  }
 }

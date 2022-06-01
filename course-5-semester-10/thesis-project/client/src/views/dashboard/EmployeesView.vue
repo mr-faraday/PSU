@@ -27,8 +27,8 @@ const createEmployee = async (employeeData) => {
     fetchEmployees()
     form.value.clearForm()
   } catch (error) {
-    if (error.request?.data?.message) {
-      alert(error.request.data.message)
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -45,8 +45,8 @@ const deactivateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    if (error.request?.data?.message) {
-      alert(error.request.data.message)
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -63,8 +63,8 @@ const activateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    if (error.request?.data?.message) {
-      alert(error.request.data.message)
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
     } else {
       console.warn(error)
     }

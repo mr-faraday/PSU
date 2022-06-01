@@ -4,6 +4,8 @@ const asyncHandler = require('express-async-handler')
 const { TaskStatusId } = require('../constants')
 const { db } = require('../db')
 const { Cargo } = require('../db/models/cargo')
+const { CargoPlacement } = require('../db/models/cargo-placement')
+const { Shelf } = require('../db/models/shelf')
 const { Task } = require('../db/models/task')
 const router = require('express').Router()
 
@@ -25,7 +27,7 @@ router.post(
         const { clientId, weight } = req.body
 
         if (!clientId || !weight) {
-            return res.json({
+            return res.status(400).json({
                 success: false,
                 message: 'Не указаны обязательные поля'
             })
@@ -62,7 +64,7 @@ router.post(
         )
 
         if (!freeShelvesResult[0]) {
-            return res.json({
+            return res.status(406).json({
                 success: false,
                 message: 'Нет свободных позиций на стеллажах'
             })
@@ -109,6 +111,59 @@ router.post(
             success: true,
             result: task
         })
+    })
+)
+
+router.post(
+    '/:id/return',
+    asyncHandler(async (req, res) => {
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Не указан обязательный параметр'
+            })
+        }
+
+        const cargo = await Cargo.findByPk(id)
+
+        if (!cargo) {
+            return res.status(404).json({
+                success: false,
+                message: 'Не найден груз'
+            })
+        }
+
+        const existingTask = await Task.findOne({
+            where: {
+                cargoId: cargo.id,
+                statusId: TaskStatusId.NEW
+            }
+        })
+
+        if (existingTask) {
+            return res.status(406).json({
+                success: false,
+                message: 'С этим грузом уже связана задача'
+            })
+        }
+
+        const cargoCurrentPlacement = await CargoPlacement.findOne({
+            where: { cargoId: cargo.id }
+        })
+
+        await Task.create({
+            cargoId: cargo.id,
+            sourceShelfId: cargoCurrentPlacement.shelfId,
+            sourcePosition: cargoCurrentPlacement.position,
+            targetShelfId: null,
+            targetPosition: null,
+            statusId: TaskStatusId.NEW,
+            createdByUserId: res.locals.user.id
+        })
+
+        res.json({ success: true })
     })
 )
 

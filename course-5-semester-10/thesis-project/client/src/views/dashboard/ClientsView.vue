@@ -18,8 +18,8 @@ const createClient = async (clientData) => {
     fetchClients()
     form.value.clearForm()
   } catch (error) {
-    if (error.request?.data?.message) {
-      alert(error.request.data.message)
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -36,8 +36,8 @@ const fetchClients = async () => {
 
     employees.value = res.data.result.sort((a, b) => a.id - b.id)
   } catch (error) {
-    if (error.request?.data?.message) {
-      alert(error.request.data.message)
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
     } else {
       console.warn(error)
     }

@@ -1,10 +1,40 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
-import TasksApi from '@/api/tasks-api';
+import TasksApi from '@/api/tasks-api'
+import { useStore } from 'vuex'
+import { TaskStatusId, UserRoleId } from '@/constants'
 
+const store = useStore()
 const loading = ref(false)
 const tasks = ref([])
+const taskStatuses = computed(() => store.getters.settings.taskStatuses)
+
+const completeTask = async (id) => {
+  try {
+    loading.value = true
+
+    await TasksApi.complete(id)
+
+    fetchTasks()
+
+    alert('Задача успешно завершена')
+  } catch (error) {
+    if (error.response?.data?.message) {
+      alert(error.response.data.message)
+    } else {
+      console.warn(error)
+    }
+
+    loading.value = false
+  }
+}
+
+const authorizedCompleteTas = computed(() => {
+  const user = store.getters['user/info']
+
+  return [UserRoleId.ADMIN, UserRoleId.MANAGER].includes(user.roleId)
+})
 
 const fetchTasks = async () => {
   try {
@@ -12,7 +42,12 @@ const fetchTasks = async () => {
 
     const res = await TasksApi.get()
 
-    tasks.value = res.data.result.sort((a, b) => a.id - b.id)
+    tasks.value = res.data.result
+      .sort((a, b) => a.id - b.id)
+      .map((task) => ({
+        ...task,
+        statusName: taskStatuses.value.find((status) => status.id === task.statusId).name,
+      }))
   } catch (error) {
     console.warn(error)
   } finally {
@@ -34,17 +69,29 @@ onMounted(fetchTasks)
         <thead>
           <tr>
             <th>ID</th>
-            <th>ID клиента</th>
-            <th>Вес</th>
-            <th>Время поступления</th>
+            <th>ID груза</th>
+            <th>Статус</th>
+            <th>Тип</th>
+            <th>Дата создания</th>
+            <th>Дeйствия</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="task in tasks" :key="task.id">
-            <td>{{ cargo.id }}</td>
-            <td>{{ cargo.clientId }}</td>
-            <td>{{ cargo.weight }}</td>
-            <td>{{ new Date(cargo.arrivedAt) }}</td>
+            <td>{{ task.id }}</td>
+            <td>{{ task.cargoId }}</td>
+            <td>{{ task.statusName }}</td>
+            <td>{{ task.sourcePosition ? 'Возврат' : 'Поступление' }}</td>
+            <td>{{ new Date(task.createdAt).toLocaleString() }}</td>
+            <td>
+              <button
+                v-if="authorizedCompleteTas && TaskStatusId.NEW === task.statusId"
+                type="button"
+                @click="completeTask(task.id)"
+              >
+                Завершить
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

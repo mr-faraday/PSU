@@ -20,7 +20,7 @@ exports.Cargo = db.define(name, {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    arrived_at: {
+    arrivedAt: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW

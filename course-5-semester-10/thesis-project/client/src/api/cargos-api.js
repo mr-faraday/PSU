@@ -11,4 +11,8 @@ export default class CargosApi {
   static async create(cargoData) {
     return instance.post('/', cargoData)
   }
+
+  static async return(cargoId) {
+    return instance.post(`/${cargoId}/return`)
+  }
 }
