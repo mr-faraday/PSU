@@ -22,6 +22,7 @@ exports.Cargo = db.define(name, {
     },
     arrived_at: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 })

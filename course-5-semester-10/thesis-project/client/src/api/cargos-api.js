@@ -7,4 +7,8 @@ export default class CargosApi {
   static async get() {
     return instance.get('/')
   }
+
+  static async create(cargoData) {
+    return instance.post('/', cargoData)
+  }
 }

@@ -6,19 +6,33 @@ const { TaskStatus } = require('./models/task-status')
 const { User } = require('./models/user')
 const { UserRole } = require('./models/user-role')
 
-const createRootUser = async () => {
-    try {
-        const rootUser = new User({
-            login: 'root',
-            firstName: 'Jhon',
-            lastName: 'Doe',
-            roleId: UserRoleId.ADMIN
-        })
-        await rootUser.setPassword('root')
-        await rootUser.save()
-    } catch (error) {
-        console.log(error)
-    }
+const createUsers = async () => {
+    const admin = new User({
+        login: 'admin',
+        firstName: 'Jhon',
+        lastName: 'Doe',
+        roleId: UserRoleId.ADMIN
+    })
+    await admin.setPassword('1234')
+    await admin.save()
+
+    const manager = new User({
+        login: 'manager',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        roleId: UserRoleId.MANAGER
+    })
+    await manager.setPassword('1234')
+    await manager.save()
+
+    const operator = new User({
+        login: 'operator',
+        firstName: 'Chris',
+        lastName: 'Pratt',
+        roleId: UserRoleId.OPERATOR
+    })
+    await operator.setPassword('1234')
+    await operator.save()
 }
 
 exports.insertInitialData = async function () {
@@ -34,7 +48,6 @@ exports.insertInitialData = async function () {
         UserRole.create({ id: UserRoleId.MANAGER, name: 'Менеджер' }),
 
         TaskStatus.create({ id: TaskStatusId.NEW, name: 'Новое' }),
-        TaskStatus.create({ id: TaskStatusId.IN_PROGRESS, name: 'В работе' }),
         TaskStatus.create({ id: TaskStatusId.DONE, name: 'Выполнено' }),
         TaskStatus.create({ id: TaskStatusId.CANCELED, name: 'Отменено' }),
 
@@ -42,18 +55,18 @@ exports.insertInitialData = async function () {
         Rack.create({ levelsHeight: 3, postionRow: 2 }),
         Rack.create({ levelsHeight: 3, postionRow: 3 }),
 
-        Shelf.create({ long: 10, levelHeight: 1, rackId: 1 }),
-        Shelf.create({ long: 10, levelHeight: 2, rackId: 1 }),
-        Shelf.create({ long: 10, levelHeight: 3, rackId: 1 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 1, rackId: 1 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 2, rackId: 1 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 3, rackId: 1 }),
 
-        Shelf.create({ long: 10, levelHeight: 1, rackId: 2 }),
-        Shelf.create({ long: 10, levelHeight: 2, rackId: 2 }),
-        Shelf.create({ long: 10, levelHeight: 3, rackId: 2 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 1, rackId: 2 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 2, rackId: 2 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 3, rackId: 2 }),
 
-        Shelf.create({ long: 10, levelHeight: 1, rackId: 3 }),
-        Shelf.create({ long: 10, levelHeight: 2, rackId: 3 }),
-        Shelf.create({ long: 10, levelHeight: 3, rackId: 3 })
+        Shelf.create({ positionQuantity: 10, levelHeight: 1, rackId: 3 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 2, rackId: 3 }),
+        Shelf.create({ positionQuantity: 10, levelHeight: 3, rackId: 3 })
     ])
 
-    await createRootUser()
+    await createUsers()
 }

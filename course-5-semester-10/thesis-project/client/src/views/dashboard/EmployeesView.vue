@@ -9,6 +9,7 @@ const store = useStore()
 const loading = ref(false)
 const user = computed(() => store.getters['user/info'])
 const employees = ref([])
+const form = ref(null)
 
 const createEmployee = async (employeeData) => {
   try {
@@ -24,8 +25,14 @@ const createEmployee = async (employeeData) => {
     alert(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`)
 
     fetchEmployees()
+    form.value.clearForm()
   } catch (error) {
-    console.warn(error.message)
+    if (error.request?.data?.message) {
+      alert(error.request.data.message)
+    } else {
+      console.warn(error)
+    }
+
     loading.value = false
   }
 }
@@ -38,7 +45,12 @@ const deactivateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    console.warn(error.message)
+    if (error.request?.data?.message) {
+      alert(error.request.data.message)
+    } else {
+      console.warn(error)
+    }
+
     loading.value = false
   }
 }
@@ -51,7 +63,12 @@ const activateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    console.warn(error.message)
+    if (error.request?.data?.message) {
+      alert(error.request.data.message)
+    } else {
+      console.warn(error)
+    }
+
     loading.value = false
   }
 }
@@ -86,7 +103,7 @@ onMounted(fetchEmployees)
 
   <template v-else>
     <div class="create-employee-form-container">
-      <CreateEmployeeForm @submit="createEmployee" />
+      <CreateEmployeeForm ref="form" @submit="createEmployee" />
     </div>
 
     <div class="table-container">

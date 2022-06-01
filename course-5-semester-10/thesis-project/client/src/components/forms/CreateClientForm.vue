@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, ref } from 'vue'
+import { defineEmits, ref, defineExpose } from 'vue'
 
 const emit = defineEmits(['submit'])
 
@@ -21,11 +21,15 @@ const submitHandler = async (e) => {
   }
 
   emit('submit', client)
-
-  firstName.value = ''
-  lastName.value = ''
-  phone.value = ''
 }
+
+defineExpose({
+  clearForm() {
+    firstName.value = ''
+    lastName.value = ''
+    phone.value = ''
+  },
+})
 </script>
 
 <template>

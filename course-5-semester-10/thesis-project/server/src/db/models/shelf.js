@@ -16,7 +16,7 @@ exports.Shelf = db.define(name, {
             key: 'id'
         }
     },
-    long: {
+    positionQuantity: {
         type: DataTypes.INTEGER,
         allowNull: false
     },

@@ -6,6 +6,7 @@ import ClientsApi from '@/api/clients-api'
 
 const loading = ref(false)
 const employees = ref([])
+const form = ref(null)
 
 const createClient = async (clientData) => {
   try {
@@ -15,8 +16,14 @@ const createClient = async (clientData) => {
     alert(`Клиент зарегестрирован.`)
 
     fetchClients()
+    form.value.clearForm()
   } catch (error) {
-    console.warn(error.message)
+    if (error.request?.data?.message) {
+      alert(error.request.data.message)
+    } else {
+      console.warn(error)
+    }
+
     loading.value = false
   }
 }
@@ -29,7 +36,11 @@ const fetchClients = async () => {
 
     employees.value = res.data.result.sort((a, b) => a.id - b.id)
   } catch (error) {
-    console.warn(error)
+    if (error.request?.data?.message) {
+      alert(error.request.data.message)
+    } else {
+      console.warn(error)
+    }
   } finally {
     loading.value = false
   }
@@ -45,7 +56,7 @@ onMounted(fetchClients)
 
   <template v-else>
     <div class="create-client-form-container">
-      <CreateClientForm @submit="createClient" />
+      <CreateClientForm ref="form" @submit="createClient" />
     </div>
 
     <div class="table-container">

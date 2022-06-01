@@ -6,7 +6,6 @@ export declare enum UserRoleId {
 
 export declare enum TaskStatusId {
     NEW = 1,
-    IN_PROGRESS = 2,
     DONE = 3,
     CANCELED = 4
 }

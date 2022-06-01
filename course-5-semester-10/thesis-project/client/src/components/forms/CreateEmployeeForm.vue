@@ -1,6 +1,6 @@
 <script setup>
 import { UserRoleId } from '@/constants'
-import { computed, defineEmits, ref } from 'vue'
+import { computed, defineEmits, ref, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 
 const emit = defineEmits(['submit'])
@@ -28,12 +28,16 @@ const submitHandler = async (e) => {
   }
 
   emit('submit', user)
-
-  login.value = ''
-  roleId.value = UserRoleId.MANAGER
-  firstName.value = ''
-  lastName.value = ''
 }
+
+defineExpose({
+  clearForm() {
+    login.value = ''
+    roleId.value = UserRoleId.MANAGER
+    firstName.value = ''
+    lastName.value = ''
+  },
+})
 </script>
 
 <template>
