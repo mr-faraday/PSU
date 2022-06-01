@@ -20,6 +20,7 @@ exports.CargoPlacement = db.define(name, {
     },
     shelfId: {
         type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
             model: Shelf,
             key: 'id'
@@ -27,6 +28,6 @@ exports.CargoPlacement = db.define(name, {
     },
     position: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     }
 })

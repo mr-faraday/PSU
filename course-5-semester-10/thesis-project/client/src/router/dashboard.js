@@ -20,11 +20,29 @@ const dashboardItems = [
     roles: [UserRoleId.ADMIN, UserRoleId.MANAGER],
   },
   {
-    name: 'Задачи по приёму/распределению',
-    href: '/dashboard/tasks',
-    component: 'TasksView',
+    name: 'Оформление заявки на принятие ТМЦ',
+    href: '/dashboard/receive-cargo',
+    component: 'ReceiveCargoView',
     meta: {
-      title: 'Задачи по приёму/распределению',
+      title: 'Оформление заявки на принятие ТМЦ',
+    },
+    roles: [UserRoleId.ADMIN, UserRoleId.MANAGER],
+  },
+  {
+    name: 'Оформление заявок на перемещение ТМЦ',
+    href: '/dashboard/move-cargo',
+    component: 'MoveCargoView',
+    meta: {
+      title: 'Оформление заявки на принятие ТМЦ',
+    },
+    roles: [UserRoleId.ADMIN, UserRoleId.MANAGER],
+  },
+  {
+    name: 'Список задач',
+    href: '/dashboard/tasks',
+    component: 'TasksListView',
+    meta: {
+      title: 'Задачи по приёму/распределению ТМЦ',
     },
     roles: [UserRoleId.ADMIN, UserRoleId.MANAGER, UserRoleId.OPERATOR],
   },
@@ -36,6 +54,15 @@ const dashboardItems = [
       title: 'Схема склада',
     },
     roles: [UserRoleId.ADMIN, UserRoleId.OPERATOR],
+  },
+  {
+    name: 'Список ТМЦ',
+    href: '/dashboard/cargos',
+    component: 'CargosListView',
+    meta: {
+      title: 'Список ТМЦ',
+    },
+    roles: [UserRoleId.ADMIN, UserRoleId.MANAGER, UserRoleId.OPERATOR],
   },
 ]
 
