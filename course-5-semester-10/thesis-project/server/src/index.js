@@ -20,6 +20,7 @@ app.use('/settings', require('./routers/settings'))
 app.use('/employees', require('./routers/employees'))
 app.use('/clients', require('./routers/clients'))
 app.use('/cargos', require('./routers/cargos'))
+app.use('/tasks', require('./routers/tasks'))
 
 app.use((error, req, res, next) => {
     console.warn(error)

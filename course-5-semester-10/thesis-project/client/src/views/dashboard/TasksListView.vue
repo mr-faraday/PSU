@@ -44,7 +44,7 @@ onMounted(fetchTasks)
             <td>{{ cargo.id }}</td>
             <td>{{ cargo.clientId }}</td>
             <td>{{ cargo.weight }}</td>
-            <td>{{ new Date(cargo.arrived_at) }}</td>
+            <td>{{ new Date(cargo.arrivedAt) }}</td>
           </tr>
         </tbody>
       </table>

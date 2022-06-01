@@ -78,7 +78,6 @@ router.post(
                 WHERE shelf_id = :shelfId
                 UNION ALL
                 SELECT
-                    t.target_shelf_id as shelf_id,
                     t.target_position as position
                     FROM tasks t WHERE t.status_id = 1 AND t.target_shelf_id = :shelfId
             `,
@@ -114,67 +113,3 @@ router.post(
 )
 
 module.exports = router
-
-// `
-//             SELECT
-//                 s.id,
-//                 s.positionQuantity,
-//                 s.level_height as levelHeight,
-//                 s.rack_id as rackId,
-//                 r.postion_row as postionRow
-//             FROM
-//                 shelves s
-//             LEFT JOIN
-//                 racks r
-//             ON
-//                 s.rack_id = r.id
-//             WHERE
-//                 s.id NOT IN (
-//                     SELECT
-//                         shelf_id
-//                     FROM
-//                         cargo_placements
-//                 )
-//             ORDER BY
-//                 r.postion_row,
-//                 s.positionQuantity
-//             `,
-
-// const findResult = await db.query(
-//     `
-//     SELECT * FROM (
-//         SELECT
-//             shelf.id AS shelfId,
-//             shelf.positionQuantity AS shelfPositionQuantity,
-//             shelf.level_height AS shelfLevelHeight,
-//             (
-//                 SELECT
-//                     COUNT(*)
-//                 FROM
-//                     cargo_placements AS cargo_placement
-//                 WHERE
-//                     cargo_placement.shelf_id = shelf.id
-//             ) AS occupiedPositions
-//         FROM
-//             shelves as shelf
-//         WHERE
-//             shelf.id NOT IN (
-//                 SELECT
-//                     cargo_placement.shelf_id
-//                 FROM
-//                     cargo_placements AS cargo_placement
-//                 WHERE
-//                     cargo_placement.cargo_id = :cargoId
-//             )
-//     ) AS shelf
-//     WHERE
-//         shelf.occupiedPositions < shelf.shelfPositionQuantity * shelf.shelfLevelHeight
-//     ORDER BY
-//         shelf.occupiedPositions ASC
-//     LIMIT 1
-// `,
-//     {
-//         type: db.QueryTypes.SELECT,
-//         replacements: { cargoId: 1 /* cargo.id */ }
-//     }
-// )

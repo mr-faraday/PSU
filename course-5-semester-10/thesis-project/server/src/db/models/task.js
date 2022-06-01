@@ -40,8 +40,7 @@ exports.Task = db.define(
             }
         },
         sourcePosition: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.INTEGER
         },
         targetShelfId: {
             type: DataTypes.INTEGER,
@@ -51,8 +50,7 @@ exports.Task = db.define(
             }
         },
         targetPosition: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.INTEGER
         },
 
         createdByUserId: {
