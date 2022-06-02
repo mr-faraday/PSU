@@ -6,6 +6,7 @@ const { db } = require('../db')
 const { Cargo } = require('../db/models/cargo')
 const { CargoPlacement } = require('../db/models/cargo-placement')
 const { Task } = require('../db/models/task')
+const { ShelfOcupation } = require('../db/queries/shelf-ocupation')
 const router = require('express').Router()
 
 router.use(require('../middleware/authentication-middleware'))
@@ -32,33 +33,7 @@ router.post(
             })
         }
 
-        const freeShelvesResult = await db.query(
-            `
-            SELECT * FROM (
-                SELECT
-                    id,
-                    rack_id as rackId,
-                    position_quantity as positionQuantity,
-                    level_height as levelHeight,
-                    COALESCE(ocupied_position_count, 0) as ocupiedPositionCount
-                FROM shelves LEFT JOIN (
-                    SELECT shelf_id, COUNT(position) AS ocupied_position_count FROM (
-                        SELECT
-                            shelf_id,
-                            position
-                        FROM cargo_placements cp
-                        UNION ALL
-                        SELECT
-                            t.target_shelf_id as shelf_id,
-                            t.target_position as position
-                        FROM tasks t WHERE t.status_id = 1
-                    ) as ocupations GROUP BY shelf_id
-                ) as ocupations ON shelves.id = ocupations.shelf_id
-            ) as res ORDER BY res.ocupiedPositionCount ASC
-            LIMIT 1
-            `,
-            { type: db.QueryTypes.SELECT, underscored: true }
-        )
+        const freeShelvesResult = await ShelfOcupation.getNotFull()
 
         if (!freeShelvesResult[0]) {
             return res.status(406).json({
@@ -93,20 +68,20 @@ router.post(
                 return acc + 1
             }, 1)
 
-        const cargo = await Cargo.create({ clientId, weight })
-        const task = await Task.create({
-            cargoId: cargo.id,
-            sourceShelfId: null,
-            sourcePosition: null,
-            targetShelfId: shelfId,
-            targetPosition: postion,
-            statusId: TaskStatusId.NEW,
-            createdByUserId: res.locals.user.id
-        })
+        // const cargo = await Cargo.create({ clientId, weight })
+        // const task = await Task.create({
+        //     cargoId: cargo.id,
+        //     sourceShelfId: null,
+        //     sourcePosition: null,
+        //     targetShelfId: shelfId,
+        //     targetPosition: postion,
+        //     statusId: TaskStatusId.NEW,
+        //     createdByUserId: res.locals.user.id
+        // })
 
         res.json({
             success: true,
-            result: task
+            result: { id: 1 } // task
         })
     })
 )
