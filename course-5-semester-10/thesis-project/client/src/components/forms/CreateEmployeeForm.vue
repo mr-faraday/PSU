@@ -1,8 +1,10 @@
 <script setup>
 import { UserRoleId } from '@/constants'
 import { computed, defineEmits, ref, defineExpose } from 'vue'
+import { useToast } from 'vue-toastification'
 import { useStore } from 'vuex'
 
+const toast = useToast()
 const emit = defineEmits(['submit'])
 const store = useStore()
 
@@ -24,7 +26,7 @@ const submitHandler = async (e) => {
   }
 
   if (!user.login || !user.firstName || !user.lastName) {
-    return alert('Заполните все поля')
+    return toast.warning('Заполните все поля')
   }
 
   emit('submit', user)

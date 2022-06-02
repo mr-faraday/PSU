@@ -32,7 +32,6 @@ onMounted(async () => {
     router.push('/dashboard')
   } catch (error) {
     if (error.response?.status === 401) {
-      console.log('asdf')
       router.push('/login')
     } else {
       throw error

@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import CargosApi from '@/api/cargos-api'
 import MoveCargoForm from '@/components/forms/MoveCargoForm.vue';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast()
 
 const loading = ref(false)
 const form = ref(null)
@@ -12,12 +15,12 @@ const moveCargo = async (cargoId) => {
     loading.value = true
 
     await CargosApi.return(cargoId)
-    alert('Заявка на возврат ТМЦ успешно отправлена')
+    toast.success('Заявка на возврат ТМЦ успешно отправлена')
 
     form.value.clearForm()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }

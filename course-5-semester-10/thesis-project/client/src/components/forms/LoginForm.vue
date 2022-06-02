@@ -2,16 +2,23 @@
 import AuthApi from '@/api/auth-api'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import { useStore } from 'vuex'
 
 const router = useRouter()
 const store = useStore()
+const toast = useToast()
 
 const login = ref('')
 const password = ref('')
 
 const submitHandler = async (e) => {
   e.preventDefault()
+
+  if (!login.value || !password.value) {
+    toast.warning('Введите логин и пароль')
+    return
+  }
 
   try {
     await AuthApi.login({
@@ -24,7 +31,7 @@ const submitHandler = async (e) => {
     router.push('/dashboard')
   } catch (error) {
     console.log(error)
-    alert('Неправильный логин или пароль')
+    toast.error('Неправильный логин или пароль')
   }
 }
 </script>

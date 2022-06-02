@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import ReceiveCargoForm from '@/components/forms/ReceiveCargoForm.vue'
 import CargosApi from '@/api/cargos-api'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 const loading = ref(false)
 const form = ref(null)
@@ -12,12 +15,12 @@ const receiveCargo = async (cargoData) => {
     loading.value = true
 
     const res = await CargosApi.create(cargoData)
-    alert(`Задача на приём ТМЦ создана, id: ${res.data.result.id}`)
+    toast.success(`Задача на приём ТМЦ создана, id: ${res.data.result.id}`)
 
     form.value.clearForm()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }

@@ -1,6 +1,8 @@
 <script setup>
 import { defineEmits, ref, defineExpose } from 'vue'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const emit = defineEmits(['submit'])
 
 const clientId = ref('')
@@ -15,7 +17,7 @@ const submitHandler = async (e) => {
   }
 
   if (!cargoData.clientId || !cargoData.weight) {
-    return alert('Заполните все поля')
+    return toast.warning('Заполните все поля')
   }
 
   emit('submit', cargoData)
@@ -34,11 +36,11 @@ defineExpose({
     <h4>Регистрация груза</h4>
 
     <div class="form-group">
-      <input v-model="clientId" placeholder="ID клиента" />
+      <input v-model="clientId" placeholder="ID клиента" type="number" />
     </div>
 
     <div class="form-group">
-      <input v-model="weight" placeholder="Вес груза (кг)" />
+      <input v-model="weight" placeholder="Вес груза (кг)" type="number" />
     </div>
 
     <button type="submit">Зарегистрировать</button>

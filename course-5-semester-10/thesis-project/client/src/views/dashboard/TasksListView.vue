@@ -4,8 +4,11 @@ import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import TasksApi from '@/api/tasks-api'
 import { useStore } from 'vuex'
 import { TaskStatusId, UserRoleId } from '@/constants'
+import { useToast } from 'vue-toastification'
 
 const store = useStore()
+const toast = useToast()
+
 const loading = ref(false)
 const tasks = ref([])
 const taskStatuses = computed(() => store.getters.settings.taskStatuses)
@@ -16,12 +19,12 @@ const completeTask = async (id) => {
 
     await TasksApi.complete(id)
 
-    fetchTasks()
+    toast.success(`Задача выполнена`)
 
-    alert('Задача успешно завершена')
+    fetchTasks()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -44,6 +47,12 @@ const fetchTasks = async () => {
 
     tasks.value = res.data.result
       .sort((a, b) => a.id - b.id)
+      // sort by status
+      .sort((a, b) => {
+        if (a.statusId === TaskStatusId.DONE) return 1
+        if (b.statusId === TaskStatusId.DONE) return -1
+        return 0
+      })
       .map((task) => ({
         ...task,
         statusName: taskStatuses.value.find((status) => status.id === task.statusId).name,

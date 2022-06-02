@@ -1,6 +1,8 @@
 <script setup>
 import { defineEmits, ref, defineExpose } from 'vue'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const emit = defineEmits(['submit'])
 
 const firstName = ref('')
@@ -17,7 +19,7 @@ const submitHandler = async (e) => {
   }
 
   if (!client.firstName || !client.lastName || !client.phone) {
-    return alert('Заполните все поля')
+    return toast.warning('Заполните все поля')
   }
 
   emit('submit', client)
@@ -45,7 +47,7 @@ defineExpose({
     </div>
 
     <div class="form-group">
-      <input v-model="phone" placeholder="Телефон" />
+      <input v-model="phone" placeholder="Телефон" type="tel" />
     </div>
 
     <button type="submit">Зарегистрировать</button>

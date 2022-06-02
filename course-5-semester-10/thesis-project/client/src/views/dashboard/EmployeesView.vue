@@ -4,10 +4,13 @@ import { computed, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import CreateEmployeeForm from '@/components/forms/CreateEmployeeForm.vue'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const store = useStore()
-const loading = ref(false)
+
 const user = computed(() => store.getters['user/info'])
+const loading = ref(false)
 const employees = ref([])
 const form = ref(null)
 
@@ -22,13 +25,13 @@ const createEmployee = async (employeeData) => {
       password: res.data.result.password,
     }
 
-    alert(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`)
+    toast.success(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`)
 
     fetchEmployees()
     form.value.clearForm()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -46,7 +49,7 @@ const deactivateEmployee = async ({ id }) => {
     fetchEmployees()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -64,7 +67,7 @@ const activateEmployee = async ({ id }) => {
     fetchEmployees()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -115,6 +118,7 @@ onMounted(fetchEmployees)
             <th>Роль</th>
             <th>Имя</th>
             <th>Фамилия</th>
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -144,21 +148,5 @@ onMounted(fetchEmployees)
 <style lang="scss" scoped>
 .create-employee-form-container {
   margin-bottom: 50px;
-}
-
-.table-container {
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th {
-    text-align: left;
-  }
-
-  tr {
-    &:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-  }
 }
 </style>

@@ -3,7 +3,9 @@ import { onMounted, ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import CreateClientForm from '@/components/forms/CreateClientForm.vue'
 import ClientsApi from '@/api/clients-api'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const loading = ref(false)
 const employees = ref([])
 const form = ref(null)
@@ -13,13 +15,13 @@ const createClient = async (clientData) => {
     loading.value = true
 
     await ClientsApi.create(clientData)
-    alert(`Клиент зарегестрирован.`)
+    toast.success(`Клиент зарегестрирован.`)
 
     fetchClients()
     form.value.clearForm()
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }
@@ -37,7 +39,7 @@ const fetchClients = async () => {
     employees.value = res.data.result.sort((a, b) => a.id - b.id)
   } catch (error) {
     if (error.response?.data?.message) {
-      alert(error.response.data.message)
+      toast.error(error.response.data.message)
     } else {
       console.warn(error)
     }

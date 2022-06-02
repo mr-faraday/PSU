@@ -47,9 +47,9 @@ exports.insertInitialData = async function () {
         UserRole.create({ id: UserRoleId.OPERATOR, name: 'Оператор' }),
         UserRole.create({ id: UserRoleId.MANAGER, name: 'Менеджер' }),
 
-        TaskStatus.create({ id: TaskStatusId.NEW, name: 'Новое' }),
-        TaskStatus.create({ id: TaskStatusId.DONE, name: 'Выполнено' }),
-        TaskStatus.create({ id: TaskStatusId.CANCELED, name: 'Отменено' }),
+        TaskStatus.create({ id: TaskStatusId.NEW, name: 'Новая' }),
+        TaskStatus.create({ id: TaskStatusId.DONE, name: 'Выполнена' }),
+        TaskStatus.create({ id: TaskStatusId.CANCELED, name: 'Отменена' }),
 
         Rack.create({ levelsHeight: 3, postionRow: 1 }),
         Rack.create({ levelsHeight: 3, postionRow: 2 }),

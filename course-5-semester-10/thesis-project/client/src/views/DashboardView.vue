@@ -3,8 +3,10 @@ import UserApi from '@/api/user-api'
 import ControlPanel from '@/components/ControlPanel.vue'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import { useStore } from 'vuex'
 
+const toast = useToast()
 const store = useStore()
 const user = computed(() => store.getters['user/info'])
 const userRole = computed(() => store.getters['user/role'])
@@ -37,12 +39,12 @@ const changePassword = async (e) => {
     newPassword.value = ''
     confirmPassword.value = ''
 
-    alert('Пароль успешно изменен')
+    toast.success('Пароль успешно изменен')
   } catch (error) {
     if (error.response?.status === 401) {
-      alert('Неправильно введён текущий пароль')
+      toast.error('Неправильно введён текущий пароль')
     } else {
-      alert(error.message)
+      toast.error(error.message)
     }
   } finally {
     loading.value = false
