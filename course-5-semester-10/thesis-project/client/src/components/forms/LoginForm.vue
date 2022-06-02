@@ -30,8 +30,11 @@ const submitHandler = async (e) => {
 
     router.push('/dashboard')
   } catch (error) {
-    console.log(error)
-    toast.error('Неправильный логин или пароль')
+    if (error.response?.status === 401) {
+      toast.error('Неверный логин или пароль')
+    } else {
+      toast.error(error.message)
+    }
   }
 }
 </script>

@@ -2,6 +2,9 @@
 import { onMounted, ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import CargosApi from '@/api/cargos-api'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 const loading = ref(false)
 const cargos = ref([])
@@ -14,7 +17,7 @@ const fetchCargos = async () => {
 
     cargos.value = res.data.result.sort((a, b) => a.id - b.id)
   } catch (error) {
-    console.warn(error)
+    toast.error(error.message)
   } finally {
     loading.value = false
   }

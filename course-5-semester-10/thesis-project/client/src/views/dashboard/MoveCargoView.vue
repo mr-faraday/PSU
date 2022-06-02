@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import CargosApi from '@/api/cargos-api'
-import MoveCargoForm from '@/components/forms/MoveCargoForm.vue';
-import { useToast } from 'vue-toastification';
+import MoveCargoForm from '@/components/forms/MoveCargoForm.vue'
+import { useToast } from 'vue-toastification'
 
 const toast = useToast()
 
@@ -19,11 +19,7 @@ const moveCargo = async (cargoId) => {
 
     form.value.clearForm()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
+    toast.error(error.response?.data?.message ?? error.message)
   } finally {
     loading.value = false
   }

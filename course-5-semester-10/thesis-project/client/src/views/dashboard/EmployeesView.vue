@@ -30,12 +30,7 @@ const createEmployee = async (employeeData) => {
     fetchEmployees()
     form.value.clearForm()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
-
+    toast.error(error.response?.data?.message ?? error.message)
     loading.value = false
   }
 }
@@ -48,12 +43,7 @@ const deactivateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
-
+    toast.error(error.response?.data?.message ?? error.message)
     loading.value = false
   }
 }
@@ -66,12 +56,7 @@ const activateEmployee = async ({ id }) => {
 
     fetchEmployees()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
-
+    toast.error(error.response?.data?.message ?? error.message)
     loading.value = false
   }
 }
@@ -90,7 +75,7 @@ const fetchEmployees = async () => {
       .sort((a, b) => a.id - b.id)
       .sort((a, b) => (a.active === b.active ? 0 : a.active ? -1 : 1))
   } catch (error) {
-    console.warn(error)
+    toast.error(error.message)
   } finally {
     loading.value = false
   }

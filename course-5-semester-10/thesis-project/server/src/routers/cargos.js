@@ -39,9 +39,9 @@ router.post(
         // find shelf with free positions that are not a target of new tasks (new tasks status = 1)
         const freeShelvesResult = await db.query(
             `
-            SELECT id FROM shelves WHERE id NOT IN
+            SELECT id, ocupied_position_count as "ocupiedPositionCount" FROM shelves WHERE id NOT IN
             (
-                SELECT shelf_id as id FROM
+                SELECT shelf_id as id, ocupied_position_count FROM
                     (
                         SELECT shelf_id, COUNT(position) AS "ocupied_position_count" FROM
                             (
@@ -54,7 +54,7 @@ router.post(
                                     t.target_shelf_id as shelf_id,
                                     t.target_position as position
                                 FROM tasks t WHERE t.status_id = 1
-                            ) as ocupations GROUP BY shelf_id
+                            ) as ocupations GROUP BY shelf_id ORDER BY ocupied_position_count
                     ) as count_res INNER JOIN shelves ON shelves.id = shelf_id
                 WHERE position_quantity <= ocupied_position_count
             )
@@ -62,6 +62,8 @@ router.post(
             `,
             { type: db.QueryTypes.SELECT }
         )
+
+        console.log(freeShelvesResult)
 
         if (!freeShelvesResult[0]) {
             return res.status(406).json({

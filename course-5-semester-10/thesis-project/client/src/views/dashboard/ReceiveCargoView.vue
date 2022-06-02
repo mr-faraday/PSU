@@ -19,11 +19,7 @@ const receiveCargo = async (cargoData) => {
 
     form.value.clearForm()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
+    toast.error(error.response?.data?.message ?? error.message)
   } finally {
     loading.value = false
   }

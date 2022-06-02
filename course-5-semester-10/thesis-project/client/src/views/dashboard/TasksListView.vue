@@ -23,12 +23,7 @@ const completeTask = async (id) => {
 
     fetchTasks()
   } catch (error) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message)
-    } else {
-      console.warn(error)
-    }
-
+    toast.error(error.response?.data?.message ?? error.message)
     loading.value = false
   }
 }
@@ -58,7 +53,7 @@ const fetchTasks = async () => {
         statusName: taskStatuses.value.find((status) => status.id === task.statusId).name,
       }))
   } catch (error) {
-    console.warn(error)
+    toast.error(error.message)
   } finally {
     loading.value = false
   }
