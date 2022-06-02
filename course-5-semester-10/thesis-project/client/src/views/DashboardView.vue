@@ -103,7 +103,7 @@ const isIndex = computed(() => /dashboard\/?$/.test(route.path))
     </div>
 
     <div v-else class="operation-window">
-      <h2 class="container">{{ route.meta.title }}</h2>
+      <h2 v-if="route.meta?.title" class="container">{{ route.meta.title }}</h2>
 
       <router-view />
     </div>

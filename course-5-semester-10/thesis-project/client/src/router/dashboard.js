@@ -50,9 +50,6 @@ const dashboardItems = [
     name: 'Схема склада',
     href: '/dashboard/warehouse-scheme',
     component: 'WarehouseSchemeView',
-    meta: {
-      title: 'Схема склада',
-    },
     roles: [UserRoleId.ADMIN, UserRoleId.OPERATOR],
   },
   {

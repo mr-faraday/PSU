@@ -1,19 +1,87 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import SpinnerIndicator from '@/components/SpinnerIndicator.vue'
 import { useToast } from 'vue-toastification'
 import WarehouseApi from '@/api/warehouse-api'
+import Chart from 'chart.js/auto'
 
 const toast = useToast()
 
 const loading = ref(false)
-const rawData = ref(null)
+const chart = ref(null)
 
-const fetchTasks = async () => {
+/* eslint-disable */
+
+const CHART_COLORS = {
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(201, 203, 207)',
+}
+
+const getCahrtConfig = (data) => ({
+  type: 'bar',
+  data,
+  options: {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Статистика по занятому месту',
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  },
+})
+
+const initChart = async () => {
   try {
     loading.value = true
     const res = await WarehouseApi.getShelfOcupations()
-    rawData.value = res.data.result
+    const rawData = res.data.result
+      .map((shelf) => ({
+        ...shelf,
+        ocupiedPositionCount: Number(shelf.ocupiedPositionCount),
+      }))
+      .sort((a, b) => a.rackId - b.rackId)
+      .sort((a, b) => a.id - b.id)
+
+    const data = rawData.map((s) => ({
+      label: `стеллаж ${s.rackId} / полка ${s.id}`,
+      ocupied: s.ocupiedPositionCount,
+      free: s.positionQuantity - s.ocupiedPositionCount,
+    }))
+
+    const labels = data.map((s) => s.label)
+    const datasets = [
+      {
+        label: 'Занято',
+        data: data.map((s) => s.ocupied),
+        backgroundColor: CHART_COLORS.red,
+      },
+      {
+        label: 'Свободно',
+        data: data.map((s) => s.free),
+        backgroundColor: CHART_COLORS.blue,
+      },
+    ]
+
+    loading.value = false
+    await new Promise((r) => requestAnimationFrame(r))
+    await new Promise((r) => requestAnimationFrame(r))
+
+    const canvas = document.getElementById('chart')
+    chart.value = new Chart(canvas, getCahrtConfig({ labels, datasets }))
   } catch (error) {
     toast.error(error.message)
   } finally {
@@ -21,7 +89,12 @@ const fetchTasks = async () => {
   }
 }
 
-onMounted(fetchTasks)
+onMounted(initChart)
+onUnmounted(() => {
+  if (chart.value) {
+    chart.value.destroy()
+  }
+})
 </script>
 
 <template>
@@ -29,8 +102,14 @@ onMounted(fetchTasks)
     <SpinnerIndicator />
   </div>
 
-  <div v-else class="container">...</div>
+  <div v-else class="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.chart-container {
+  position: relative;
+  height: 80vh;
+}
 </style>
