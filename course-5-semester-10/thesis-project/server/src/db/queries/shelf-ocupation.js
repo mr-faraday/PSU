@@ -6,10 +6,10 @@ const getAll = async () => {
         SELECT * FROM (
             SELECT
                 id,
-                rack_id as rackId,
-                position_quantity as positionQuantity,
-                level_height as levelHeight,
-                COALESCE(ocupied_position_count, 0) as ocupiedPositionCount
+                rack_id as "rackId",
+                position_quantity as "positionQuantity",
+                level_height as "levelHeight",
+                COALESCE(ocupied_position_count, 0) as "ocupiedPositionCount"
             FROM shelves LEFT JOIN (
                 SELECT shelf_id, COUNT(position) AS ocupied_position_count FROM (
                     SELECT
@@ -23,7 +23,7 @@ const getAll = async () => {
                     FROM tasks t WHERE t.status_id = 1
                 ) as ocupations GROUP BY shelf_id
             ) as ocupations ON shelves.id = ocupations.shelf_id
-        ) as res ORDER BY res.ocupiedPositionCount ASC
+        ) as res ORDER BY res."ocupiedPositionCount" ASC
         `,
         { type: db.QueryTypes.SELECT }
     )
@@ -35,10 +35,10 @@ const getNotFull = async () => {
         SELECT * FROM (
             SELECT
                 id,
-                rack_id as rackId,
-                position_quantity as positionQuantity,
-                level_height as levelHeight,
-                COALESCE(ocupied_position_count, 0) as ocupiedPositionCount
+                rack_id as "rackId",
+                position_quantity as "positionQuantity",
+                level_height as "levelHeight",
+                COALESCE(ocupied_position_count, 0) as "ocupiedPositionCount"
             FROM shelves LEFT JOIN (
                 SELECT shelf_id, COUNT(position) AS ocupied_position_count FROM (
                     SELECT
@@ -52,8 +52,8 @@ const getNotFull = async () => {
                     FROM tasks t WHERE t.status_id = 1
                 ) as ocupations GROUP BY shelf_id
             ) as ocupations ON shelves.id = ocupations.shelf_id
-        ) as res WHERE res.ocupiedPositionCount < res.positionQuantity
-        ORDER BY res.ocupiedPositionCount ASC
+        ) as res WHERE res."ocupiedPositionCount" < res."positionQuantity"
+        ORDER BY res."ocupiedPositionCount" ASC
         `,
         { type: db.QueryTypes.SELECT }
     )
