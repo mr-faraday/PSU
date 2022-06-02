@@ -32,7 +32,7 @@ const receiveCargo = async (cargoData) => {
     <SpinnerIndicator />
   </div>
 
-  <div v-else class="create-client-form-container">
+  <div v-else class="create-client-form-container container">
     <ReceiveCargoForm ref="form" @submit="receiveCargo" />
   </div>
 </template>

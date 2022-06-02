@@ -72,7 +72,6 @@ nav.control-pannel {
   @extend .scroll;
 
   flex: 1;
-  padding: 0 20px;
   padding-bottom: 20px;
 
   input:not([type='submit']) {

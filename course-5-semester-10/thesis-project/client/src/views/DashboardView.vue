@@ -57,7 +57,7 @@ const isIndex = computed(() => /dashboard\/?$/.test(route.path))
   <div class="dashboard-page">
     <ControlPanel />
 
-    <div v-if="isIndex" class="operation-window">
+    <div v-if="isIndex" class="operation-window container">
       <h2>{{ user.firstName }} {{ user.lastName }}</h2>
 
       <table>
@@ -101,7 +101,7 @@ const isIndex = computed(() => /dashboard\/?$/.test(route.path))
     </div>
 
     <div v-else class="operation-window">
-      <h2>{{ route.meta.title }}</h2>
+      <h2 class="container">{{ route.meta.title }}</h2>
 
       <router-view />
     </div>

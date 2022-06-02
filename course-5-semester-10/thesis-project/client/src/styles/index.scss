@@ -82,3 +82,14 @@ input:not([type='submit']) {
     border-bottom-color: rgb(177, 177, 177);
   }
 }
+
+.spinner-container {
+  padding: 300px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  padding: 0 20px;
+}

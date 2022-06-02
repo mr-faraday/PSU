@@ -48,9 +48,6 @@ onMounted(async () => {
     <h1 v-if="!authenticated">warehouse management system</h1>
 
     <template v-else>
-      <!-- <router-link to="/dashboard" :class="{ disabled: !authenticated }">Dashboard</router-link>
-      <router-link to="/login">Login</router-link> -->
-
       <router-link to="/dashboard" class="user-info">
         <p class="fullname">
           {{ user.firstName }} {{ user.lastName }} <span class="role">{{ userRole.name }}</span>
@@ -130,12 +127,5 @@ header {
   .login {
     color: #ddd;
   }
-}
-
-.spinner-container {
-  padding: 300px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>

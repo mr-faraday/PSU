@@ -102,7 +102,7 @@ onMounted(fetchEmployees)
   </div>
 
   <template v-else>
-    <div class="create-employee-form-container">
+    <div class="create-employee-form-container container">
       <CreateEmployeeForm ref="form" @submit="createEmployee" />
     </div>
 
@@ -149,9 +149,16 @@ onMounted(fetchEmployees)
 .table-container {
   table {
     width: 100%;
+    border-collapse: collapse;
   }
   th {
     text-align: left;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: #f2f2f2;
+    }
   }
 }
 </style>

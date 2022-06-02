@@ -55,7 +55,7 @@ onMounted(fetchClients)
   </div>
 
   <template v-else>
-    <div class="create-client-form-container">
+    <div class="create-client-form-container container">
       <CreateClientForm ref="form" @submit="createClient" />
     </div>
 
