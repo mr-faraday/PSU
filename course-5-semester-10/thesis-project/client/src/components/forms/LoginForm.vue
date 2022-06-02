@@ -9,6 +9,7 @@ const router = useRouter()
 const store = useStore()
 const toast = useToast()
 
+const loading = ref(false)
 const login = ref('')
 const password = ref('')
 
@@ -21,6 +22,8 @@ const submitHandler = async (e) => {
   }
 
   try {
+    loading.value = true
+
     await AuthApi.login({
       login: login.value,
       password: password.value,
@@ -35,23 +38,25 @@ const submitHandler = async (e) => {
     } else {
       toast.error(error.message)
     }
+
+    loading.value = false
   }
 }
 </script>
 
 <template>
   <form class="login-form" @submit="submitHandler">
-    <h2>Login</h2>
+    <h2>Вход</h2>
 
     <div class="input">
-      <input v-model="login" type="text" placeholder="Login" />
+      <input v-model="login" type="text" placeholder="Логин" :disabled="loading" />
     </div>
 
     <div class="input">
-      <input v-model="password" type="password" placeholder="Password" />
+      <input v-model="password" type="password" placeholder="пароль" :disabled="loading" />
     </div>
 
-    <input type="submit" value="Login" />
+    <input type="submit" value="Войти" :disabled="loading" />
   </form>
 </template>
 
