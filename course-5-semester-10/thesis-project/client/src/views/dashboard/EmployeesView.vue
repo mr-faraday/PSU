@@ -28,7 +28,7 @@ const createEmployee = async (employeeData) => {
     toast.success(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`)
 
     fetchEmployees()
-    form.value.clearForm()
+    form.value?.clearForm()
   } catch (error) {
     toast.error(error.response?.data?.message ?? error.message)
     loading.value = false

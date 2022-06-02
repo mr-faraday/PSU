@@ -18,7 +18,7 @@ const createClient = async (clientData) => {
     toast.success(`Клиент зарегестрирован.`)
 
     fetchClients()
-    form.value.clearForm()
+    form.value?.clearForm()
   } catch (error) {
     toast.error(error.response?.data?.message ?? error.message)
     loading.value = false

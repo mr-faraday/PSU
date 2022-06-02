@@ -5,7 +5,6 @@ const { TaskStatusId } = require('../constants')
 const { db } = require('../db')
 const { Cargo } = require('../db/models/cargo')
 const { CargoPlacement } = require('../db/models/cargo-placement')
-const { Shelf } = require('../db/models/shelf')
 const { Task } = require('../db/models/task')
 const router = require('express').Router()
 
@@ -33,37 +32,33 @@ router.post(
             })
         }
 
-        // shelves."positionQuantity" field represents the number of positions on the shelf
-        // cargo_placements contains only position of cargo on shelf
-        // cargo_placements.`position` field represents the ocupied position on the shelf
-        // find shelf with free positions that are not a target of new tasks (new tasks status = 1)
         const freeShelvesResult = await db.query(
             `
-            SELECT id, ocupied_position_count as "ocupiedPositionCount" FROM shelves WHERE id NOT IN
-            (
-                SELECT shelf_id as id, ocupied_position_count FROM
-                    (
-                        SELECT shelf_id, COUNT(position) AS "ocupied_position_count" FROM
-                            (
-                                SELECT
-                                    shelf_id,
-                                    position
-                                FROM cargo_placements cp
-                                UNION ALL
-                                SELECT
-                                    t.target_shelf_id as shelf_id,
-                                    t.target_position as position
-                                FROM tasks t WHERE t.status_id = 1
-                            ) as ocupations GROUP BY shelf_id ORDER BY ocupied_position_count
-                    ) as count_res INNER JOIN shelves ON shelves.id = shelf_id
-                WHERE position_quantity <= ocupied_position_count
-            )
+            SELECT * FROM (
+                SELECT
+                    id,
+                    rack_id as rackId,
+                    position_quantity as positionQuantity,
+                    level_height as levelHeight,
+                    COALESCE(ocupied_position_count, 0) as ocupiedPositionCount
+                FROM shelves LEFT JOIN (
+                    SELECT shelf_id, COUNT(position) AS ocupied_position_count FROM (
+                        SELECT
+                            shelf_id,
+                            position
+                        FROM cargo_placements cp
+                        UNION ALL
+                        SELECT
+                            t.target_shelf_id as shelf_id,
+                            t.target_position as position
+                        FROM tasks t WHERE t.status_id = 1
+                    ) as ocupations GROUP BY shelf_id
+                ) as ocupations ON shelves.id = ocupations.shelf_id
+            ) as res ORDER BY res.ocupiedPositionCount ASC
             LIMIT 1
             `,
-            { type: db.QueryTypes.SELECT }
+            { type: db.QueryTypes.SELECT, underscored: true }
         )
-
-        console.log(freeShelvesResult)
 
         if (!freeShelvesResult[0]) {
             return res.status(406).json({

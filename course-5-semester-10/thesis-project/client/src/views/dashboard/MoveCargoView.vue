@@ -17,7 +17,7 @@ const moveCargo = async (cargoId) => {
     await CargosApi.return(cargoId)
     toast.success('Заявка на возврат ТМЦ успешно отправлена')
 
-    form.value.clearForm()
+    form.value?.clearForm()
   } catch (error) {
     toast.error(error.response?.data?.message ?? error.message)
   } finally {

@@ -17,7 +17,7 @@ const receiveCargo = async (cargoData) => {
     const res = await CargosApi.create(cargoData)
     toast.success(`Задача на приём ТМЦ создана, id: ${res.data.result.id}`)
 
-    form.value.clearForm()
+    form.value?.clearForm()
   } catch (error) {
     toast.error(error.response?.data?.message ?? error.message)
   } finally {
