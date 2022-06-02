@@ -68,20 +68,20 @@ router.post(
                 return acc + 1
             }, 1)
 
-        // const cargo = await Cargo.create({ clientId, weight })
-        // const task = await Task.create({
-        //     cargoId: cargo.id,
-        //     sourceShelfId: null,
-        //     sourcePosition: null,
-        //     targetShelfId: shelfId,
-        //     targetPosition: postion,
-        //     statusId: TaskStatusId.NEW,
-        //     createdByUserId: res.locals.user.id
-        // })
+        const cargo = await Cargo.create({ clientId, weight })
+        const task = await Task.create({
+            cargoId: cargo.id,
+            sourceShelfId: null,
+            sourcePosition: null,
+            targetShelfId: shelfId,
+            targetPosition: postion,
+            statusId: TaskStatusId.NEW,
+            createdByUserId: res.locals.user.id
+        })
 
         res.json({
             success: true,
-            result: { id: 1 } // task
+            result: task
         })
     })
 )
