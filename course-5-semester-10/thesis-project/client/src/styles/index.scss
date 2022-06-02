@@ -119,7 +119,10 @@ input:not([type='submit']) {
     &:nth-child(even) {
       background-color: #f2f2f2;
     }
-    &:hover {
+  }
+
+  tbody {
+    tr:hover {
       background-color: #ddd;
     }
   }
