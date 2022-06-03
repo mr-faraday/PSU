@@ -92,10 +92,12 @@ const initChart = async () => {
 
     loading.value = false
     await new Promise((r) => requestAnimationFrame(r))
-    await new Promise((r) => requestAnimationFrame(r))
 
     const canvas = document.getElementById('chart')
-    chart.value = new Chart(canvas, getCahrtConfig({ labels, datasets }))
+
+    if (canvas) {
+      chart.value = new Chart(canvas, getCahrtConfig({ labels, datasets }))
+    }
   } catch (error) {
     toast.error(error.message)
   } finally {
@@ -104,9 +106,13 @@ const initChart = async () => {
 }
 
 onMounted(initChart)
-onUnmounted(() => {
-  if (chart.value) {
-    chart.value.destroy()
+onUnmounted(async () => {
+  const chartRef = chart.value
+
+  if (chartRef) {
+    chartRef.stop()
+    await new Promise((r) => requestAnimationFrame(r))
+    chartRef.destroy()
   }
 })
 </script>
