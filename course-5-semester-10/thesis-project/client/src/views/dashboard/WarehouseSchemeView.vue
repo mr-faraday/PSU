@@ -52,14 +52,18 @@ const initChart = async () => {
       .map((shelf) => ({
         ...shelf,
         ocupiedPositionCount: Number(shelf.ocupiedPositionCount),
+        reservedPositionCount: Number(shelf.reservedPositionCount),
+        willFreeShorltyPositionCount: Number(shelf.willFreeShorltyPositionCount),
       }))
       .sort((a, b) => a.rackId - b.rackId)
       .sort((a, b) => a.id - b.id)
 
     const data = rawData.map((s) => ({
       label: `стеллаж ${s.rackId} / полка ${s.id}`,
-      ocupied: s.ocupiedPositionCount,
-      free: s.positionQuantity - s.ocupiedPositionCount,
+      ocupied: s.ocupiedPositionCount - s.willFreeShorltyPositionCount,
+      reserved: s.reservedPositionCount,
+      willFree: s.willFreeShorltyPositionCount,
+      free: s.positionQuantity - s.ocupiedPositionCount - s.reservedPositionCount,
     }))
 
     const labels = data.map((s) => s.label)
@@ -67,12 +71,22 @@ const initChart = async () => {
       {
         label: 'Занято',
         data: data.map((s) => s.ocupied),
-        backgroundColor: CHART_COLORS.red,
+        backgroundColor: CHART_COLORS.blue,
+      },
+      {
+        label: 'Скоро освободятся',
+        data: data.map((s) => s.willFree),
+        backgroundColor: CHART_COLORS.green,
+      },
+      {
+        label: 'Зарезервировано',
+        data: data.map((s) => s.reserved),
+        backgroundColor: CHART_COLORS.yellow,
       },
       {
         label: 'Свободно',
         data: data.map((s) => s.free),
-        backgroundColor: CHART_COLORS.blue,
+        backgroundColor: CHART_COLORS.grey,
       },
     ]
 

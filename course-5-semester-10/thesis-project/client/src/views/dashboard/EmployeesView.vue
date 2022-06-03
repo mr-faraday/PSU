@@ -25,7 +25,11 @@ const createEmployee = async (employeeData) => {
       password: res.data.result.password,
     }
 
-    toast.success(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`)
+    toast.success(`Сотрудник создан. Логин: ${credential.login}, пароль: ${credential.password}`, {
+      timeout: false,
+      draggable: false,
+      closeOnClick: false,
+    })
 
     fetchEmployees()
     form.value?.clearForm()
