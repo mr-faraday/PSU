@@ -59,7 +59,7 @@ const initChart = async () => {
       .sort((a, b) => a.id - b.id)
 
     const data = rawData.map((s) => ({
-      label: `стеллаж ${s.rackId} / полка ${s.id}`,
+      label: `полка ${s.id} (c.${s.rackId})`,
       ocupied: s.ocupiedPositionCount - s.willFreeShorltyPositionCount,
       reserved: s.reservedPositionCount,
       willFree: s.willFreeShorltyPositionCount,
