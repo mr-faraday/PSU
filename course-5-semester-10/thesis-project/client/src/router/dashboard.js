@@ -2,11 +2,11 @@ import { UserRoleId } from '@/constants'
 
 const dashboardItems = [
   {
-    name: 'Управелние персоналом',
+    name: 'Управление персоналом',
     href: '/dashboard/employees',
     component: 'EmployeesView',
     meta: {
-      title: 'Управелние персоналом',
+      title: 'Управление персоналом',
     },
     roles: [UserRoleId.ADMIN],
   },
