@@ -35,6 +35,3 @@ const moveCargo = async (cargoId) => {
     <MoveCargoForm ref="form" @submit="moveCargo" />
   </div>
 </template>
-
-<style lang="scss" scoped>
-</style>
