@@ -5,6 +5,12 @@
 yarn install
 ```
 
+## Reuired .env config:
+
+```sh
+VUE_APP_API_URL= ... # api server url
+```
+
 ### Compiles and hot-reloads for development
 ```
 yarn serve
